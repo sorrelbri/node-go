@@ -1,10 +1,14 @@
+// TODO const someSocketLogic = require('./middleware/socketssockets/...');
+
 module.exports = {
-  socket: io => {
+  enableSocket: io => {
     io.on('connection', () => console.log('connected'))
     io.on('connect', ()=> {
-    console.log('connected');
-    io.emit('connected', {message: 'socket connected'});
+      io.emit('connected', {message: 'socket connected'});
     })
+
+    // TODO io = someSocketLogic(io);
+
     return io;
   }
 }
