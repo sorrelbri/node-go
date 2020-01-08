@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import './App.scss';
 import config from './config';
 
+import { Switch, Route } from 'react-router-dom';
+
 import socketIOClient from 'socket.io-client';
 export const socket = socketIOClient(config.apiAddress);
 
@@ -16,6 +18,17 @@ function App() {
       <h1>React Boilerplate</h1>
       {fetchData ? <p>{fetchData}</p> : <></>}
       {socketData ? <p>{socketData}</p> : <></>}
+      <Switch>
+
+        <Route path="/" exact>
+          <p>Index</p>
+        </Route>
+
+        <Route path="/game">
+          <p>Game</p>
+        </Route>
+
+      </Switch>
     </div>
   );
 }
