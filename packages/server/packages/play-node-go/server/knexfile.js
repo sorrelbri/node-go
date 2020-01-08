@@ -8,6 +8,11 @@ module.exports = {
     connection: process.env.PG_CONNECTION_STRING
   },
 
+  test: {
+    client: 'postgresql',
+    connection: process.env.PG_CONNECTION_STRING_TEST
+  },
+
   staging: {
     client: 'postgresql',
     connection: process.env.PG_CONNECTION_STRING,
