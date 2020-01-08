@@ -88,3 +88,7 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+const socketIO = require('socket.io')
+const socket = require('../socket').socket;
+const io = socket(socketIO(server));
