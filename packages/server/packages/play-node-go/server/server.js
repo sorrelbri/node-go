@@ -6,6 +6,8 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
+const db = require('./data/db');
+
 const dotenv = require('dotenv');
 dotenv.config();
 
