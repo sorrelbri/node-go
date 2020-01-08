@@ -2,8 +2,6 @@ const createError = require('http-errors');
 const express = require('express');
 
 const cors = require('cors');
-const socketIO = require("socket.io");
-const http = require('http');
 
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -18,14 +16,10 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
 const app = express();
-const server = require('./bin/www');
-
 
 const corsOptions = {
   origin: process.env.REACT_ADDRESS
 }
-const port = process.env.PORT;
-
 
 app.options('*', cors(corsOptions));
 app.use('*', cors(corsOptions));
