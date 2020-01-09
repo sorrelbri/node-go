@@ -1,1 +1,1 @@
-web: predeploy
+web: npm run predeploy
