@@ -5,6 +5,13 @@ import config from './config';
 import { Switch, Route } from 'react-router-dom';
 
 import socketIOClient from 'socket.io-client';
+
+import Account from './pages/Account/Account';
+import Game from './pages/Game/Game';
+import Home from './pages/Home/Home';
+import News from './pages/News/News';
+import Room from './pages/Room/Room';
+
 export const socket = socketIOClient(config.apiAddress);
 
 function App() {
@@ -20,12 +27,25 @@ function App() {
       {socketData ? <p>{socketData}</p> : <></>}
       <Switch>
 
-        <Route path="/" exact>
-          <p>Index</p>
+        <Route path="/account">
+          <Account />
         </Route>
 
-        <Route path="/game">
-          <p>Game</p>
+        <Route path="/rooms">
+          <Room />
+        </Route>
+
+        <Route path="/games">
+          <Game />
+        </Route>
+      
+        <Route path="/news">
+          <News />
+        </Route>
+      
+        <Route path="/">
+          {/* Add ternary for login */}
+          <Home />
         </Route>
 
       </Switch>
