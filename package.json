@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@mars/heroku-js-runtime-env": "^3.0.2",
     "@testing-library/user-event": "^7.1.2",
     "flow-bin": "^0.114.0",
     "node-sass": "^4.13.0",
@@ -18,10 +19,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "flow": "./node_modules/.bin/flow flow",
-
     "predeploy": "REACT_APP_ENVIRONMENT=production npm run build",
     "postinstall": "react-scripts build"
-
   },
   "eslintConfig": {
     "extends": "react-app"
