@@ -1,0 +1,24 @@
+[ignore]
+.*/node_modules/.*
+.*/src/serviceWorker\.js
+.*/src/index\.js
+.*\.test
+.*/server/node_modules/.*
+.*/server/test/.*
+.*/server/knexfile\.js
+.*/public/.*
+
+[include]
+
+[libs]
+
+[lints]
+
+[options]
+; all=true 
+
+[strict]
+
+[untyped]
+.*\.scss
+.*\.css
