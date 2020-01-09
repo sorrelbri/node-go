@@ -1,9 +1,10 @@
 import React from 'react';
-import './Accounts.scss';
+import './Account.scss';
 
 const Account = () => {
   return (  
     <>
+      <p>Account</p>
     </>
   );
 }
