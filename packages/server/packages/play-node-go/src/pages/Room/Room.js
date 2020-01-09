@@ -1,9 +1,10 @@
 import React from 'react';
-import './Accounts.scss';
+import './Room.scss';
 
 const Room = () => {
   return (  
     <>
+      <p>Room</p>
     </>
   );
 }

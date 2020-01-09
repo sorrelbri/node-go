@@ -1,9 +1,10 @@
 import React from 'react';
-import './Accounts.scss';
+import './Home.scss';
 
 const Home = () => {
   return (  
     <>
+      <p>Home</p>
     </>
   );
 }
