@@ -5,7 +5,4 @@
 `$ git subtree push --prefix server hk-api master`
 
 ### React
-`$ git push hk-play master`
-
-### TODO
-restructure React to subdirectory for similar deployment
+`$ git subtree push --prefix play-node-go hk-play master`
