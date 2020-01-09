@@ -1,6 +1,6 @@
 const production = {
-  apiAddress: null,
-  endpoint: null
+  apiAddress: 'https://node-go-api.herokuapp.com',
+  endpoint: 'https://play-node-go.herokuapp.com'
 }
 
 const development = {
