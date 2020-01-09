@@ -1,3 +1,6 @@
+import runtimeEnv from '@mars/heroku-js-runtime-env';
+const env = runtimeEnv();
+
 const production = {
   apiAddress: 'https://node-go-api.herokuapp.com',
   endpoint: 'https://play-node-go.herokuapp.com'
@@ -8,7 +11,7 @@ const development = {
   endpoint: 'http://localhost:3000'
 }
 
-const config = process.env.REACT_APP_ENVIRONMENT === 'production' 
+const config = env.REACT_APP_ENVIRONMENT === 'production' 
   ? production
   : development
 
