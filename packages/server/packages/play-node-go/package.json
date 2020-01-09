@@ -19,7 +19,8 @@
     "eject": "react-scripts eject",
     "flow": "./node_modules/.bin/flow flow",
 
-    "predeploy": "REACT_APP_ENVIRONMENT=production npm run build"
+    "predeploy": "REACT_APP_ENVIRONMENT=production npm run build",
+    "postinstall": "react-scripts build"
 
   },
   "eslintConfig": {
