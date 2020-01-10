@@ -5,12 +5,18 @@ module.exports = {
 
   development: {
     client: 'postgresql',
-    connection: process.env.PG_CONNECTION_STRING
+    connection: process.env.PG_CONNECTION_STRING,
+    migrations: {
+      directory: './data/migrations',
+    },
   },
 
   test: {
     client: 'postgresql',
-    connection: process.env.PG_CONNECTION_STRING_TEST
+    connection: process.env.PG_CONNECTION_STRING_TEST,
+    migrations: {
+      directory: './data/migrations',
+    },
   },
 
   staging: {
