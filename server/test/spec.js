@@ -8,7 +8,7 @@ const server = require('../server');
 
 const should = chai.should();
 
-// const authSpec = require('./auth.spec');
+const authSpec = require('./auth.spec');
 
 chai.use(chaiHttp);
 // ! to run tests from other testing modules
@@ -25,37 +25,7 @@ const setupDb = () => {
 describe('Auth Routes', function() {
   setupDb();
   
-  // authSpec(chai, server)
-
-  const newUserFormData = {
-    'username':'newUser',
-    'password':'password',
-    'email':'user@example.com'
-  }
-
-  it('post to sign up should return 200 status', function(done) {
-    chai.request(server)
-      .post('/auth/signup')
-      .type('form')
-      .send(newUserFormData)
-      .end((err, res) => {
-        if (err) done(err);
-        res.should.status(200);
-        done();
-      });
-  });
-
-  it('post to sign up should return token', done => {
-    chai.request(server)
-      .post('/auth/signup')
-      .type('form')
-      .send(newUserFormData)
-      .end((err, res) => {
-        if (err) done(err);
-        res.should.cookie('token');
-        done();
-      });
-  });
+  authSpec(chai, knex, server)
 
 })
 
