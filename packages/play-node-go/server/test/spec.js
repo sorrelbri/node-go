@@ -20,6 +20,10 @@ const setupDb = () => {
     .then(() => knex.migrate.latest())
     .then(() => done());
   });
+  afterEach(done => {
+    knex.migrate.rollback(true)
+    .then(() => done());
+  })
 }
 
 describe('Auth Routes', function() {
