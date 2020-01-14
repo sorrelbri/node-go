@@ -1,4 +1,4 @@
-const authSpec = (chai, server) => {
+const authSpec = (chai, knex, server) => {
   const newUserFormData = {
     'username':'newUser',
     'password':'password',
@@ -27,6 +27,21 @@ const authSpec = (chai, server) => {
         res.should.cookie('token');
         done();
       });
-  });
+    });
+    
+    it('post to sign up should add user to db', done => {
+      chai.request(server)
+        .post('/auth/signup')
+        .type('form')
+        .send(newUserFormData)
+        .end((err, res) => {
+          if (err) done(err);
+          knex('user').where({'username': newUserFormData.username}).then(results => {
+            const newUser = results[0];
+            if (newUser.username === newUserFormData.username) done();
+          })
+        });
+      
+  })
 }
 module.exports = authSpec;
