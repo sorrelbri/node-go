@@ -20,12 +20,10 @@ const compareHash = async (password, hash) => {
   const success = await new Promise((resolve, reject) => {
     bcrypt.compare(password, hash, (err, res) => {
       if (err) reject(err);
-      if (res) return true;
-      return false;
+      if (res) resolve(true);
     })
   });
-
-  return compareHash;
+  return success;
 }
 
 module.exports = { hashPassword, compareHash };
