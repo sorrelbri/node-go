@@ -87,8 +87,7 @@ const authSpec = (chai, knex, server) => {
     })
   })
   
-  it('post to login with registered user should return cookie', function(done) {
-    this.timeout(5000);
+  it('post to login with registered user should return cookie', done => {
     chai.request(server)
     .post('/auth/signup')
     .type('form')
