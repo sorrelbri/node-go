@@ -8,7 +8,8 @@ const server = require('../server');
 
 const should = chai.should();
 
-const authSpec = require('./auth.spec');
+const authSignupSpec = require('./auth.signup.spec');
+const authLoginSpec = require('./auth.login.spec');
 
 chai.use(chaiHttp);
 // ! to run tests from other testing modules
@@ -29,8 +30,8 @@ const setupDb = () => {
 describe('Auth Routes', function() {
   setupDb();
   
-  authSpec(chai, knex, server)
-  
+  authSignupSpec(chai, knex, server);
+  authLoginSpec(chai, knex, server);
 });
 
 describe('API Routes', function() {
