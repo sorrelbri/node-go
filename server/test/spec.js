@@ -2,7 +2,7 @@ process.env.NODE_ENV = 'test';
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-var knex = require('../data/db');
+const knex = require('../data/db');
 
 const server = require('../server');
 
@@ -30,21 +30,20 @@ describe('Auth Routes', function() {
   setupDb();
   
   authSpec(chai, knex, server)
-
-})
+  
+});
 
 describe('API Routes', function() {
   setupDb();
-
+  
   it('home should return 200 status', done => {
     chai.request(server)
-      .get('/')
-      .end((err,res)=> {
-        if(err) done(err);
-        res.should.status(200);
-        done();
-      })
-  })
+    .get('/')
+    .end((err,res)=> {
+      if(err) done(err);
+      res.should.status(200);
+      done();
+    });
+  });
+  
 });
-
-

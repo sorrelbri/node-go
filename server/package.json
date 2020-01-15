@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "mocha ./test/*",
+    "test": "mocha ./test/* --exit",
     "make-migration": "./node_modules/.bin/knex migrate:make",
     "migrate": "./node_modules/.bin/knex migrate:latest",
     "migrate-test": "./node_modules/.bin/knex migrate:latest --env test",
