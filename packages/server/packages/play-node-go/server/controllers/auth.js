@@ -2,12 +2,21 @@ const knex = require('../data/db')
 
 const { hashPassword, compareHash } = require('../services/bcrypt');
 const signToken = require('../services/signToken');
-const { validateSignup, validateLogin } = require('../services/userValidate');
+
+const { validationResult } = require('express-validator');
+
+const checkValidationErrors = (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+}
 
 const signup = async (req, res, next) => {
   
+  checkValidationErrors(req, res);
+  
   const user = req.body;
-  if (!validateSignup(user)) return;
   
   try {
     
@@ -15,6 +24,7 @@ const signup = async (req, res, next) => {
     const secureUser = { ...user, password: hashedPassword }
     
     knex('user')
+    .returning(['username', 'email'])
     .insert(secureUser)
     .then(queryResults => {
       const newUser = queryResults[0];
@@ -28,9 +38,10 @@ const signup = async (req, res, next) => {
 }
 
 const login = async (req, res, next) => {
-  
+
+  checkValidationErrors(req, res);
+
   const user = req.body;
-  if (!validateLogin(user)) return;
 
   try {
 
