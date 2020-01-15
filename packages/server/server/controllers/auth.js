@@ -36,7 +36,7 @@ const login = async (req, res, next) => {
 
     const queryResults = await knex('user')
     .where({username: user.username})
-    .select('username', 'email', 'password')
+    .select()
     .then(queryResults => queryResults);
     
     const savedUser = queryResults[0] || null;
@@ -44,7 +44,6 @@ const login = async (req, res, next) => {
     
     const hashedPassword = savedUser.password;
     const passwordMatch = await compareHash(user.password, hashedPassword);
-    
     if (!passwordMatch) return res.status(401).json({err: 'bad credentials'});
     
     const authorizedUser = {...savedUser};
