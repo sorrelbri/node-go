@@ -7,18 +7,23 @@
 .*/server/test/.*
 .*/server/knexfile\.js
 .*/public/.*
+.*\.scss
+.*\.css
+.+\.s?css
 
 [include]
+.*/src/components/
+.*/src/pages/.*
+.*/src/reducers/.*
+.*/src/utils/.*
+.*/App.js
 
 [libs]
 
 [lints]
 
 [options]
-; all=true 
 
 [strict]
 
 [untyped]
-.*\.scss
-.*\.css
