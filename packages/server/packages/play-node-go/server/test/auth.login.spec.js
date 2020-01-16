@@ -2,6 +2,7 @@ const authSignupSpec = (chai, knex, server) => {
   const newUserFormData = {
     'username':'newUser',
     'password':'password',
+    'confirmPassword':'password',
     'email':'user@example.com'
   }
   const loginFormData = {
