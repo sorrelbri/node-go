@@ -13,27 +13,24 @@ const checkValidationErrors = (req, res) => {
 }
 
 const signup = async (req, res, next) => {
-  
   checkValidationErrors(req, res);
   
   const user = req.body;
-  
   try {
-    
+    delete user.confirmPassword;
     const hashedPassword = await hashPassword(user.password);
     const secureUser = { ...user, password: hashedPassword }
-    
+
     knex('user')
     .returning(['username', 'email'])
     .insert(secureUser)
     .then(queryResults => {
       const newUser = queryResults[0];
-      signToken(res, newUser);
-      res.send('ok').status(200);
+      signToken(res, newUser).send('ok').status(201);
     })
   } 
   catch (err) {
-    res.status(500).json(err)
+    res.status(500).json(err);
   }
 }
 
