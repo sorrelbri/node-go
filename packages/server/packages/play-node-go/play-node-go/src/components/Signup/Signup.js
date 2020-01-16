@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Signup.scss';
 
-const Signup = () => {
+const Signup = (props) => {
   const [ username, setUsername ] = useState('');
   const [ password, setPassword ] = useState('');
   const [ confirmPassword, setConfirmPassword ] = useState('');
@@ -28,7 +28,7 @@ const Signup = () => {
           default=""
         />
 
-        <label htmlFor="confirmPassword-input">confirmPassword:</label>
+        <label htmlFor="confirmPassword-input">Confirm password:</label>
         <input 
           name="confirmPassword"
           id="confirmPassword-input"
@@ -36,6 +36,8 @@ const Signup = () => {
           onChange={e => setConfirmPassword(e.target.value)}
           default=""
         />
+
+        <input type="submit" value="Create Account!"/>
 
       </form>
     </div>
