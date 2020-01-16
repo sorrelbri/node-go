@@ -14,6 +14,7 @@ import Room from './pages/Room/Room';
 
 export const socket = socketIOClient(config.apiAddress);
 
+
 function App() {
   const [fetchData, setFetchData] = useState();
   const [socketData, setSocketData] = useState();
@@ -32,7 +33,6 @@ function App() {
     socket.on('connect_error', err => setError([...error, err]));
     socket.on('error', err => setError([...error, err]))
   })
-  
   return (
     <Router>
       

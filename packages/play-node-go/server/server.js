@@ -19,8 +19,9 @@ const apiRouter = require('./routes/api');
 
 const app = express();
 
+const allowedOrigin = process.env.NODE_ENV === 'production' ? env.REACT_ADDRESS : '*';
 const corsOptions = {
-  origin: process.env.REACT_ADDRESS
+  origin: allowedOrigin
 }
 
 app.options('*', cors(corsOptions));
