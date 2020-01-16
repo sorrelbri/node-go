@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useReducer} from 'react';
 import './App.scss';
 import config from './config';
 
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 
 import socketIOClient from 'socket.io-client';
 
@@ -17,39 +17,56 @@ export const socket = socketIOClient(config.apiAddress);
 function App() {
   const [fetchData, setFetchData] = useState();
   const [socketData, setSocketData] = useState();
-  fetch(config.apiAddress).then(res => res.text()).then(data => setFetchData(data));
-  socket.emit('connect');
-  socket.on('connected', data => setSocketData(data.message));
+  const [error, setError] = useState([]);
+
+  useEffect(() => {
+    fetch(config.apiAddress)
+    .then(res => res.text())
+    .catch(err => setError([...error, err]))
+    .then(data => setFetchData(data))
+  })
+  useEffect(() => {
+    
+    socket.emit('connect');
+    socket.on('connect', data => setSocketData('socket connected'));
+    socket.on('connect_error', err => setError([...error, err]));
+    socket.on('error', err => setError([...error, err]))
+  })
+  
   return (
-    <div className="App">
-      <h1>React Boilerplate</h1>
-      {fetchData ? <p>{fetchData}</p> : <></>}
-      {socketData ? <p>{socketData}</p> : <></>}
-      <Switch>
-
-        <Route path="/account">
-          <Account />
-        </Route>
-
-        <Route path="/rooms">
-          <Room />
-        </Route>
-
-        <Route path="/games">
-          <Game />
-        </Route>
+    <Router>
       
-        <Route path="/news">
-          <News />
-        </Route>
-      
-        <Route path="/">
-          {/* Add ternary for login */}
-          <Home />
-        </Route>
+      <div data-testid="App" className="App">
+        <h1>React Boilerplate</h1>
+        {fetchData ? <p>{fetchData}</p> : <></>}
+        {socketData ? <p>{socketData}</p> : <></>}
+        {error ? error.map(err => <p>{err}</p>): <></>}
+        <Switch>
 
-      </Switch>
-    </div>
+          <Route path="/account">
+            <Account />
+          </Route>
+
+          <Route path="/rooms">
+            <Room />
+          </Route>
+
+          <Route path="/games">
+            <Game />
+          </Route>
+        
+          <Route path="/news">
+            <News />
+          </Route>
+        
+          <Route path="/">
+            {/* Add ternary for login */}
+            <Home />
+          </Route>
+
+        </Switch>
+      </div>
+    </Router>
   );
 }
 
