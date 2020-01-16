@@ -1,12 +1,12 @@
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 
-const saltRounds = process.env.NODE_ENV === 'test' ? 5 : process.env.SALT_ROUNDS;
+const saltRounds = process.env.NODE_ENV === 'test' ? 5 : parseInt(process.env.SALT_ROUNDS);
 
 const hashPassword = async (password) => {
-
   const hashedPassword = await new Promise((resolve, reject) => {
     bcrypt.hash(password, saltRounds, (err, hash) => {
+      console.log(err)
       if (err) reject(err)
       resolve(hash)
     });

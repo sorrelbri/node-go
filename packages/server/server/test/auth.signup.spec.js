@@ -4,21 +4,25 @@ const authSignupSpec = (chai, knex, server) => {
   const newUserFormData = {
     'username':'newUser',
     'password':'password',
+    'confirmPassword':'password',
     'email':'user@example.com'
   }
   const invalidEmailFormData = {
     'username':'newUser',
     'email': 'useremail',
-    'password':'password'
+    'password':'password',
+    'confirmPassword':'password'
   }
   const scriptInjectionFormData = {
     'username': '<script> alert("hello, there");</script>',
     'password':'password',
+    'confirmPassword':'password',
     'email':'user@example.com'
   }
   const sqlInjectionFormData = {
     'username': '; DROP TABLE user;',
     'password':'password',
+    'confirmPassword':'password',
     'email':'user@example.com'
   }
 

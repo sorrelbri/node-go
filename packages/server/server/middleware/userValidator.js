@@ -5,6 +5,8 @@ const signupValidationRules = () => {
     check('email', 'invalid email').normalizeEmail().isEmail(),
     check('username', 'invalid username').isString(),
     check('password', 'invalid password').isString().isLength({min: 8}),
+    check('confirmPassword', 'invalid password').isString()
+      .custom((confirmPassword, { req }) => confirmPassword === req.body.password),
     sanitize('username').escape()
   ]
 }
@@ -17,7 +19,7 @@ const loginValidationRules = () => {
 }
 
 const validate = (req, res, next) => {
-  const errors = validationResult(req)
+  const errors = validationResult(req);
   if (errors.isEmpty()) {
     return next()
   }

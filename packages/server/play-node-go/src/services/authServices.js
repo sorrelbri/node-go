@@ -10,18 +10,17 @@ const loginService = () => {
 }
 
 const signupService = async (formData) => {
-  const response = await Axios.post(signupEndpoint, {
-    ...formData
-  }).then(res => {
+  const response = await Axios.post(signupEndpoint, {...formData })
+    .then(res => {
     return res;
   }).catch(err => {
+    console.log(err)
     return err;
   });
-  console.log(response)
   return response;
 }
 
-module.exports = {
+export default {
   loginService,
   signupService
 }
