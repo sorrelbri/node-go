@@ -6,11 +6,16 @@ import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 
 import socketIOClient from 'socket.io-client';
 
+import Sidebar from './components/Sidebar/Sidebar';
+
 import Account from './pages/Account/Account';
 import Game from './pages/Game/Game';
 import Home from './pages/Home/Home';
 import News from './pages/News/News';
 import Room from './pages/Room/Room';
+
+import { stateReducer } from './reducers/stateReducer';
+import { initState } from './reducers/init/stateReducer.init';
 
 export const socket = socketIOClient(config.apiAddress);
 
@@ -19,6 +24,12 @@ function App() {
   const [fetchData, setFetchData] = useState();
   const [socketData, setSocketData] = useState();
   const [error, setError] = useState([]);
+
+  const [ state, dispatch ] = useReducer(
+    stateReducer,
+    {},
+    initState
+  );
 
   useEffect(() => {
     fetch(config.apiAddress)
@@ -41,27 +52,33 @@ function App() {
         {fetchData ? <p>{fetchData}</p> : <></>}
         {socketData ? <p>{socketData}</p> : <></>}
         {error ? error.map(err => <p>{err}</p>): <></>}
+        
         <Switch>
 
           <Route path="/account">
-            <Account />
+            <Sidebar page="account" state={state} dispatch={dispatch}/>
+            <Account state={state} dispatch={dispatch}/>
           </Route>
 
           <Route path="/rooms">
-            <Room />
+            <Sidebar page="rooms"/>
+            <Room state={state} dispatch={dispatch}/>
           </Route>
 
           <Route path="/games">
-            <Game />
+            <Sidebar page="games"/>
+            <Game state={state} dispatch={dispatch}/>
           </Route>
         
           <Route path="/news">
-            <News />
+            <Sidebar page="news"/>
+            <News state={state} dispatch={dispatch}/>
           </Route>
         
           <Route path="/">
+            <Sidebar page="home" state={state} dispatch={dispatch}/>
             {/* Add ternary for login */}
-            <Home />
+            <Home state={state} dispatch={dispatch}/>
           </Route>
 
         </Switch>
