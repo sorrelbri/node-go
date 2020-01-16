@@ -1,0 +1,11 @@
+@mixin fullspan {
+  height: 100%;
+  width: 100%;
+}
+
+@mixin flexAround($direction) {
+  display: flex;
+  flex-direction: $direction;
+  align-items: center;
+  justify-content: space-around;
+}
