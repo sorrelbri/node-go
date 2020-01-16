@@ -1,0 +1,17 @@
+$dev-colors: (
+  "a": #34dc90,
+  "b": #9034dc,
+  "c": #dc9034,
+  "d": #dc34dc,
+  "e": #34dcdc,
+  "f": #dcdc34
+);
+
+/* Responsive Design */
+$break-points: (
+  "500": "only screen and (min-width: 500px)",
+  "570": "only screen and (min-width: 570px)",
+  "590": "only screen and (min-width: 590px)",
+  "700": "only screen and (min-width: 700px)",
+  "900": "only screen and (min-width: 900px)"
+)

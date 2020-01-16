@@ -10,10 +10,10 @@ const HomeSidebar = (props) => {
     <nav>
       {props.state.user ? <></> : <>
         <p onClick={()=>{setShowForm('login')}}>Login</p>
+        {showForm === 'login' ? <Login /> : <></>}
         <p onClick={()=>{setShowForm('signup')}}>Signup</p>
+        {showForm === 'signup' ? <Signup /> : <></>}
       </>}
-      {showForm === 'signup' ? <Signup /> : <></>}
-      {showForm === 'login' ? <Login /> : <></>}
     </nav>
   );
 }
