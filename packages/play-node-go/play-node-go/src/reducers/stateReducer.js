@@ -15,11 +15,12 @@ export type action = {
 
 export const stateReducer = (state: state, action: action): state => {
   const errorStrippedState = stripErrors({...state});
-
+  console.log(action)
   switch (action.type) {
     case 'INIT': return initState();
 
-    case 'AUTH': return authReducer(errorStrippedState, action);
+    case 'AUTH':
+      return authReducer(errorStrippedState, action);
   
     default: return state;
   }
