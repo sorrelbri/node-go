@@ -15,7 +15,7 @@ export type action = {
 
 export const stateReducer = (state: state, action: action): state => {
   const errorStrippedState = stripErrors({...state});
-  console.log(action)
+  
   switch (action.type) {
     case 'INIT': return initState();
 
