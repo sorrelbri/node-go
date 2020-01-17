@@ -14,4 +14,8 @@ $break-points: (
   "590": "only screen and (min-width: 590px)",
   "700": "only screen and (min-width: 700px)",
   "900": "only screen and (min-width: 900px)"
-)
+);
+
+$colors: (
+  "error": #aa3333,
+);

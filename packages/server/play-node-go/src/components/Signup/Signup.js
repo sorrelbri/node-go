@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Signup.scss';
 import authServices from '../../services/authServices';
+import FormError from '../FormError/FormError';
 
 const Signup = (props) => {
   const [ username, setUsername ] = useState('');
@@ -23,8 +24,18 @@ const Signup = (props) => {
     })
   }
 
+  const formError = errors => {
+    if(!errors) return <></>;
+
+    if (errors.auth) {
+      return <FormError error={errors.auth}/>
+    }
+  }
+  
   return (
+    
     <div className="Signup" data-testid="Signup">
+      {formError(props.state.errors)}
       <form 
         data-testid="Signup__form"
         onSubmit={e => handleSubmit(e)}
