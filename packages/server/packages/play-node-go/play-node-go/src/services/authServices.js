@@ -14,7 +14,6 @@ const signupService = async (formData) => {
     .then(res => {
     return res;
   }).catch(err => {
-    console.log(err)
     return err;
   });
   return response;
