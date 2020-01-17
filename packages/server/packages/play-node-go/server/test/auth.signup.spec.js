@@ -26,14 +26,14 @@ const authSignupSpec = (chai, knex, server) => {
     'email':'user@example.com'
   }
 
-  it('post to /signup should return 200 status', done => {
+  it('post to /signup should return 201 status', done => {
     chai.request(server)
     .post('/auth/signup')
     .type('form')
     .send(newUserFormData)
     .end((err, res) => {
       if (err) done(err);
-      res.should.status(200);
+      res.should.status(201);
       done();
     });
   });
@@ -142,7 +142,25 @@ const authSignupSpec = (chai, knex, server) => {
     })
   })
 
+  it('post to /signup with already registered user should return 409 error', done => {
+    chai.request(server)
+    .post('/auth/signup')
+    .type('form')
+    .send(newUserFormData)
+    .end((err, res) => {
+      if (err) done(err);
 
+      chai.request(server)
+      .post('/auth/signup')
+      .type('form')
+      .send(newUserFormData)
+      .end((err, res) => {
+        if(err) done(err);
+        res.should.status(409);
+        done();
+      })
+    })
+  })
 
 }
 module.exports = authSignupSpec;
