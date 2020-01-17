@@ -31,6 +31,7 @@ function App() {
     .catch(err => setError([...error, err]))
     .then(data => setFetchData(data))
   })
+
   useEffect(() => {
     
     socket.emit('connect');
@@ -38,6 +39,7 @@ function App() {
     socket.on('connect_error', err => setError([...error, err]));
     socket.on('error', err => setError([...error, err]))
   })
+
   return (
     <Router>
       
