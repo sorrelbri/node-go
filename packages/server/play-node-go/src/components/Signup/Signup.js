@@ -1,15 +1,35 @@
 import React, { useState } from 'react';
 import './Signup.scss';
+import authServices from '../../services/authServices';
 
 const Signup = (props) => {
   const [ username, setUsername ] = useState('');
+  const [ email, setEmail ] = useState('');
   const [ password, setPassword ] = useState('');
   const [ confirmPassword, setConfirmPassword ] = useState('');
 
+  const handleSubmit = async e => {
+    e.preventDefault();
+    const signupResponse = await authServices.signupService({
+      username,
+      email,
+      password,
+      confirmPassword
+    })
+    return props.dispatch({
+      type: 'AUTH',
+      message: 'SIGNUP',
+      body: signupResponse
+    })
+  }
+
   return (
     <div className="Signup" data-testid="Signup">
-      <form data-testid="Signup__form">
-        
+      <form 
+        data-testid="Signup__form"
+        onSubmit={e => handleSubmit(e)}
+      >
+
         <label htmlFor="username-input">Username:</label>
         <input 
           name="username"
@@ -19,11 +39,20 @@ const Signup = (props) => {
           default="username"
         />
 
+        <label htmlFor="email-input">Email:</label>
+        <input 
+          name="email"
+          id="email-input"
+          type="text"
+          onChange={e => setEmail(e.target.value)}
+          default="email"
+        />
+
         <label htmlFor="password-input">Password:</label>
         <input 
           name="password"
           id="password-input"
-          type="text"
+          type="password"
           onChange={e => setPassword(e.target.value)}
           default=""
         />
@@ -32,7 +61,7 @@ const Signup = (props) => {
         <input 
           name="confirmPassword"
           id="confirmPassword-input"
-          type="text"
+          type="password"
           onChange={e => setConfirmPassword(e.target.value)}
           default=""
         />
