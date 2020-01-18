@@ -9,8 +9,19 @@ headers.append('Content-Type', 'application/json');
 headers.append('Accept', 'application/json');
 headers.append('Sec-Fetch-Site', 'cross-site')
 
-const loginService = () => {
-
+const loginService = async(formData) => {
+  const response = await fetch(loginEndpoint, {
+    method: 'POST',
+    credentials: 'include',
+    body: JSON.stringify(formData),
+    headers: headers
+  })
+  .then(res => {
+    return res.text();
+  }).catch(err => {
+    return err;
+  });
+  return response;
 }
 
 const signupService = async (formData) => {
@@ -20,7 +31,7 @@ const signupService = async (formData) => {
     body: JSON.stringify(formData),
     headers: headers
   })
-    .then(res => {
+  .then(res => {
     return res.text();
   }).catch(err => {
     return err;
