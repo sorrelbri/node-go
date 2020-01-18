@@ -26,7 +26,8 @@ const signup = async (req, res, next) => {
     }
 
     const newUser = await userQueries.insertUser(secureUser)
-    signToken(res, newUser).status(201).json({...newUser});
+    signToken(res, newUser)
+    res.status(201).json({...newUser});
   } 
 
   catch (err) {
