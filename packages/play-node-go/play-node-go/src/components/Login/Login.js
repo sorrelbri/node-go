@@ -86,7 +86,7 @@ const Login = (props) => {
         <input 
           name="password"
           id="password-input"
-          type="text"
+          type="password"
           onChange={e => setPassword(e.target.value)}
           default=""
         />
