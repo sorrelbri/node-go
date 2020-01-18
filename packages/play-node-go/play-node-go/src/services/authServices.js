@@ -21,7 +21,7 @@ const signupService = async (formData) => {
     headers: headers
   })
     .then(res => {
-    return res;
+    return res.text();
   }).catch(err => {
     return err;
   });
