@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Signup.scss';
-import authServices from '../../services/authServices';
-import FormError from '../FormError/FormError';
+import authServices from '../../../services/authServices';
+import FormError from '../../Error/FormError/FormError';
 
 const Signup = (props) => {
   const [ username, setUsername ] = useState('');
