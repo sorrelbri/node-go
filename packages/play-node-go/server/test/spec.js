@@ -10,6 +10,7 @@ const should = chai.should();
 
 const authSignupSpec = require('./auth.signup.spec');
 const authLoginSpec = require('./auth.login.spec');
+const apiIndexSpec = require('./api.index.spec');
 
 chai.use(chaiHttp);
 // ! to run tests from other testing modules
@@ -37,14 +38,6 @@ describe('Auth Routes', function() {
 describe('API Routes', function() {
   setupDb();
   
-  it('home should return 200 status', done => {
-    chai.request(server)
-    .get('/')
-    .end((err,res)=> {
-      if(err) done(err);
-      res.should.status(200);
-      done();
-    });
-  });
+  apiIndexSpec(chai, knex, server)
   
 });

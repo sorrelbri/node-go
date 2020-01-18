@@ -1,4 +1,3 @@
-
 const { validationResult } = require('express-validator');
 
 const userQueries = require('../data/queries/user');
