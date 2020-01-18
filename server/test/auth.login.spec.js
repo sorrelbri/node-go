@@ -19,7 +19,7 @@ const authSignupSpec = (chai, knex, server) => {
     .end((err, res) => {
       if (err) done(err);
       res.should.status(401);
-      res.body.err.should.equal('bad credentials');
+      res.body.errors.should.equal('bad credentials');
       done();
     });
   })
@@ -32,7 +32,7 @@ const authSignupSpec = (chai, knex, server) => {
     .end((err, res) => {
       if (err) done(err);
       res.should.status(401);
-      res.body.err.should.equal('bad credentials');
+      res.body.errors.should.equal('bad credentials');
       done();
     })
   })

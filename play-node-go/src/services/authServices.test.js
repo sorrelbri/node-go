@@ -16,7 +16,8 @@ describe('signupService', () => {
 });
 
 describe('loginService', () => {
-  it('', () => {
-
+  it('login is successful', async () => {
+    // const response = await loginService(newUserFormData);
+    // console.log(response);
   });
 });
