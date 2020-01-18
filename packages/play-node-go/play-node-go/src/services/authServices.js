@@ -1,5 +1,4 @@
 import config from '../config';
-import Axios from 'axios';
 
 const authEndpoint = config.authAddress;
 const signupEndpoint = `${authEndpoint}/signup`
@@ -15,8 +14,6 @@ const loginService = () => {
 }
 
 const signupService = async (formData) => {
-  // const response = await Axios.post(signupEndpoint, {...formData }, {credentials: 'include', headers: headers})
-  console.log(formData)
   const response = await fetch(signupEndpoint, {
     method: 'POST',
     credentials: 'include',

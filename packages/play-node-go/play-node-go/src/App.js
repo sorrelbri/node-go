@@ -24,16 +24,19 @@ function App() {
 
   const fetchIndexAPI = async () => {
     const response = await indexServices.indexService();
-    if (response.body) {
-      console.log(response.body)
+    if (response) {
       const action = {
         type: 'INDEX',
         message: 'SET_USER',
-        body: response.body
+        body: response
       }
       dispatch(action)
     }
   }
+
+  useEffect(() => {
+    fetchIndexAPI();
+  }, [])
 
   const socketConnect = () => {
     socket.emit('connect');
@@ -43,13 +46,11 @@ function App() {
   }
 
   useEffect(() => {
-    fetchIndexAPI();
     socketConnect();
-  }, [socketData, state.user])
+  }, [])
 
   return (
     <Router>
-    {/* {fetchOnLoad()}; */}
       
       <div data-testid="App" className="App">        
         <Switch>
