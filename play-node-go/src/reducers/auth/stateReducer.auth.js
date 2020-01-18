@@ -1,8 +1,6 @@
 // @flow
 import type { state, action } from '../stateReducer';
 
-import authServices from '../../services/authServices';
-
 export const authReducer = (state: state, action: action):state => {
   switch (action.message) {
     case 'LOGIN':
