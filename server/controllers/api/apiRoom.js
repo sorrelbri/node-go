@@ -1,11 +1,10 @@
-// const roomQueries = require('../../data/queries/room');
+const roomQueries = require('../../data/queries/room');
 
 const roomIndex = async (req, res, next) => {
   try {
     // TODO eventually add check for user's private rooms
-    
-
-    res.status(200).json({rooms: [{id: 1, name: 'main', description: 'A general place to play Go'}]})
+    const publicRooms = await roomQueries.findPublicRooms();
+    res.status(200).json({rooms: publicRooms})
   }
 
   catch (err) {
