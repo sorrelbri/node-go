@@ -1,17 +1,14 @@
 import React, {useState, useEffect, useReducer} from 'react';
-import './App.scss';
-import config from './config';
-
-import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
-
 import socketIOClient from 'socket.io-client';
-
+import config from './config';
+import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 import MainWrapper from './components/MainWrapper/MainWrapper';
-
 import { stateReducer } from './reducers/stateReducer';
 import { initState } from './reducers/init/stateReducer.init';
+import indexServices from './services/api/indexServices';
+import './App.scss';
 
-export const socket = socketIOClient(config.apiAddress);
+export const socket = socketIOClient(config.socketAddress);
 
 
 function App() {
@@ -25,18 +22,17 @@ function App() {
     initState
   );
 
-  const fetchIndexAPI = () => {
-    fetch(config.apiAddress)
-    .then(res => res.text())
-    .catch(err => setError([...error, err]))
-    .then(data => {
+  const fetchIndexAPI = async () => {
+    const response = await indexServices.indexService();
+    if (response.body) {
+      console.log(response.body)
       const action = {
         type: 'INDEX',
-        message: 'INDEX_DATA',
-        body: data
+        message: 'SET_USER',
+        body: response.body
       }
       dispatch(action)
-    })
+    }
   }
 
   const socketConnect = () => {

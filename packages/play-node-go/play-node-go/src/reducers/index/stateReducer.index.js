@@ -4,7 +4,7 @@ import type { state, action } from '../stateReducer';
 export const indexReducer = (state: state, action: action):state => {
   switch(action.message) {
 
-    case 'INDEX_DATA':
+    case 'SET_USER':
       const parsedData = indexDataParse(action.body);
       return state;
       
