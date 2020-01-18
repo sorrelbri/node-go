@@ -4,7 +4,7 @@ const env = runtimeEnv();
 const production = {
   apiAddress: 'https://node-go-api.herokuapp.com/api/v1',
   endpoint: 'https://play-node-go.herokuapp.com',
-  authAddress: 'https://node-go.herokuapp.com/auth',
+  authAddress: 'https://node-go-api.herokuapp.com/auth',
   socketAddress: 'https://node-go-api.herokuapp.com'
 }
 
