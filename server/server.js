@@ -22,7 +22,8 @@ const app = express();
 const allowedOrigin = process.env.REACT_ADDRESS;
 const corsOptions = {
   origin: allowedOrigin,
-  credentials: true
+  credentials: true,
+  methods: "GET,PUT,POST,DELETE"
 }
 
 app.options('*', cors(corsOptions));
