@@ -5,13 +5,13 @@ const apiIndex = async (req, res, next) => {
   try {
     if (req.cookies && req.cookies.token) {
       const token = req.cookies.token;
-      const verifiedToken = verifyToken(token);
-      res.status(200).json(verifiedToken.user)
+      const verifiedToken = await verifyToken(token);
+      res.status(200).send(verifiedToken.user)
     }
     res.status(200).json()
   }
 
-  catch {
+  catch (err) {
     res.status(500).json(err);
   }
 }
