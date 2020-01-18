@@ -28,11 +28,6 @@ const corsOptions = {
 
 app.options('*', cors(corsOptions));
 app.use('*', cors(corsOptions));
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", allowedOrigin);
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
 
 // disable logging for tests
 if (process.env.NODE_ENV !== 'test') app.use(logger('dev'));
