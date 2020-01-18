@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Login.scss';
-import authServices from '../../services/authServices';
-import FormError from '../FormError/FormError';
+import authServices from '../../../services/authServices';
+import FormError from '../../Error/FormError/FormError';
 
 const Login = (props) => {
   const [username, setUsername] = useState('');
