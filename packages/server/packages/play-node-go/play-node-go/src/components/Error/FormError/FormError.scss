@@ -1,0 +1,5 @@
+@import '../../../../public/stylesheets/partials/variables';
+
+span.FormError {
+  color: map-get($colors, "error");;
+}

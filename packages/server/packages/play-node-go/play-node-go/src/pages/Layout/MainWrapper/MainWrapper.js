@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './MainWrapper.scss';
 
+import NavBar from '../NavBar/NavBar';
 import Sidebar from '../Sidebar/Sidebar';
 import Account from '../../pages/Account/Account';
 import Game from '../../pages/Game/Game';
@@ -14,10 +15,13 @@ const MainWrapper = (props) => {
     if (props.page === 'game') return selectPage(props)
     return (
       <div className="main-wrapper" data-testid="main-wrapper">
-        <Sidebar page={props.page} state={props.state} dispatch={props.dispatch}/>
-        <main>
-          {selectPage(props)}
-        </main>
+        <NavBar user={props.state.user}/>
+        <div className="content-wrapper">
+          <Sidebar page={props.page} state={props.state} dispatch={props.dispatch}/>
+          <main>
+            {selectPage(props)}
+          </main>
+        </div>
       </div>
     )
   }
