@@ -11,6 +11,7 @@ const should = chai.should();
 const authSignupSpec = require('./auth.signup.spec');
 const authLoginSpec = require('./auth.login.spec');
 const apiIndexSpec = require('./api.index.spec');
+const apiRoomSpec = require('./room/api.room.spec');
 
 chai.use(chaiHttp);
 // ! to run tests from other testing modules
@@ -20,7 +21,9 @@ const setupDb = () => {
   beforeEach(done => {
     knex.migrate.rollback(true)
     .then(() => knex.migrate.latest())
-    .then(() => done());
+    .then(() => knex.seed.run()
+      .then(() => done())
+    );
   });
   afterEach(done => {
     knex.migrate.rollback(true)
@@ -39,5 +42,6 @@ describe('API Routes', function() {
   setupDb();
   
   apiIndexSpec(chai, knex, server)
+  apiRoomSpec(chai, knex, server)
   
 });
