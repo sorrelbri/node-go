@@ -3,11 +3,11 @@ import './MainWrapper.scss';
 
 import NavBar from '../NavBar/NavBar';
 import Sidebar from '../Sidebar/Sidebar';
-import Account from '../../pages/Account/Account';
-import Game from '../../pages/Game/Game';
-import Home from '../../pages/Home/Home';
-import News from '../../pages/News/News';
-import Room from '../../pages/Room/Room';
+import Account from '../../Account/Account';
+import Game from '../../Game/Game';
+import Home from '../../Home/Home';
+import News from '../../News/News';
+import Room from '../../Room/Room';
 
 const MainWrapper = (props) => {
 
