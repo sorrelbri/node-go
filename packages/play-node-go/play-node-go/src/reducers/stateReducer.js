@@ -1,6 +1,7 @@
 // @flow
 import { initState } from './init/stateReducer.init';
 import { authReducer } from './auth/stateReducer.auth';
+import { errorReducer } from './err/stateReducer.err';
 import { indexReducer } from './index/stateReducer.index';
 
 export type state = {
@@ -19,13 +20,16 @@ export const stateReducer = (state: state, action: action): state => {
   
   switch (action.type) {
     case 'INIT': return initState();
+    
+    case 'AUTH':
+      return authReducer(errorStrippedState, action);
 
     case 'INDEX':
       return indexReducer(errorStrippedState, action);
 
-    case 'AUTH':
-      return authReducer(errorStrippedState, action);
-  
+    case 'ERR':
+      return errorReducer(errorStrippedState, action);
+
     default: return state;
   }
 }

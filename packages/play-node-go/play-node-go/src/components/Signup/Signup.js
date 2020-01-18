@@ -11,6 +11,14 @@ const Signup = (props) => {
 
   const handleSubmit = async e => {
     e.preventDefault();
+    if (password !== confirmPassword) {
+      return props.dispatch({
+        type: 'ERR',
+        message: 'AUTH_ERROR',
+        body: { authError: 'Password fields must be the same'}
+      })
+    }
+
     const signupResponse = await authServices.signupService({
       username,
       email,
