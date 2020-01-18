@@ -25,23 +25,35 @@ function App() {
     initState
   );
 
-  useEffect(() => {
+  const fetchIndexAPI = () => {
     fetch(config.apiAddress)
     .then(res => res.text())
     .catch(err => setError([...error, err]))
-    .then(data => setFetchData(data))
-  })
+    .then(data => {
+      const action = {
+        type: 'INDEX',
+        message: 'INDEX_DATA',
+        body: data
+      }
+      dispatch(action)
+    })
+  }
 
-  useEffect(() => {
-    
+  const socketConnect = () => {
     socket.emit('connect');
-    socket.on('connect', data => setSocketData('socket connected'));
+    socket.on('connected', data => setSocketData('socket connected'));
     socket.on('connect_error', err => setError([...error, err]));
     socket.on('error', err => setError([...error, err]))
-  })
+  }
+
+  useEffect(() => {
+    fetchIndexAPI();
+    socketConnect();
+  }, [socketData, state.user])
 
   return (
     <Router>
+    {/* {fetchOnLoad()}; */}
       
       <div data-testid="App" className="App">        
         <Switch>
@@ -71,7 +83,7 @@ function App() {
         <h1>React Boilerplate</h1>
         {fetchData ? <p>{fetchData}</p> : <></>}
         {socketData ? <p>{socketData}</p> : <></>}
-        {error ? error.map(err => <p>{err}</p>): <></>}
+        {/* {error ? error.map(err => <p>{err}</p>): <></>} */}
       </div>
     </Router>
   );
