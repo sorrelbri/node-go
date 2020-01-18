@@ -1,4 +1,6 @@
 const apiRoomSpec = (chai, knex, server) => {
+  const roomEndpoint = '/api/v1/rooms';
+  const publicRooms = {rooms: [{id: 1, name: 'main', description: 'A general place to play Go'}]};
   
   it('seeded rooms should be present in db', done => {
     knex('room').where('id', 1).orWhere('id', 2).select('name').then(roomResults => {
@@ -8,7 +10,7 @@ const apiRoomSpec = (chai, knex, server) => {
 
   it('request to api rooms should return 200', done => {
     chai.request(server)
-    .get('api/v1/rooms')
+    .get(roomEndpoint)
     .end((err,res)=> {
       if(err) done(err);
       res.should.status(200);
@@ -16,15 +18,15 @@ const apiRoomSpec = (chai, knex, server) => {
     });
   })
 
-  // it('request to api rooms should return all public rooms', done => {
-  //   chai.request(server)
-  //   .get('api/v1/rooms')
-  //   .end((err,res)=> {
-  //     if(err) done(err);
-  //     res.body.should.have.property('rooms');
-  //     done();
-  //   });
-  // })
+  it('request to api rooms should return all public rooms', done => {
+    chai.request(server)
+    .get(roomEndpoint)
+    .end((err,res)=> {
+      if(err) done(err);
+      res.body.should.eql(publicRooms);
+      done();
+    });
+  })
 }
 
 module.exports = apiRoomSpec;
