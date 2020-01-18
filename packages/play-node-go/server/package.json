@@ -8,7 +8,8 @@
     "make-migration": "./node_modules/.bin/knex migrate:make",
     "migrate": "./node_modules/.bin/knex migrate:latest",
     "migrate-test": "./node_modules/.bin/knex migrate:latest --env test",
-    "seed": "./node_modules/.bin/knex seed:run"
+    "seed": "./node_modules/.bin/knex seed:run",
+    "make-seed": "./node_modules/.bin/knex seed:make"
   },
   "dependencies": {
     "bcrypt": "^3.0.7",
