@@ -12,8 +12,10 @@ const signToken = (res, user) => {
   });
   return res.cookie('token', token, {
     expires: new Date(Date.now() + expiration),
-    secure: false, // set to true if your using https
-    httpOnly: true,
+    domain: process.env.DOMAIN,
+    // secure: false, // set to true if your using https
+    httpOnly: true
+    // path: '/api/v1'
   });
 };
 module.exports = signToken;
