@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import './Sidebar.scss';
 
-import AccountSidebar from '../../pages/Account/AccountSidebar';
-import HomeSidebar from '../../pages/Home/HomeSidebar';
-import NewsSidebar from '../../pages/News/NewsSidebar';
-import RoomSidebar from '../../pages/Room/RoomSidebar';
+import AccountSidebar from '../../Account/AccountSidebar';
+import HomeSidebar from '../../Home/HomeSidebar';
+import NewsSidebar from '../../News/NewsSidebar';
+import RoomSidebar from '../../Room/RoomSidebar';
 
 const Sidebar = (props) => {
 
