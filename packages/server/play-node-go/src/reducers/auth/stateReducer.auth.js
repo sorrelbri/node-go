@@ -7,7 +7,7 @@ export const authReducer = (state: state, action: action):state => {
       return loginReducer(state, action);
       
     case 'SIGNUP':
-      return signupReducer(state, action);
+      return loginReducer(state, action);
 
     case 'LOGOUT':
       return state;
@@ -18,13 +18,6 @@ export const authReducer = (state: state, action: action):state => {
 }
 
 function loginReducer(state: state, action: action): state {
-  const userCredentials = action.body;
-
-
-  return state;
-}
-
-function signupReducer(state: state, action: action): state {
   const newUser = action.body;
   return {...state, user: newUser };  
 }

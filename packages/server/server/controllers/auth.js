@@ -45,25 +45,25 @@ const login = async (req, res, next) => {
     const savedUser = queryResults[0] || null;
 
     if (!savedUser) {
-      return res.status(401).json({err: 'bad credentials'});
+      return res.status(401).send({errors: 'bad credentials'});
     }
     
     const hashedPassword = savedUser.password;
     const passwordMatch = await compareHash(user.password, hashedPassword);
 
     if (!passwordMatch) {
-      return res.status(401).json({err: 'bad credentials'});
+      return res.status(401).send({errors: 'bad credentials'});
     }
     
     const authorizedUser = {...savedUser};
     delete authorizedUser.password;
     
     signToken(res, authorizedUser);
-    res.send('ok').status(200);
+    res.send({...authorizedUser}).status(200);
   }
   
   catch (err) {
-    res.status(500).json(err);
+    res.status(500).send({errors: err});
   }
 }
 
