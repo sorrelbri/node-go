@@ -2,7 +2,7 @@ import React, {useState, useEffect, useReducer} from 'react';
 import socketIOClient from 'socket.io-client';
 import config from './config';
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
-import MainWrapper from './components/MainWrapper/MainWrapper';
+import MainWrapper from './pages/Layout/MainWrapper/MainWrapper';
 import { stateReducer } from './reducers/stateReducer';
 import { initState } from './reducers/init/stateReducer.init';
 import indexServices from './services/api/indexServices';
