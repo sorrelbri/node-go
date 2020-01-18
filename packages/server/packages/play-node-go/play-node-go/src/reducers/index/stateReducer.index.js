@@ -5,8 +5,8 @@ export const indexReducer = (state: state, action: action):state => {
   switch(action.message) {
 
     case 'SET_USER':
-      const parsedData = indexDataParse(action.body);
-      return state;
+      const user = indexDataParse(action.body);
+      return {...state, user};
       
     default: 
       return state;
@@ -14,5 +14,6 @@ export const indexReducer = (state: state, action: action):state => {
 }
 
 function indexDataParse(indexData) {
-  console.log(indexData)
+  const user = JSON.parse(indexData);
+  return user
 }
