@@ -6,6 +6,7 @@ module.exports = {
   development: {
     client: 'postgresql',
     connection: process.env.PG_CONNECTION_STRING,
+    seeds: { directory: './data/seeds' },
     migrations: {
       directory: './data/migrations',
     },
@@ -14,6 +15,7 @@ module.exports = {
   test: {
     client: 'postgresql',
     connection: process.env.PG_CONNECTION_STRING_TEST,
+    seeds: { directory: './data/seeds' },
     migrations: {
       directory: './data/migrations',
     },
