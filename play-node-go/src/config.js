@@ -7,7 +7,9 @@ const production = {
 }
 
 const development = {
-  apiAddress: 'http://localhost:8000',
+  authAddress: 'http://localhost:8000/auth',
+  apiAddress: 'http://localhost:8000/api/v1',
+  socketAddress: 'http://localhost:8000',
   endpoint: 'http://localhost:3000'
 }
 
