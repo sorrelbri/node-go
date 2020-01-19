@@ -24,7 +24,7 @@ const HomeSidebar = (props) => {
 
   return (  
     <nav>
-      {props.state.user ? ifUser : ifNoUser}
+      {props.state.user.username ? ifUser : ifNoUser}
     </nav>
   );
 }
