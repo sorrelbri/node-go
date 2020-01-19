@@ -15,5 +15,5 @@ export const roomsReducer = (state: state, action: action):state => {
 
 function roomsParse(roomsData) {
   const rooms = JSON.parse(roomsData);
-  return rooms
+  return rooms.rooms
 }
