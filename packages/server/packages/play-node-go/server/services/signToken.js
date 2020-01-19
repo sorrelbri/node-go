@@ -13,9 +13,9 @@ const signToken = (res, user) => {
   return res.cookie('token', token, {
     expires: new Date(Date.now() + expiration),
     domain: process.env.DOMAIN,
-    // secure: false, // set to true if your using https
-    httpOnly: true
-    // path: '/api/v1'
+    secure: process.env.NODE_ENV === 'production' ? true : false,
+    httpOnly: true,
+    sameSite: 'Strict'
   });
 };
 module.exports = signToken;
