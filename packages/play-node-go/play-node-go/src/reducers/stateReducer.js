@@ -3,6 +3,7 @@ import { initState } from './init/stateReducer.init';
 import { authReducer } from './auth/stateReducer.auth';
 import { errorReducer } from './err/stateReducer.err';
 import { indexReducer } from './index/stateReducer.index';
+import { roomsReducer } from './rooms/stateReducer.rooms';
 
 export type state = {
   user: {},
@@ -26,6 +27,9 @@ export const stateReducer = (state: state, action: action): state => {
 
     case 'INDEX':
       return indexReducer(errorStrippedState, action);
+
+    case 'ROOMS':
+      return roomsReducer(errorStrippedState, action);
 
     case 'ERR':
       return errorReducer(errorStrippedState, action);
