@@ -1,0 +1,9 @@
+div.RoomButton {
+  display: block;
+  padding: 1vw;
+
+  .RoomButton__room-name {
+    text-transform: capitalize;
+  }
+
+}

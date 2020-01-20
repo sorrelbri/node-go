@@ -1,17 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './NavBar.scss';
-import Logo from '../../../components/Logo/Logo';
+import Logo from '../../../components/Button/Logo/Logo';
 
 const NavBar = (props) => {
 
   return (
     <div className="NavBar" data-testid="NavBar">
-      <Link to="/" >
+      <Link to="/home" >
         <div className="NavBar__logo"><Logo /></div>
       </Link>
 
-      <Link to="/" >
+      <Link to="/home" >
         <div className="NavBar__home">Find a Game</div>
       </Link>
       
