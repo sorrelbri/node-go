@@ -91,4 +91,4 @@ function onListening() {
 
 const socketIO = require('socket.io')
 const enableSocket = require('../socket').enableSocket;
-const io = enableSocket(socketIO(server));
+const io = enableSocket(socketIO(server, { cookie: false }));
