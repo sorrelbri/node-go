@@ -1,8 +1,24 @@
 import React, { useEffect } from 'react';
 import './Home.scss';
 import roomsServices from '../../services/api/roomsServices';
+import RoomButton from '../../components/Button/Room/Room';
 
 const Home = props => {
+  const state =     props.state;
+  const dispatch =  props.dispatch;
+
+  const renderRooms = () => {
+    const rooms = state.rooms || [];
+    if (rooms.length) {
+      return rooms.map(roomData => (
+        <RoomButton 
+          key={`room-${roomData.id}`}
+          room={roomData}
+        />
+      ))
+    }
+    return <p>Loading Component</p>
+  }
 
   const fetchRoomsAPI = async () => {
     const response = await roomsServices.indexService();
@@ -12,7 +28,7 @@ const Home = props => {
         message: 'SET_ROOMS',
         body: response
       }
-      return props.dispatch(action)
+      return dispatch(action)
     }
   }
 
@@ -24,7 +40,7 @@ const Home = props => {
     <div className="page">
 
       <div className="Home" data-testid="Home">
-        <p>Home</p>
+        {renderRooms()}
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useReducer} from 'react';
 import socketIOClient from 'socket.io-client';
 import config from './config';
-import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
+import { Switch, Route, BrowserRouter as Router, Redirect } from 'react-router-dom';
 import MainWrapper from './pages/Layout/MainWrapper/MainWrapper';
 import { stateReducer } from './reducers/stateReducer';
 import { initState } from './reducers/init/stateReducer.init';
@@ -70,10 +70,15 @@ function App() {
           <Route path="/news">
             <MainWrapper page="news" state={state} dispatch={dispatch}/>
           </Route>
+
+          <Route path="/home">
+            <MainWrapper page="home" state={state} dispatch={dispatch}/>
+          </Route>
         
           <Route path="/">
-            {/* Add ternary for login */}
-            <MainWrapper page="home" state={state} dispatch={dispatch}/>
+            {state.user.username 
+            ? <MainWrapper page="home" state={state} dispatch={dispatch}/> 
+            : <MainWrapper page="news" state={state} dispatch={dispatch}/>}
           </Route>
 
         </Switch>
