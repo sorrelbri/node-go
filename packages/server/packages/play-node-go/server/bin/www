@@ -89,6 +89,5 @@ function onListening() {
   debug('Listening on ' + bind);
 }
 
-const socketIO = require('socket.io')
-const enableSocket = require('../socket').enableSocket;
-const io = enableSocket(socketIO(server, { cookie: false }));
+const socket = require('../socket');
+socket.io.attach(server);
