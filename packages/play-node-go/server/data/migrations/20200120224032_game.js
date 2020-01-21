@@ -14,6 +14,7 @@ exports.up = function(knex) {
 
     table.string('application');
     table.string('application_version');
+    table.timestamps(true, true);
 
     table.string('player_black');
     table.string('player_white');
