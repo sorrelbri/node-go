@@ -15,7 +15,6 @@ const apiRoomSpec = require('./room/api.room.spec');
 
 chai.use(chaiHttp);
 // ! to run tests from other testing modules
-// import someTest from './endpoint/someTest';
 
 const setupDb = () => {
   beforeEach(done => {
