@@ -4,16 +4,18 @@ import { authReducer } from './auth/stateReducer.auth';
 import { errorReducer } from './err/stateReducer.err';
 import { indexReducer } from './index/stateReducer.index';
 import { roomsReducer } from './rooms/stateReducer.rooms';
+import { messagesReducer } from './messages/stateReducer.messages';
 
 export type state = {
   user: {},
-  errors: {}
+  errors: {},
+  messages: []
 }
 
 export type action = {
   type: string,
   message: ?string,
-  body: {},
+  body: {} | Array<{}>,
 }
 
 export const stateReducer = (state: state, action: action): state => {
@@ -27,6 +29,9 @@ export const stateReducer = (state: state, action: action): state => {
 
     case 'INDEX':
       return indexReducer(errorStrippedState, action);
+
+    case 'MESSAGES':
+      return messagesReducer(errorStrippedState, action);
 
     case 'ROOMS':
       return roomsReducer(errorStrippedState, action);
