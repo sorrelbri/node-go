@@ -14,18 +14,16 @@ const checkValidationErrors = (req, res) => {
 const signup = async (req, res, next) => {
   checkValidationErrors(req, res);
   const user = req.body;
-
   try {
     delete user.confirmPassword;
+    const existingUser = await userQueries.findUserByNameOrEmail(user);
     const hashedPassword = await hashPassword(user.password);
     const secureUser = { ...user, password: hashedPassword };
-    const existingUser = await userQueries.findUserByNameOrEmail(secureUser);
-
     if (existingUser.length) {
       return res.status(409).json({errors: [{auth: 'User already exists!'}]})
     }
 
-    const newUser = await userQueries.insertUser(secureUser)
+    const newUser = await userQueries.insertUser(secureUser);
     signToken(res, newUser)
     res.status(201).json({...newUser});
   } 

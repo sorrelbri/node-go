@@ -1,6 +1,6 @@
 const knex = require('../db');
 
-const joinGameSection = [
+const joinGameSelect = [
   'room.id', 'room.name', 'room.description', 'room.language',
   'game.komi', 'game.handicap', 'game.board_size', 
   'game.player_black', 'game.player_white',
@@ -17,7 +17,7 @@ const findRoomById = async (roomId) => {
   
   return await knex
   .from('room')
-  .select(joinGameSection)
+  .select(joinGameSelect)
   .where('room.id', '=', roomId)
   .join('game', function() {
     this.on('game.room', '=', 'room.id')

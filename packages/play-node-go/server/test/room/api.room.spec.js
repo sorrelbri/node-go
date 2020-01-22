@@ -14,6 +14,11 @@ const apiRoomSpec = (chai, knex, server) => {
       player_white: 'anon',
       player_black_rank: 'K3',
       player_white_rank: 'K2'
+    } ],
+    messages: [ {
+      content: 'Hey! Welcome to the general room!',
+      username: 'user-one',
+      admin: true
     } ]
   }
   
