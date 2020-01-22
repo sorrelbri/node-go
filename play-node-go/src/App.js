@@ -39,6 +39,7 @@ function App() {
   }, [])
 
   const socketConnect = () => {
+    socket.removeAllListeners();
     socket.emit('connect');
     socket.on('connected', data => setSocketData('socket connected'));
     socket.on('connect_error', err => setError([...error, err]));

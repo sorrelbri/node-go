@@ -53,10 +53,9 @@ const Signup = (props) => {
       password,
       confirmPassword
     })
-    const parsedResponse = JSON.parse(signupResponse)
-    
-    if (parsedResponse.errors) {
-      const authError = parsedResponse.errors[0].auth
+
+    if (signupResponse.errors) {
+      const authError = signupResponse.errors[0].auth
       return props.dispatch({
         ...errorDispatchAction,
         body: { authError }
@@ -66,7 +65,7 @@ const Signup = (props) => {
     return props.dispatch({
       type: 'AUTH',
       message: 'SIGNUP',
-      body: parsedResponse
+      body: signupResponse
     })
   }
 

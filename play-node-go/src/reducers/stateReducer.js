@@ -13,7 +13,7 @@ export type state = {
 export type action = {
   type: string,
   message: ?string,
-  body: {}
+  body: {},
 }
 
 export const stateReducer = (state: state, action: action): state => {
