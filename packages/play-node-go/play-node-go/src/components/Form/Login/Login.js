@@ -36,9 +36,8 @@ const Login = (props) => {
       username,
       password
     })
-    const parsedResponse = JSON.parse(loginResponse);
-    if (parsedResponse.errors) {
-      const authError = parsedResponse.errors
+    if (loginResponse.errors) {
+      const authError = loginResponse.errors
       return props.dispatch({
         ...errorDispatchAction,
         body: { authError }
@@ -48,7 +47,7 @@ const Login = (props) => {
     return props.dispatch({
       type: 'AUTH',
       message: 'LOGIN',
-      body: parsedResponse
+      body: loginResponse
     })
   }
 

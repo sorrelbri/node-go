@@ -1,19 +1,43 @@
 // @flow
 import type { state, action } from '../stateReducer';
+import { stateReducer } from '../stateReducer';
 
 export const roomsReducer = (state: state, action: action):state => {
   switch(action.message) {
 
     case 'SET_ROOMS':
-      const rooms = roomsParse(action.body);
+      const rooms = action.body;
       return {...state, rooms};
+
+    case 'JOIN_ROOM': {
+      // SET MESSAGES
+      const stateWithMessages = action.body.messages.length ? setMessages(state, action.body) : state;
+      
+      // SET CURRENT ROOM
+
+      // if (!data.roomGames.length) {
+      //   const errorAction = {
+      //     type: 'ERR',
+      //     message: 'JOIN_ROOM',
+      //     body: { joinRoomError: 'Game room has no games' }
+      //   }
+      //   return stateReducer(stateWithMessages, errorAction);
+      // }
+
+      // SET GAMES
+    }
+
       
     default:
       return state;
   }
 }
 
-function roomsParse(roomsData) {
-  const rooms = JSON.parse(roomsData);
-  return rooms.rooms
+function setMessages(state, data) {
+  const messageAction = {
+    type: 'MESSAGE',
+    message: 'SET_MESSAGES',
+    body: data.messages
+  }
+  stateReducer(state, messageAction)
 }
