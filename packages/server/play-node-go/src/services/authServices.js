@@ -16,11 +16,10 @@ const loginService = async(formData) => {
     body: JSON.stringify(formData),
     headers: headers
   })
-  .then(res => {
-    return res.text();
-  }).catch(err => {
-    return err;
-  });
+  .then(res => res.text())
+  .then(text => JSON.parse(text))
+  .catch(err => err);
+  
   return response;
 }
 
@@ -31,11 +30,10 @@ const signupService = async (formData) => {
     body: JSON.stringify(formData),
     headers: headers
   })
-  .then(res => {
-    return res.text();
-  }).catch(err => {
-    return err;
-  });
+  .then(res => res.text())
+  .then(text => JSON.parse(text))
+  .catch(err => err);
+
   return response;
 }
 

@@ -3,12 +3,30 @@ import { useParams } from 'react-router-dom';
 import './Room.scss';
 import socketIOClient from 'socket.io-client';
 import config from '../../config';
+import roomsServices from '../../services/api/roomsServices';
 
 const Room = (props) => {
-  const roomId = useParams().id;
+  const roomId = parseInt(useParams().id) || 0;
   const [ socketData, setSocketData ] = useState();
   const [ messages, setMessages ] = useState();
+
+  const fetchRoomAPI = async () => {
+    const response = await roomsServices.getRoomService(roomId);
+    if (response) {
+      console.log(response);
+      // const action = {
+      //   type: 'ROOMS',
+      //   message: 'JOIN_ROOM',
+      //   body: response
+      // }
+      // return dispatch(action);
+    }
+  }
   
+  useEffect(() => {
+    fetchRoomAPI();
+  }, [])
+
   // ! [start] roomSocket
   const roomSocket = socketIOClient(`${config.socketAddress}/${roomId}`)
 
@@ -23,6 +41,7 @@ const Room = (props) => {
   useEffect(() => {
     roomSocketConnect();
   }, [])
+
   // ! [end]
 
   return (  
