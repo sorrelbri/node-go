@@ -2,13 +2,7 @@ import React, { useEffect } from 'react';
 import './Home.scss';
 import roomsServices from '../../services/api/roomsServices';
 import RoomButton from '../../components/Button/Room/Room';
-import socketIOClient from 'socket.io-client';
-import config from '../../config';
 
-// ! [start] roomSocket stub
-const roomId = 1
-const roomSocket = socketIOClient(`${config.socketAddress}/${roomId}`)
-// ! [end]
 
 const Home = props => {
   const state =     props.state || {};
@@ -42,19 +36,6 @@ const Home = props => {
   useEffect(() => {
     fetchRoomsAPI();
   }, [])
-
-  // ! [start] roomSocket stub
-  const roomSocketConnect = () => {
-    roomSocket.emit('connect');
-    // roomSocket.on('connected', data => setSocketData('room socket connected'));
-    // roomSocket.on('connect_error', err => setError([...error, err]));
-    // roomSocket.on('error', err => setError([...error, err]))
-  }
-
-  useEffect(() => {
-    roomSocketConnect();
-  }, [])
-  // ! [end]
 
   return (  
     <div className="page">

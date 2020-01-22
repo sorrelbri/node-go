@@ -1,5 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
+import { BrowserRouter as Router } from 'react-router-dom';
 import Room from './Room';
 
 const roomData = {
@@ -10,13 +11,21 @@ const roomData = {
 }
 
 test('renders RoomButton without crashing', () => {
-  const { getByTestId } = render(<Room room={roomData} />);
+  const { getByTestId } = render(
+    <Router>
+      <Room room={roomData} />
+    </Router>
+  );
   const RoomButton = getByTestId('RoomButton');
   expect(RoomButton).toBeInTheDocument();
 });
 
 test('renders RoomButton with Room name', () => {
-  const { getByTestId } = render(<Room room={roomData} />);
+  const { getByTestId } = render(
+    <Router>
+      <Room room={roomData} />
+    </Router>
+  );
   const RoomButton = getByTestId('RoomButton');
   expect(RoomButton).toHaveTextContent('main');
 });
