@@ -4,6 +4,13 @@ const winType = [
   '0', 'Void', '?'
 ]
 
+const rankArray = [
+  'D7', 'D6', 'D5', 'D4', 'D3', 'D2', 'D1',
+  'K1', 'K2', 'K3', 'K4', 'K5', 'K6', 'K7', 'K8', 'K9', 'K10',
+  'K11', 'K12', 'K13', 'K14', 'K15', 'K16', 'K17', 'K18', 'K19', 'K20',
+  'K21', 'K22', 'K23', 'K24', 'K25', 'K26', 'K27', 'K28', 'K29', 'K30', 'UR'
+]
+
 exports.up = function(knex) {
   return knex.schema.createTable("game", table => {
     table.increments('id').primary();
@@ -18,6 +25,9 @@ exports.up = function(knex) {
 
     table.string('player_black');
     table.string('player_white');
+    table.enu('player_black_rank', rankArray).default('UR');
+    table.enu('player_white_rank', rankArray).default('UR');
+    
     table.string('event');
     table.string('name');
     table.string('description');

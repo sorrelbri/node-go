@@ -1,7 +1,7 @@
 const roomQueries = require('../../data/queries/room');
 const {enableRoomSocket} = require('../../socket');
 
-const roomIndex = async (req, res, next) => {
+const getAll = async (req, res, next) => {
   try {
     // TODO eventually add check for user's private rooms
     const publicRooms = await roomQueries.findPublicRooms();
@@ -14,6 +14,19 @@ const roomIndex = async (req, res, next) => {
   }
 }
 
+const show = async (req, res, next) => {
+  try {
+    const roomId = req.params.id;
+    const roomGames = await roomQueries.findRoomById(roomId);
+    const body = {roomGames}
+    res.status(200).json(body);
+  }
+  catch (err) {
+    res.status(500).json(err);
+  }
+}
+
 module.exports = {
-  roomIndex
+  getAll,
+  show
 }
