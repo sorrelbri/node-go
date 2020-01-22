@@ -25,6 +25,7 @@ export const roomsReducer = (state: state, action: action):state => {
       // }
 
       // SET GAMES
+      return stateWithMessages;
     }
 
       
@@ -33,11 +34,11 @@ export const roomsReducer = (state: state, action: action):state => {
   }
 }
 
-function setMessages(state, data) {
+function setMessages(state, body) {
   const messageAction = {
-    type: 'MESSAGE',
+    type: 'MESSAGES',
     message: 'SET_MESSAGES',
-    body: data.messages
+    body: body.messages
   }
-  stateReducer(state, messageAction)
+  return stateReducer(state, messageAction)
 }
