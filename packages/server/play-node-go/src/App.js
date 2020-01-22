@@ -59,7 +59,7 @@ function App() {
             <MainWrapper page="account" state={state} dispatch={dispatch}/>
           </Route>
 
-          <Route path="/rooms">
+          <Route path="/rooms/:id">
             <MainWrapper page="room" state={state} dispatch={dispatch}/>
           </Route>
 
