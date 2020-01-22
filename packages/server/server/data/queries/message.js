@@ -1,11 +1,17 @@
 const knex = require('../db');
-
-// TODO timestamps
+const joinUserSelect = [
+  'content', 'username', 'admin'
+]
 
 const findMessageByRoom = async (roomId) => {
-  return await knex('message')
-  .where({'id': roomId})
-  .select('*');
+  return await knex
+  .from('message')
+  .where({'message.room': roomId})
+  .select(joinUserSelect)
+  .join('user', function() {
+    this.on('message.user', '=', 'user.id')
+  })
+  // .toSQL();
 }
 
 module.exports = {

@@ -1,4 +1,5 @@
 const roomQueries = require('../../data/queries/room');
+const messageQueries = require('../../data/queries/message');
 const {enableRoomSocket} = require('../../socket');
 
 const getAll = async (req, res, next) => {
@@ -18,7 +19,8 @@ const show = async (req, res, next) => {
   try {
     const roomId = req.params.id;
     const roomGames = await roomQueries.findRoomById(roomId);
-    const body = {roomGames}
+    const messages = await messageQueries.findMessageByRoom(roomId);
+    const body = {roomGames, messages};
     res.status(200).json(body);
   }
   catch (err) {
