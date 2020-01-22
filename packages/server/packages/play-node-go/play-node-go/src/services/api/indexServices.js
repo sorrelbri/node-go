@@ -11,9 +11,9 @@ const indexService = async () => {
   const response = await fetch(apiAddress, 
     {method: 'GET', credentials: 'include', headers: headers}
   )
-  .then(res => {
-    return res.text();
-  }).catch(err => {
+  .then(res => res.text())
+  .then(text => JSON.parse(text))
+  .catch(err => {
     return err;
   });
   return response;
