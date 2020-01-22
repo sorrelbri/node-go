@@ -27,7 +27,7 @@ const Home = props => {
       const action = {
         type: 'ROOMS',
         message: 'SET_ROOMS',
-        body: response
+        body: response.rooms
       }
       return dispatch(action)
     }

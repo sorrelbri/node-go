@@ -47,8 +47,7 @@ it('join room returns state with current room, games and messages all populated'
     ...state, 
     currentRoom: roomsData[0], 
     messages: joinRoomData.messages,
-    roomGames: [
-      joinRoomData.roomGames
-    ]
+    roomGames: normalizedRoomGames
+
   })
 });

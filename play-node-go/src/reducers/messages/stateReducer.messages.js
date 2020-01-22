@@ -6,8 +6,8 @@ export const messagesReducer = (state: state, action: action):state => {
   switch(action.message) {
 
     case 'SET_MESSAGES':
-      const rooms = parseData(action.body);
-      return {...state, rooms};
+      const messages = action.body;
+      return {...state, messages};
 
       
     default:
