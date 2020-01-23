@@ -49,6 +49,5 @@ it('join room returns state with current room, games and messages all populated'
     currentRoom: joinRoomData.currentRoom, 
     messages: joinRoomData.messages,
     games: joinRoomData.roomGames
-
   })
 });
