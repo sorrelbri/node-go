@@ -9,23 +9,19 @@ export const roomsReducer = (state: state, action: action):state => {
       const rooms = action.body;
       return {...state, rooms};
 
+    case 'SET_CURRENT':
+      const currentRoom = action.body;
+      return {...state, currentRoom};
+
     case 'JOIN_ROOM': {
-      // SET MESSAGES
-      const stateWithMessages = action.body.messages.length ? setMessages(state, action.body) : state;
-      
-      // SET CURRENT ROOM
+      const stateWithRoom = setCurrentRoom(state, action);
+      const stateWithMessages = setMessages(stateWithRoom, action);
+      if (!action.body.roomGames) {
+        return setJoinRoomError(state);
+      }
+      const stateWithGames = setGames(stateWithMessages, action);
 
-      // if (!data.roomGames.length) {
-      //   const errorAction = {
-      //     type: 'ERR',
-      //     message: 'JOIN_ROOM',
-      //     body: { joinRoomError: 'Game room has no games' }
-      //   }
-      //   return stateReducer(stateWithMessages, errorAction);
-      // }
-
-      // SET GAMES
-      return stateWithMessages;
+      return stateWithGames;
     }
 
       
@@ -34,11 +30,47 @@ export const roomsReducer = (state: state, action: action):state => {
   }
 }
 
-function setMessages(state, body) {
-  const messageAction = {
-    type: 'MESSAGES',
-    message: 'SET_MESSAGES',
-    body: body.messages
+function setMessages(state, action) {
+  if(action.body.messages.length) {
+    const messages = action.body.messages;
+    const messageAction = {
+      type: 'MESSAGES',
+      message: 'SET_MESSAGES',
+      body: messages
+    }
+    return stateReducer(state, messageAction);
   }
-  return stateReducer(state, messageAction)
+  return state;
+}
+
+function setJoinRoomError(state, body) {
+  const errorAction = {
+    type: 'ERR',
+    message: 'JOIN_ROOM_ERROR',
+    body: { joinRoomError: 'Game room has no games' }
+  }
+  return stateReducer(state, errorAction);
+}
+
+function setCurrentRoom(state, action) {
+  const currentRoom = action.body.currentRoom;
+  const roomAction = {
+    type: 'ROOMS',
+    message: 'SET_CURRENT',
+    body: currentRoom
+  }
+  return stateReducer(state, roomAction);
+}
+
+function setGames(state, action) {
+  if (action.body.roomGames.length) {
+    const games = action.body.roomGames;
+    const gamesAction = {
+      type: 'GAMES',
+      message: 'SET_GAMES',
+      body: games
+    }
+    return stateReducer(state, gamesAction);
+  }
+  return state;
 }
