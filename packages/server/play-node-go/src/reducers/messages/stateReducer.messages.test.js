@@ -13,7 +13,7 @@ it('default returns state unaltered', () => {
   expect(stateReducer(state, action)).toEqual(state);
 })
 
-it('default returns state unaltered', () => {
+it('set messages returns state with messages', () => {
   const state = initState();
   const action = {type: 'MESSAGES', message: 'SET_MESSAGES', body: messagesData};
   expect(stateReducer(state, action)).toEqual({...state, messages: messagesData});

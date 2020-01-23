@@ -6,6 +6,8 @@ import config from '../../config';
 import roomsServices from '../../services/api/roomsServices';
 
 const Room = (props) => {
+  const state = props.state;
+  const dispatch = props.dispatch;
   const roomId = parseInt(useParams().id) || 0;
   const [ socketData, setSocketData ] = useState();
   const [ messages, setMessages ] = useState();
@@ -13,13 +15,12 @@ const Room = (props) => {
   const fetchRoomAPI = async () => {
     const response = await roomsServices.getRoomService(roomId);
     if (response) {
-      console.log(response);
-      // const action = {
-      //   type: 'ROOMS',
-      //   message: 'JOIN_ROOM',
-      //   body: response
-      // }
-      // return dispatch(action);
+      const action = {
+        type: 'ROOMS',
+        message: 'JOIN_ROOM',
+        body: response
+      }
+      return dispatch(action);
     }
   }
   
@@ -31,7 +32,6 @@ const Room = (props) => {
   const roomSocket = socketIOClient(`${config.socketAddress}/${roomId}`)
 
   const roomSocketConnect = () => {
-    console.log(roomId)
     roomSocket.emit('connect');
     // ! dispatch data
     roomSocket.on('connected', data => setSocketData('room socket connected'));
