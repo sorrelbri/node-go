@@ -2,11 +2,14 @@ const apiRoomSpec = (chai, knex, server) => {
   const roomEndpoint = '/api/v1/rooms';
   const publicRooms = {rooms: [{id: 1, name: 'main', description: 'A general place to play Go', language: 'EN'}]};
   const roomOne = {
-    roomGames: [ {
+    currentRoom: {
       id: 1,
       name: 'main',
       description: 'A general place to play Go',
-      language: 'EN',
+      language: 'EN'
+    },
+    roomGames: [ {
+      id: 1,
       komi: 6.5,
       handicap: 0,
       board_size: 19,
