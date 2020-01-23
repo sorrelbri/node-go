@@ -25,6 +25,17 @@ const getRoomService = async (roomIndex) => {
   )
   .then(res => res.text())
   .then(text => JSON.parse(text))
+  .then(obj => {
+    obj.games = obj.roomGames.map(game => {
+      delete Object.assign(game, {boardSize: game.board_size }).board_size;
+      delete Object.assign(game, {playerBlack: game.player_black }).player_black;
+      delete Object.assign(game, {playerBlackRank: game.player_black_rank }).player_black_rank;
+      delete Object.assign(game, {playerWhite: game.player_white }).player_white;
+      delete Object.assign(game, {playerWhiteRank: game.player_white_rank }).player_white_rank;
+      return game;
+    })
+    return obj;
+  })
   .catch(err => err);
 
   return response;
