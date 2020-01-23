@@ -11,18 +11,20 @@ const roomsData = [
 ]
 
 const joinRoomData = {
-  "roomGames": [
-    {
-      "id":1, "name":"main", 
-      "description":"A general place to play Go",
-      "language":"EN", "komi":6.5, "handicap":0, "board_size":19,
-      "player_black":"anon", "player_white":"anon",
-      "player_black_rank":"K3", "player_white_rank":"K2"
+  currentRoom: {
+    id:1, name:"main", 
+    description:"A general place to play Go", language:"EN"
+  },
+  roomGames: [
+    { 
+      komi:6.5, handicap:0, board_size:19,
+      player_black:"anon", player_white:"anon",
+      player_black_rank:"K3", player_white_rank:"K2"
     }
   ],
-  "messages": [
+  messages: [
     {
-      "content": "Hey! Welcome to the general room!", "username": "userOne", "admin":true
+      content: "Hey! Welcome to the general room!", username: "userOne", admin: true
     }
   ]
 }
@@ -42,12 +44,11 @@ it('set rooms returns state with rooms added', () => {
 it('join room returns state with current room, games and messages all populated', () => {
   const state = initState();
   const action = {type: 'ROOMS', message: 'JOIN_ROOM', body: joinRoomData};
-  const normalizedRoomGames = joinRoomData.roomGames.map(game => {delete game.id; delete game.name; delete game.description; return game});
   expect(stateReducer(state, action)).toEqual({
     ...state, 
-    currentRoom: roomsData[0], 
+    currentRoom: joinRoomData.currentRoom, 
     messages: joinRoomData.messages,
-    roomGames: normalizedRoomGames
+    games: joinRoomData.roomGames
 
   })
 });
