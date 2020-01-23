@@ -4,6 +4,10 @@ import './Room.scss';
 import socketIOClient from 'socket.io-client';
 import config from '../../config';
 import roomsServices from '../../services/api/roomsServices';
+import GameButton from '../../components/Button/Game/Game';
+import Message from '../../components/Display/Message/Message';
+
+import Development from '../../components/Display/Development/Development';
 
 const Room = (props) => {
   const state = props.state;
@@ -45,9 +49,46 @@ const Room = (props) => {
 
   // ! [end]
 
+  const renderGames = () => {
+    const games = state.games || [];
+    if (games.length) {
+      return games.map(gameData => (
+        <GameButton 
+          key={`game-${gameData.id}`}
+          game={gameData}
+        />
+      ))
+    }
+    return <p>Loading Games...</p>
+  }
+
+  const renderMessages = () => {
+    const messages = state.messages || [];
+    if (messages.length) {
+      return messages.map((messageData, idx) => (
+        <Message
+          key={`message-${idx}`}
+          message={messageData}
+        />
+      ))
+    }
+    return <p>Loading Messages...</p>
+  }
+
+
   return (  
     <div className="Room" data-testid="Room">
-      <h2></h2>
+      <h2>{state.currentRoom ? state.currentRoom.name : 'Loading'}</h2>
+
+      <div className="Room__game-container">
+        {renderGames()}
+      </div>
+
+      <div className="Room__message-container">
+        {renderMessages()}
+        <Development />
+      </div>
+
     </div>
   );
 }
