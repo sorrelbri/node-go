@@ -31,6 +31,7 @@ const Room = (props) => {
   const roomSocket = socketIOClient(`${config.socketAddress}/${roomId}`)
 
   const roomSocketConnect = () => {
+    console.log(roomId)
     roomSocket.emit('connect');
     // ! dispatch data
     roomSocket.on('connected', data => setSocketData('room socket connected'));
