@@ -9,7 +9,7 @@ const show = async (req, res, next) => {
     const gameId = req.params.id;
     if (!gameId) throw('missing game parameter')
     const game = await gameQueries.findGameById(gameId);
-    enableGameSocket(game.room, game.id);
+    enableGameSocket(game.room);
     
     const record = await moveQueries.findGameRecord(gameId);
     res.status(200).json({game, record})

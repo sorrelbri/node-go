@@ -8,7 +8,7 @@ io.on('connection', ()=> {
   io.emit('connected', {message: 'socket connected'});
 })
 
-const enableRoomSocket = (roomId) => {
+const enableRoomSocket = () => {
   const roomSocket = io.of(roomId);
   roomSocket.on('connection', (socket) => {
     
@@ -27,13 +27,25 @@ const enableRoomSocket = (roomId) => {
   return roomSocket;
 }
 
-const enableGameSocket = (roomId, gameId) => {
+const enableGameSocket = (roomId) => {
   const gameSocket = io.of(roomId);
+  let game;
   gameSocket.on('connection', (socket) => {
-    socket.join(gameId);
-    socket.to(gameId).emit(`joined room ${gameId}`)
-    console.log(socket)
+    socket.on('joined game', (gameId) => {
+      game = `game-${gameId}`;
+      console.log(gameId)
+      socket.join(game);
+      // socket
+      // .to(game)
+      io.sockets.in(game).emit('success', game)
+    })
+    
   });
+  // console.log(game)
+  // gameSocket
+  // .to(game)
+  // .emit(`success`, game)
+  // socket.on('hey', () => console.log('hey'))
 
 
   return gameSocket;
