@@ -14,7 +14,7 @@ const Room = (props) => {
   const state = props.state;
   const dispatch = props.dispatch;
   const roomId = parseInt(useParams().id) || 0;
-  const [ socketData, setSocketData ] = useState(false);
+  const [ socket, setSocket ] = useState(false);
 
   const fetchRoomAPI = async () => {
     const response = await roomsServices.getRoomService(roomId);
@@ -39,17 +39,20 @@ const Room = (props) => {
     roomSocket.emit('connect');
     // ! dispatch data
     roomSocket.on('connect', socket => {
-      setSocketData(true)
+      setSocket(true)
     });
     roomSocket.on('join_game_request', data => {
+      // !
       console.log(data)
     })
     roomSocket.on('connect_error', err => {
-      setSocketData(false)
+      setSocket(false)
+      // !
       console.log(err);
     });
     roomSocket.on('error', err => {
-      setSocketData(false)
+      setSocket(false)
+      // !
       console.log(err);
     });
   }
@@ -103,7 +106,7 @@ const Room = (props) => {
     <div className="Room" data-testid="Room">
       <div className="Room__heading">
         <h2>{state.currentRoom ? state.currentRoom.name : 'Loading'}</h2>
-        <span className="Room__connection">{socketData ? '✓' : ' ⃠'}</span>
+        <span className="Room__connection">{socket ? '✓' : ' ⃠'}</span>
         {state.errors.joinGame ? <ActionError error={state.errors.joinGame}/> : <></>}
       </div>
 
