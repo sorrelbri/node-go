@@ -6,6 +6,7 @@ import config from '../../config';
 import roomsServices from '../../services/api/roomsServices';
 import GameButton from '../../components/Button/Game/Game';
 import Message from '../../components/Display/Message/Message';
+import ActionError from '../../components/Error/ActionError/ActionError';
 
 import Development from '../../components/Display/Development/Development';
 
@@ -13,8 +14,7 @@ const Room = (props) => {
   const state = props.state;
   const dispatch = props.dispatch;
   const roomId = parseInt(useParams().id) || 0;
-  const [ socketData, setSocketData ] = useState();
-  const [ messages, setMessages ] = useState();
+  const [ socketData, setSocketData ] = useState(false);
 
   const fetchRoomAPI = async () => {
     const response = await roomsServices.getRoomService(roomId);
@@ -38,14 +38,35 @@ const Room = (props) => {
   const roomSocketConnect = () => {
     roomSocket.emit('connect');
     // ! dispatch data
-    roomSocket.on('connected', data => setSocketData('room socket connected'));
-    roomSocket.on('connect_error', err => console.log(err));
-    roomSocket.on('error', err => console.log(err));
+    roomSocket.on('connect', socket => {
+      setSocketData(true)
+    });
+    roomSocket.on('join_game_request', data => {
+      console.log(data)
+    })
+    roomSocket.on('connect_error', err => {
+      setSocketData(false)
+      console.log(err);
+    });
+    roomSocket.on('error', err => {
+      setSocketData(false)
+      console.log(err);
+    });
   }
 
   useEffect(() => {
     roomSocketConnect();
   }, [])
+
+  useEffect(() => {
+    const data = {
+      user: state.user,
+      game: state.joinGame
+    };
+    console.log('emitting request')
+    console.log(data)
+    roomSocket.emit('join_game_request', data)
+  }, [state.joinGame])
 
   // ! [end]
 
@@ -56,6 +77,7 @@ const Room = (props) => {
         <GameButton 
           key={`game-${gameData.id}`}
           game={gameData}
+          dispatch={dispatch}
         />
       ))
     }
@@ -78,7 +100,11 @@ const Room = (props) => {
 
   return (  
     <div className="Room" data-testid="Room">
-      <h2>{state.currentRoom ? state.currentRoom.name : 'Loading'}</h2>
+      <div className="Room__heading">
+        <h2>{state.currentRoom ? state.currentRoom.name : 'Loading'}</h2>
+        <span className="Room__connection">{socketData ? '✓' : ' ⃠'}</span>
+        {state.errors.joinGame ? <ActionError error={state.errors.joinGame}/> : <></>}
+      </div>
 
       <div className="Room__game-container">
         {renderGames()}

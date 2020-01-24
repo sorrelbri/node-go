@@ -11,12 +11,18 @@ io.on('connection', ()=> {
 enableRoomSocket = (roomId) => {
   const roomSocket = io.of(roomId);
   roomSocket.on('connection', (socket) => {
-    // socket.emit('connected');
-    console.log(`Socket connected at room ${roomId}`);
+    
+    //! Join Game Request queries db for game, ensures unique player joining
     socket.on('join_game_request', async data => {
       const gameRequest = await logJoinGameRequest(data);
+
+      if (gameRequest.err) {
+        roomSocket.emit('join_game_request_error', gameRequest.err);
+      }
+
       roomSocket.emit('join_game_request', gameRequest);
-    })
+    });
+
   });
   return roomSocket;
 }
@@ -29,5 +35,12 @@ module.exports = {
 async function logJoinGameRequest (data) {
   const {user, game} = data;
   const requestedGame = await gameQueries.findGameById(game.id);
-  return { user, requestedGame }
+  
+  if (requestedGame.user_black === user.id) {
+    return { err: 'players must be unique' }
+  }
+
+  const requestingUser = {...user};
+  delete requestingUser.email;
+  return { requestingUser, requestedGame }
 }
