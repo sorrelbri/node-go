@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './Game.scss';
 
 const GameButton = (props) => {
-  const { game, dispatch } = props;
+  const { game, dispatch, user } = props;
 
   const requestJoinGame = () => {
     console.log(`request to Join Game ${game.id}!`)
@@ -29,7 +29,8 @@ const GameButton = (props) => {
   }
 
   const renderInProgressGame = () => {
-    const gameLinkText = game.winType ? 'Study Game' : 'Watch Game'
+    const gameLinkText = game.winType ? 'Study Game' 
+      : user ? 'Rejoin Game' : 'Watch Game' 
     return (
       <>
         <Link to={`/games/${game.id}`}>{gameLinkText}</Link>

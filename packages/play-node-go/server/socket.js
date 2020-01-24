@@ -8,7 +8,7 @@ io.on('connection', ()=> {
   io.emit('connected', {message: 'socket connected'});
 })
 
-enableRoomSocket = (roomId) => {
+const enableRoomSocket = (roomId) => {
   const roomSocket = io.of(roomId);
   roomSocket.on('connection', (socket) => {
     
@@ -27,9 +27,22 @@ enableRoomSocket = (roomId) => {
   return roomSocket;
 }
 
+const enableGameSocket = (roomId, gameId) => {
+  const gameSocket = io.of(roomId);
+  gameSocket.on('connection', (socket) => {
+    socket.join(gameId);
+    socket.to(gameId).emit(`joined room ${gameId}`)
+    console.log(socket)
+  });
+
+
+  return gameSocket;
+}
+
 module.exports = {
   io,
-  enableRoomSocket
+  enableRoomSocket,
+  enableGameSocket
 }
 
 async function logJoinGameRequest (data) {
