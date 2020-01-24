@@ -21,6 +21,8 @@ export const gamesReducer = (state: state, action: action):state => {
       const id = action.body;
       return {...state, joinGame: id};
 
+    case 'SET_ACTIVE':
+      return {...state, active: action.body};
       
     default:
       return state;

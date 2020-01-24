@@ -25,6 +25,7 @@ const getRoomService = async (roomIndex) => {
   )
   .then(res => res.text())
   .then(text => JSON.parse(text))
+  
   .then(obj => {
     obj.games = obj.roomGames.map(game => {
       delete Object.assign(game, {boardSize: game.board_size }).board_size;
@@ -33,6 +34,7 @@ const getRoomService = async (roomIndex) => {
       delete Object.assign(game, {playerWhite: game.player_white }).player_white;
       delete Object.assign(game, {playerWhiteRank: game.player_white_rank }).player_white_rank;
       delete Object.assign(game, {winType: game.win_type }).win_type;
+
       return game;
     })
     return obj;
