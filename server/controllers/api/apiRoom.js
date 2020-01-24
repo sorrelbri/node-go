@@ -18,6 +18,8 @@ const getAll = async (req, res, next) => {
 const show = async (req, res, next) => {
   try {
     const roomId = req.params.id;
+    if (!roomId) throw('missing room parameter')
+    
     // TODO eventually add check for user's private rooms
     enableRoomSocket(roomId);
 
