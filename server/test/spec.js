@@ -11,7 +11,8 @@ const should = chai.should();
 const authSignupSpec = require('./auth.signup.spec');
 const authLoginSpec = require('./auth.login.spec');
 const apiIndexSpec = require('./api.index.spec');
-const apiRoomSpec = require('./room/api.room.spec');
+const apiRoomSpec = require('./api.room.spec');
+const apiGameSpec = require('./api.game.spec');
 
 chai.use(chaiHttp);
 // ! to run tests from other testing modules
@@ -42,5 +43,6 @@ describe('API Routes', function() {
   
   apiIndexSpec(chai, knex, server)
   apiRoomSpec(chai, knex, server)
+  apiGameSpec(chai, knex, server)
   
 });

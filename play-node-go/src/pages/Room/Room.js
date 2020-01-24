@@ -78,6 +78,7 @@ const Room = (props) => {
           key={`game-${gameData.id}`}
           game={gameData}
           dispatch={dispatch}
+          user={gameData.playerBlack === state.user.username || gameData.playerWhite === state.user.username}
         />
       ))
     }
