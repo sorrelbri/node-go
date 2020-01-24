@@ -2,7 +2,7 @@ const knex = require('../db')
 
 const insertUser = async (user) => {
   return await knex('user')
-  .returning(['username', 'email'])
+  .returning(['username', 'email', 'id'])
   .insert(user)
   .then(queryResults => {
     newUser = queryResults[0];
@@ -18,7 +18,7 @@ const findUserByNameOrEmail = async (user) => {
   return await knex('user')
   .where({'username': user.username})
   .orWhere({'email': user.email})
-  .select(['username', 'email', 'password'])
+  .select(['username', 'email', 'password', 'id'])
 }
 
 module.exports = {
