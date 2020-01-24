@@ -8,6 +8,9 @@ export const errorReducer = (state: state, action: action):state => {
 
     case 'JOIN_ROOM_ERROR':
       return joinRoomErrorReducer(state, action);
+    
+      case 'JOIN_GAME_ERROR':
+      return joinGameErrorReducer(state, action);
 
     default:
       return state;
@@ -22,4 +25,9 @@ function authErrorReducer(state: state, action: action): state {
 function joinRoomErrorReducer(state: state, action: action): state {
   const joinRoom = action.body.joinRoomError;
   return { ...state, errors: {joinRoom} }
+}
+
+function joinGameErrorReducer(state: state, action: action): state {
+  const joinGame = action.body.joinGameError;
+  return { ...state, errors: {joinGame} }
 }

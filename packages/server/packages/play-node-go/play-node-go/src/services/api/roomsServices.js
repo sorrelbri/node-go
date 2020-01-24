@@ -32,6 +32,7 @@ const getRoomService = async (roomIndex) => {
       delete Object.assign(game, {playerBlackRank: game.player_black_rank }).player_black_rank;
       delete Object.assign(game, {playerWhite: game.player_white }).player_white;
       delete Object.assign(game, {playerWhiteRank: game.player_white_rank }).player_white_rank;
+      delete Object.assign(game, {winType: game.win_type }).win_type;
       return game;
     })
     return obj;
