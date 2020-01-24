@@ -8,8 +8,9 @@ exports.seed = function(knex) {
         { 
           id: 1, date: new Date(), 
           application: 'node-go', application_version: '0.1.0', 
-          player_black: 'anon', player_white: 'anon',
-          player_black_rank: 'K3', player_white_rank: 'K2',
+          player_black: 'user-one', player_white: 'user-two',
+          player_black_rank: 'UR', player_white_rank: 'UR',
+          user_black: 2, user_white: 3,
           room: 1, time_setting: 1, open: false
         },
         { 
