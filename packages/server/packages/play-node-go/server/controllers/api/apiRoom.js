@@ -5,6 +5,8 @@ const {enableRoomSocket} = require('../../socket');
 
 const getAll = async (req, res, next) => {
   try {
+    const publicRooms = await roomQueries.findPublicRooms();
+    
     res.status(200).json({rooms: [...publicRooms]})
   }
 
@@ -17,7 +19,6 @@ const show = async (req, res, next) => {
   try {
     const roomId = req.params.id;
     // TODO eventually add check for user's private rooms
-    const publicRooms = await roomQueries.findPublicRooms();
     enableRoomSocket(roomId);
 
     const currentRoom = await roomQueries.findRoomById(roomId);
