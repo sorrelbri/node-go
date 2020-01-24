@@ -1,7 +1,7 @@
 const knex = require('../db');
 
 const gameOverviewSelect = [
-  'id', 'board_size', 'komi', 'handicap', 
+  'id', 'board_size', 'komi', 'handicap', 'open', 'win_type',
   'player_black', 'player_black_rank', 'player_white', 'player_white_rank'
 ]
 
@@ -10,7 +10,7 @@ const findGameById = async (gameId) => {
   .where({'id': gameId})
   .select('*');
 
-  return game;
+  return game[0];
 }
 
 const findGameByRoom = async (roomId) => {

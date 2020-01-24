@@ -34,14 +34,13 @@ const signup = async (req, res, next) => {
 }
 
 const login = async (req, res, next) => {
-
   checkValidationErrors(req, res);
   const user = req.body;
-
+  
   try {
     const queryResults = await userQueries.findUserByNameOrEmail(user);
     const savedUser = queryResults[0] || null;
-
+    
     if (!savedUser) {
       return res.status(401).send({errors: 'bad credentials'});
     }
