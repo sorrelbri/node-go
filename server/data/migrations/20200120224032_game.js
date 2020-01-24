@@ -18,6 +18,7 @@ exports.up = function(knex) {
     table.float('komi').default(6.5);
     table.integer('handicap').default(0);
     table.integer('board_size').default(19);
+    table.boolean('open').default(true);
 
     table.string('application');
     table.string('application_version');
