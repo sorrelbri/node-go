@@ -6,15 +6,19 @@ const gameOverviewSelect = [
 ]
 
 const findGameById = async (gameId) => {
-  return await knex('game')
+  const game = await knex('game')
   .where({'id': gameId})
   .select('*');
+
+  return game;
 }
 
 const findGameByRoom = async (roomId) => {
-  return await knex('game')
-  .where({'id': roomId})
+  const games = await knex('game')
+  .where({'room': roomId})
   .select(gameOverviewSelect);
+  
+  return games;
 }
 
 const insertGame = async (game) => {
