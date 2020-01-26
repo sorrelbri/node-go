@@ -1,5 +1,4 @@
 import React, {useState, useEffect, useReducer} from 'react';
-import socketIOClient from 'socket.io-client';
 import config from './config';
 import { Switch, Route, BrowserRouter as Router, Redirect } from 'react-router-dom';
 import MainWrapper from './pages/Layout/MainWrapper/MainWrapper';
@@ -8,14 +7,11 @@ import { initState } from './reducers/init/stateReducer.init';
 import indexServices from './services/api/indexServices';
 import './App.scss';
 
-export const socket = socketIOClient(config.socketAddress);
+import socketIOClient from 'socket.io-client';
+const socket = socketIOClient(config.socketAddress);
 
 
 function App() {
-  const [fetchData, setFetchData] = useState();
-  const [socketData, setSocketData] = useState();
-  const [error, setError] = useState([]);
-
   const [ state, dispatch ] = useReducer(
     stateReducer,
     {},
@@ -39,11 +35,8 @@ function App() {
   }, [])
 
   const socketConnect = () => {
-    socket.removeAllListeners();
-    socket.emit('connect');
-    socket.on('connected', data => setSocketData('socket connected'));
-    socket.on('connect_error', err => setError([...error, err]));
-    socket.on('error', err => setError([...error, err]))
+    if (state.connect) return;
+    dispatch({type:'SOCKET', message: 'LAUNCH', body:{socket, dispatch}});
   }
 
   useEffect(() => {
@@ -53,7 +46,7 @@ function App() {
   return (
     <Router>
       
-      <div data-testid="App" className="App">        
+      <div data-testid="App" className="App">
         <Switch>
 
           <Route path="/account">
@@ -84,9 +77,7 @@ function App() {
 
         </Switch>
         <h1>React Boilerplate</h1>
-        {fetchData ? <p>{fetchData}</p> : <></>}
-        {socketData ? <p>{socketData}</p> : <></>}
-        {/* {error ? error.map(err => <p>{err}</p>): <></>} */}
+        <p>{state.connect ? '✓' : ' ⃠'}</p>
       </div>
     </Router>
   );
