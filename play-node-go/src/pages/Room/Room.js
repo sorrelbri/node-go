@@ -11,10 +11,9 @@ import ActionError from '../../components/Error/ActionError/ActionError';
 import Development from '../../components/Display/Development/Development';
 
 const Room = (props) => {
-  const state = props.state;
-  const dispatch = props.dispatch;
+  const { state, dispatch} = props;
   const roomId = parseInt(useParams().id) || 0;
-  const [ socket, setSocket ] = useState(false);
+  const socket = socketIOClient(`${config.socketAddress}/${roomId}`);
 
   const fetchRoomAPI = async () => {
     const response = await roomsServices.getRoomService(roomId);
@@ -33,43 +32,19 @@ const Room = (props) => {
   }, [])
 
   // ! [start] roomSocket
-  const roomSocket = socketIOClient(`${config.socketAddress}/${roomId}`)
 
   const roomSocketConnect = () => {
-    roomSocket.emit('connect');
-    // ! dispatch data
-    roomSocket.on('connect', socket => {
-      setSocket(true)
-    });
-    roomSocket.on('join_game_request', data => {
-      // !
-      console.log(data)
-    })
-    roomSocket.on('connect_error', err => {
-      setSocket(false)
-      // !
-      console.log(err);
-    });
-    roomSocket.on('error', err => {
-      setSocket(false)
-      // !
-      console.log(err);
-    });
+    const action = {
+      type: 'SOCKET',
+      message: 'CONNECT_ROOM',
+      body: {user: state.user, room: roomId, socket}
+    }
+    dispatch(action)
   }
 
   useEffect(() => {
     roomSocketConnect();
   }, [])
-
-  useEffect(() => {
-    const data = {
-      user: state.user,
-      game: state.joinGame
-    };
-    console.log('emitting request')
-    console.log(data)
-    roomSocket.emit('join_game_request', data)
-  }, [state.joinGame])
 
   // ! [end]
 

@@ -1,7 +1,7 @@
 const roomQueries = require('../../data/queries/room');
 const messageQueries = require('../../data/queries/message');
 const gameQueries = require('../../data/queries/game');
-const {enableRoomSocket} = require('../../socket');
+const socket = require('../../socket');
 
 const getAll = async (req, res, next) => {
   try {
@@ -21,7 +21,7 @@ const show = async (req, res, next) => {
     if (!roomId) throw('missing room parameter')
     
     // TODO eventually add check for user's private rooms
-    enableRoomSocket(roomId);
+    socket.roomSocket(roomId);
 
     const currentRoom = await roomQueries.findRoomById(roomId);
     const messages = await messageQueries.findMessageByRoom(roomId);
@@ -30,6 +30,7 @@ const show = async (req, res, next) => {
     res.status(200).json(body);
   }
   catch (err) {
+    console.log(err)
     res.status(500).json(err);
   }
 }

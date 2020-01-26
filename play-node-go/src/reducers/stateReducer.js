@@ -6,11 +6,13 @@ import { indexReducer } from './index/stateReducer.index';
 import { roomsReducer } from './rooms/stateReducer.rooms';
 import { messagesReducer } from './messages/stateReducer.messages';
 import { gamesReducer } from './games/stateReducer.games';
+import { socketReducer } from './socket/stateReducer.socket';
 
 export type state = {
   user: {},
   errors: {},
-  messages: []
+  messages: [],
+  state: {}
 }
 
 export type action = {
@@ -39,6 +41,9 @@ export const stateReducer = (state: state, action: action): state => {
 
     case 'ROOMS':
       return roomsReducer(errorStrippedState, action);
+
+    case 'SOCKET':
+      return socketReducer(errorStrippedState, action);
 
     case 'ERR':
       return errorReducer(errorStrippedState, action);
