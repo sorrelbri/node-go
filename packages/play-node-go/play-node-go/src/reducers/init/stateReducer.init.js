@@ -1,6 +1,7 @@
 //@ flow
 
 import type { state } from '../stateReducer';
+const socket = require('../../io');
 
 export const initState = (): state => {
   return {
@@ -9,6 +10,7 @@ export const initState = (): state => {
     currentRoom: {},
     messages: {},
     games: {},
-    joinGame: {}
+    joinGame: {},
+    socket: {}
   };
 }
