@@ -7,9 +7,6 @@ import { initState } from './reducers/init/stateReducer.init';
 import indexServices from './services/api/indexServices';
 import './App.scss';
 
-import socketIOClient from 'socket.io-client';
-const socket = socketIOClient(config.socketAddress);
-
 
 function App() {
   const [ state, dispatch ] = useReducer(
@@ -35,8 +32,8 @@ function App() {
   }, [])
 
   const socketConnect = () => {
-    if (state.connect) return;
-    dispatch({type:'SOCKET', message: 'LAUNCH', body:{socket, dispatch}});
+    if (state.connect.type) return;
+    dispatch({type:'SOCKET', message: 'LAUNCH', body:{nsp:'', dispatch}});
   }
 
   useEffect(() => {
@@ -77,7 +74,7 @@ function App() {
 
         </Switch>
         <h1>React Boilerplate</h1>
-        <p>{state.connect ? '✓' : ' ⃠'}</p>
+        <p>{state.connect.type ? '✓' : ' ⃠'}</p>
       </div>
     </Router>
   );

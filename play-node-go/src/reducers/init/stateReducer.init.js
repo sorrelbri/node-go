@@ -11,6 +11,7 @@ export const initState = (): state => {
     messages: {},
     games: {},
     joinGame: {},
-    socket: {}
+    socket: {},
+    connect: {}
   };
 }

@@ -7,21 +7,27 @@ export const socketReducer = (state: state, action: action):state => {
   switch(action.message) {
 
     case 'CONNECTED':
-      return {...state, connect: 'home'}
+      console.log(action.body.nsp)
+      return {...state, connect: { type: 'home', location: action.body.nsp } }
 
     case 'LAUNCH': {
-      const {socket, dispatch} = action.body;
-      const launchedSocket = io.launch(socket, dispatch);
+      const {nsp, dispatch} = action.body;
+      const launchedSocket = io.launch(nsp, dispatch);
       return {...state, socket: launchedSocket};
     }
 
     case 'CONNECT_ROOM': {
-      const {socket, ...data} = action.body;
-      // if (Object.entries(state.socket)) {
-      //   state.socket.close();
-      // }
-      socket.emit('connect_room', data);
-      return {...state, socket, connect:''};
+      const {user, room, dispatch} = action.body;
+      let priorSocket = state.socket;
+      if (!priorSocket.nsp) {
+        priorSocket = io.launch('', dispatch)
+      }
+      if (priorSocket.nsp !== `/${room}`) {
+        priorSocket.emit('connect_room', {user, room});
+        priorSocket.close();
+      }
+      const socket = io.launch(room, dispatch);
+      return {...state, socket}
     }
     
     default:

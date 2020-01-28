@@ -6,24 +6,32 @@ const gameQueries = require('./data/queries/game');
 
 io.on('connection', socket=> {
   socket.emit('connected', {message: 'socket connected'});
-
   socket.on('connect_room', data => {
-    const { user, room } = data;
-    const roomIo = io.of(room);
-    roomIo.emit('new_user', user)
-    // roomIo.on('connection', roomSocket => {
-    // })
-  });
+    console.log(data)
+    if (data.user && data.user.email) {
+      delete data.user.email;
+    }
+    const roomIo = io.of(data.room);
+    roomIo.on('connection', socket => {
+      socket.emit('connected')
+      socket.emit('new_user', data);
+    })
+  })
 })
 
 const roomSocket = (roomId) => {
+  
   const roomIo = io.of(roomId)
   roomIo.on('connection', socket => {
-    console.log('connected')
+    console.log('connected room')
     socket.on('connect_room', data => {
-      console.log(data)
+      if (data.user && data.user.email) {
+        delete data.user.email;
+      }
+      socket.emit('new_user', data);
     })
   })
+  return roomIo;
 }
 
 module.exports = {
