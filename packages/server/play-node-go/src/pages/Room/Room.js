@@ -13,7 +13,7 @@ import Development from '../../components/Display/Development/Development';
 const Room = (props) => {
   const { state, dispatch} = props;
   const roomId = parseInt(useParams().id) || 0;
-  const socket = socketIOClient(`${config.socketAddress}/${roomId}`);
+  // const socket = socketIOClient(`${config.socketAddress}/${roomId}`);
 
   const fetchRoomAPI = async () => {
     const response = await roomsServices.getRoomService(roomId);
@@ -37,7 +37,7 @@ const Room = (props) => {
     const action = {
       type: 'SOCKET',
       message: 'CONNECT_ROOM',
-      body: {user: state.user, room: roomId, socket}
+      body: {user: state.user, room: roomId, dispatch}
     }
     dispatch(action)
   }
@@ -81,7 +81,7 @@ const Room = (props) => {
     <div className="Room" data-testid="Room">
       <div className="Room__heading">
         <h2>{state.currentRoom ? state.currentRoom.name : 'Loading'}</h2>
-        <span className="Room__connection">{socket ? '✓' : ' ⃠'}</span>
+        {/* <span className="Room__connection">{socket ? '✓' : ' ⃠'}</span> */}
         {state.errors.joinGame ? <ActionError error={state.errors.joinGame}/> : <></>}
       </div>
 
