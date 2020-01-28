@@ -25,8 +25,9 @@ export const roomsReducer = (state: state, action: action):state => {
     }
 
     case 'NEW_USER': {
-      console.log('hey')
-      console.log(action.data)
+      if (!action.data) {
+        return state;
+      }
       return state;
     }
       
