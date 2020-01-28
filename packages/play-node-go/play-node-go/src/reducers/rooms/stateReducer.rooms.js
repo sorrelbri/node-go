@@ -24,6 +24,11 @@ export const roomsReducer = (state: state, action: action):state => {
       return stateWithGames;
     }
 
+    case 'NEW_USER': {
+      console.log('hey')
+      console.log(action.data)
+      return state;
+    }
       
     default:
       return state;
