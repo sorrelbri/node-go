@@ -9,6 +9,7 @@ import Message from '../../components/Display/Message/Message';
 import ActionError from '../../components/Error/ActionError/ActionError';
 
 import Development from '../../components/Display/Development/Development';
+import Loading from '../../components/Display/Loading/Loading';
 
 const Room = (props) => {
   const { state, dispatch} = props;
@@ -60,7 +61,7 @@ const Room = (props) => {
         />
       ))
     }
-    return <p>Loading Games...</p>
+    return <Loading />
   }
 
   const renderMessages = () => {
@@ -73,12 +74,13 @@ const Room = (props) => {
         />
       ))
     }
-    return <p>Loading Messages...</p>
+    return <Loading />
   }
 
 
   return (  
     <div className="Room" data-testid="Room">
+    
       <div className="Room__heading">
         <h2 className="heading--two">{state.currentRoom ? state.currentRoom.name : 'Loading'}</h2>
         {/* <span className="Room__connection">{socket ? '✓' : ' ⃠'}</span> */}

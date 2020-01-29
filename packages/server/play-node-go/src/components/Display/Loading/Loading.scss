@@ -1,0 +1,183 @@
+div.Loading {
+  background-color: rgb(234, 178, 78);
+  display: flex;
+  flex-flow: row wrap;
+  height: 6vw;
+  width: 6vw;
+
+  div.point {
+    height: 1vw;
+    width: 1vw;
+    border-radius: 50%;
+    padding: 0.25vw;
+  }
+
+  #a-1 {
+    animation-name: white-stone--corner;
+    animation-duration: 4s;
+    animation-delay: -2.75s;
+    animation-iteration-count: infinite;
+  }
+  #a-2 {
+    background-color: black;
+    animation-name: black-stone;
+    animation-duration: 4s;
+    animation-delay: -1s;
+    animation-iteration-count: infinite;
+  }
+  #a-3 {
+    background-color: white;
+    animation-name: white-stone;
+    animation-duration: 4s;
+    animation-delay: -2.25s;
+    animation-iteration-count: infinite;
+  }
+  #a-4 {
+    animation-name: black-stone--corner;
+    animation-duration: 4s;
+    animation-delay: 0s;
+    animation-iteration-count: infinite;
+  }
+  
+  #b-1 {
+    background-color: black;
+    animation-name: black-stone;
+    animation-duration: 4s;
+    animation-delay: -1.5s;
+    animation-iteration-count: infinite;
+  }
+  #b-2 {
+    animation-name: white-stone--center;
+    animation-duration: 4s;
+    animation-delay: -3.25s;
+    animation-iteration-count: infinite;
+  }
+  #b-3 {
+    background-color: black;
+    animation-name: black-stone--center;
+    animation-duration: 4s;
+    animation-delay: -.5s;
+    animation-iteration-count: infinite;
+  }
+  #b-4 {
+    background-color: white;
+    animation-name: white-stone;
+    animation-duration: 4s;
+    animation-delay: -1.75s;
+    animation-iteration-count: infinite;
+  }
+
+  #c-1 {
+    animation-name: white-stone;
+    animation-duration: 4s;
+    animation-delay: -3.75s;
+    animation-iteration-count: infinite;
+  }
+  #c-2 {
+    background-color: black;
+    animation-name: black-stone--center;
+    animation-duration: 4s;
+    animation-delay: -2.5s;
+    animation-iteration-count: infinite;
+  }
+  #c-3 {
+    background-color: white;
+    animation-name: white-stone--center;
+    animation-duration: 4s;
+    animation-delay: -1.25s;
+    animation-iteration-count: infinite;
+  }
+  #c-4 {
+    animation-name: black-stone;
+    animation-duration: 4s;
+    animation-delay: -3.5s;
+    animation-iteration-count: infinite;
+  }
+  
+  #d-1 {
+    background-color: black;
+    animation-name: black-stone--corner;
+    animation-duration: 4s;
+    animation-delay: -2s;
+    animation-iteration-count: infinite;
+  }
+  #d-2 {
+    background-color: white;
+    animation-name: white-stone;
+    animation-duration: 4s;
+    animation-delay: -.25s;
+    animation-iteration-count: infinite;
+  }
+  #d-3 {
+    animation-name: black-stone;
+    animation-duration: 4s;
+    animation-delay: -3s;
+    animation-iteration-count: infinite;
+  }
+  #d-4 {
+    background-color: white;
+    animation-name: white-stone--corner;
+    animation-duration: 4s;
+    animation-delay: -.75s;
+    animation-iteration-count: infinite;
+  }
+
+}
+
+@keyframes black-stone {
+  0% {background: black;}
+  67.5% {background: black;}
+  70% {background: repeating-linear-gradient(0deg, transparent 0%, transparent 45%, black 50%, transparent 55%, transparent 100%), 
+    repeating-linear-gradient(90deg, transparent 0%, transparent 45%, black 50%, transparent 55%, transparent 100%);}
+  99.5% {background: repeating-linear-gradient(0deg, transparent 0%, transparent 45%, black 50%, transparent 55%, transparent 100%), 
+    repeating-linear-gradient(90deg, transparent 0%, transparent 45%, black 50%, transparent 55%, transparent 100%);}
+}
+
+@keyframes white-stone {
+  0% {background: white;}
+  60% {background: white;}
+  62.5% {background: repeating-linear-gradient(0deg, transparent 0%, transparent 45%, black 50%, transparent 55%, transparent 100%), 
+    repeating-linear-gradient(90deg, transparent 0%, transparent 45%, black 50%, transparent 55%, transparent 100%);}
+  92.5% {background: repeating-linear-gradient(0deg, transparent 0%, transparent 45%, black 50%, transparent 55%, transparent 100%), 
+    repeating-linear-gradient(90deg, transparent 0%, transparent 45%, black 50%, transparent 55%, transparent 100%);}
+  95% {background: white;}
+}
+
+@keyframes black-stone--corner {
+  0% {background: black;}
+  52.5% {background: black;};
+  55% {background: repeating-linear-gradient(0deg, transparent 0%, transparent 45%, black 50%, transparent 55%, transparent 100%), 
+    repeating-linear-gradient(90deg, transparent 0%, transparent 45%, black 50%, transparent 55%, transparent 100%);};
+  99% {background: repeating-linear-gradient(0deg, transparent 0%, transparent 45%, black 50%, transparent 55%, transparent 100%), 
+    repeating-linear-gradient(90deg, transparent 0%, transparent 45%, black 50%, transparent 55%, transparent 100%);};
+}
+
+@keyframes white-stone--corner {
+  0% {background: white;}
+  47.5% {background: white;};
+  50% {background: repeating-linear-gradient(0deg, transparent 0%, transparent 45%, black 50%, transparent 55%, transparent 100%), 
+    repeating-linear-gradient(90deg, transparent 0%, transparent 45%, black 50%, transparent 55%, transparent 100%);};
+  95% {background: repeating-linear-gradient(0deg, transparent 0%, transparent 45%, black 50%, transparent 55%, transparent 100%), 
+    repeating-linear-gradient(90deg, transparent 0%, transparent 45%, black 50%, transparent 55%, transparent 100%);};
+  97.5% {background: white;}
+}
+
+@keyframes black-stone--center {
+  0% {background: black;}
+  75.5% {background: black;};
+  77.5% {background: repeating-linear-gradient(0deg, transparent 0%, transparent 45%, black 50%, transparent 55%, transparent 100%), 
+    repeating-linear-gradient(90deg, transparent 0%, transparent 45%, black 50%, transparent 55%, transparent 100%);};
+  99% {background: repeating-linear-gradient(0deg, transparent 0%, transparent 45%, black 50%, transparent 55%, transparent 100%), 
+    repeating-linear-gradient(90deg, transparent 0%, transparent 45%, black 50%, transparent 55%, transparent 100%);};
+}
+
+@keyframes white-stone--center {
+  0% {background: white;}
+  72.5% {background: white;};
+  75% {background: repeating-linear-gradient(0deg, transparent 0%, transparent 45%, black 50%, transparent 55%, transparent 100%), 
+    repeating-linear-gradient(90deg, transparent 0%, transparent 45%, black 50%, transparent 55%, transparent 100%);};
+  97.5% {background: repeating-linear-gradient(0deg, transparent 0%, transparent 45%, black 50%, transparent 55%, transparent 100%), 
+    repeating-linear-gradient(90deg, transparent 0%, transparent 45%, black 50%, transparent 55%, transparent 100%);};
+  100% {background: white;}
+}
+

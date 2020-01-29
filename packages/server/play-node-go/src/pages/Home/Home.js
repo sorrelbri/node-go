@@ -3,6 +3,7 @@ import './Home.scss';
 import roomsServices from '../../services/api/roomsServices';
 import RoomButton from '../../components/Button/Room/Room';
 
+import Loading from '../../components/Display/Loading/Loading';
 
 const Home = props => {
   const state =     props.state || {};
@@ -19,7 +20,7 @@ const Home = props => {
       ))
     }
     // TODO stub loader
-    return <p className="loading">Loading Component</p>
+    return <Loading />
   }
 
   const fetchRoomsAPI = async () => {
