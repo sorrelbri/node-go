@@ -1,13 +1,13 @@
 
 div.GameButton {
   align-items: stretch;
-  background-color: #aa9933;
+  box-shadow: -2vmin 4vmin 2vmin rgba(83, 53, 35, 0.81);
   display: flex;
   flex-flow: column nowrap;
-  height: 20vw;
+  height: 20vh;
   justify-content: space-around;
   margin: 1vw;
-  width: 20vw;
+  width: 20vh;
 }
 
 div.GameButton__seat {
@@ -17,7 +17,7 @@ div.GameButton__seat {
   width: 50%;
   
   &.GameButton__seat--black {
-    border: transparent;
+    border: rgba(83, 53, 35, 0.81);
     border-radius: 5vw 5vw 0 0;
   }
   
@@ -29,18 +29,16 @@ div.GameButton__seat {
 }
 
 div.GameButton__table {
-  background-color: blue;
   height: 80%;
   margin: 0;
   width: 100%;
 }
 
 div.GameButton__table__meta {
-  background-color: transparent;
   display: flex;
   flex-flow: column nowrap;
   height: 100%;
-  justify-content: space-around;
+  justify-content: space-between;
   width: 100%;
   z-index: 2;
 }
@@ -51,9 +49,12 @@ div.GameButton__table__meta * {
 
 div.GameButton__table__image {
   align-items: center;
-  background: radial-gradient(farthest-corner at 55% 40%, rgb(150, 200, 220) 0%, rgb(97, 166, 194) 65%, rgb(70,100,120) 100%);
-  border: 0.15vw solid rgb(150, 200, 220);
-  // ! change border sides
+  background: radial-gradient(
+    farthest-corner at 55% 40%, 
+    rgb(150, 200, 220) 0%, rgb(97, 166, 194) 65%, rgb(70,100,120) 100%
+  );
+  border-top: 0.1vw solid rgb(150, 200, 220);
+  border-right: 0.05vw solid rgb(97, 166, 194);
   border-radius: 0.3vw; 
   display: flex;
   flex-flow: column nowrap;
@@ -65,9 +66,23 @@ div.GameButton__table__image {
   z-index: 1;
   
   div.table__game-board {
-    background: radial-gradient(farthest-corner at 55% 40%, rgb(244, 230, 120) 0%, rgb(234, 178, 78) 65%, rgb(200, 160, 90) 90%, rgb(200, 140, 90) 100%);
+    background: radial-gradient(
+      farthest-corner at 55% 40%, 
+      rgb(244, 230, 120) 0%, rgb(234, 178, 78) 65%, rgb(200, 160, 90) 90%, rgb(200, 140, 90) 100%
+    );
     height: 60%;
     width: 60%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    div.table__game-board--grid {
+      background: 
+        repeating-linear-gradient(0deg, #000 0%, transparent 0.75%, transparent 4.25%, #000 5%), 
+        repeating-linear-gradient(90deg, #000 0%, transparent 0.75%, transparent 4.25%, #000 5%);
+      height: 94%;
+      width: 94%;
+    }
   }
 }
 
@@ -76,38 +91,43 @@ div.table__player-area {
   width: 60%;
 
   div.table__player-bowl {
-    background: radial-gradient(farthest-corner at 48% 54%, rgb(30, 5, 0) 0%, rgb(30, 5, 0) 2%, rgb(30, 5, 0) 32%, rgb(0,0,0)35%, rgb(116,48,17) 48%, rgb(140, 60, 40) 52%, rgb(100, 40, 5) 55%, rgb(116, 48, 17) 58%, rgb(140,60,40) 65%, rgb(100, 40, 5) 80%, rgb(80, 20, 0) 90%);
+    background: radial-gradient(
+      farthest-corner at 48% 54%, 
+      rgb(30, 5, 0) 0%, rgb(30, 5, 0) 2%, rgb(30, 5, 0) 32%, rgb(0,0,0)35%, rgb(116,48,17) 48%, 
+      rgb(140, 60, 40) 52%, rgb(100, 40, 5) 55%, rgb(116, 48, 17) 58%, rgb(140,60,40) 65%, 
+      rgb(100, 40, 5) 80%, rgb(80, 20, 0) 90%
+    );
     border-radius: 50%;
-    height: 2.75vw;
-    width: 2.75vw;
+    height: 100%;
 
     &--white {
-      margin: auto 75% auto auto;
+      margin: auto auto auto 75%;
     }
     
     &--black {
-      margin: auto auto auto 75%;
+      margin: auto 75% auto auto;
     }
 
   }
 }
 
 div.GameButton__player-data {
-  background-color: rgba(155,155,155,0.5);
+  background-color: rgba(255,255,255,0.65);
   display: flex;
-  justify-content: space-between;
-  margin: 0.5vw;
+  justify-content: space-around;
   max-width: 100%;
-
+  
   &.GameButton__player-data--white {
-    margin: 0 5vw 0 0.5vw;
+    margin: 0 5vw 1vw 0.5vw;
   }
-
+  
   &.GameButton__player-data--black {
-    margin: 0 0.5vw 0 5vw;
+    margin: 1vw 0.5vw 0 5vw;
   }
 }
 
 .GameButton__link {
+  background-color: rgba(255, 255, 255, 0.95);
   margin: 0 auto;
+  padding: .5vw;
 }
