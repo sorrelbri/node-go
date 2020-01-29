@@ -1,5 +1,5 @@
-import {stateReducer} from '../stateReducer';
-import { initState } from '../init/stateReducer.init';
+import {stateReducer} from '../reducer';
+import { initState } from '../init/reducer.init';
 
 const messagesData = [
   {

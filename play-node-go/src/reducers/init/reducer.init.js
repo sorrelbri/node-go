@@ -1,6 +1,6 @@
 //@ flow
 
-import type { state } from '../stateReducer';
+import type { state } from '../reducer';
 const socket = require('../../io');
 
 export const initState = (): state => {
