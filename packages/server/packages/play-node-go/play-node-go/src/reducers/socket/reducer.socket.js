@@ -1,6 +1,6 @@
 // @flow
-import type { state, action } from '../stateReducer';
-import { stateReducer } from '../stateReducer';
+import type { state, action } from '../reducer';
+import { stateReducer } from '../reducer';
 const io = require('../../io');
 
 export const socketReducer = (state: state, action: action):state => {

@@ -1,12 +1,12 @@
 // @flow
-import { initState } from './init/stateReducer.init';
-import { authReducer } from './auth/stateReducer.auth';
-import { errorReducer } from './err/stateReducer.err';
-import { indexReducer } from './index/stateReducer.index';
-import { roomsReducer } from './rooms/stateReducer.rooms';
-import { messagesReducer } from './messages/stateReducer.messages';
-import { gamesReducer } from './games/stateReducer.games';
-import { socketReducer } from './socket/stateReducer.socket';
+import { initState } from './init/reducer.init';
+import { authReducer } from './auth/reducer.auth';
+import { errorReducer } from './err/reducer.err';
+import { indexReducer } from './index/reducer.index';
+import { roomsReducer } from './rooms/reducer.rooms';
+import { messagesReducer } from './messages/reducer.messages';
+import { gamesReducer } from './games/reducer.games';
+import { socketReducer } from './socket/reducer.socket';
 
 export type state = {
   user: {},
