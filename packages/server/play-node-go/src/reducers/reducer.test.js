@@ -1,4 +1,4 @@
-import {stateReducer} from './stateReducer';
+import {stateReducer} from './reducer';
 
 it('default returns state unaltered', () => {
   const state = {data: 'example'};
