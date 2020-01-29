@@ -5,11 +5,11 @@ import RoomArchiveButton from '../../components/Button/RoomArchive/RoomArchive';
 
 const RoomSidebar = () => {
   return (  
-    <>
+    <nav>
       <FindGameForm />
       <NewGameButton />
       <RoomArchiveButton />
-    </>
+    </nav>
   );
 }
 
