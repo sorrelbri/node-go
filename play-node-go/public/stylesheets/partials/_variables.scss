@@ -18,4 +18,8 @@ $break-points: (
 
 $colors: (
   "error": #aa3333,
-);
+  );
+
+$backgrounds: (
+  "game_room": radial-gradient(farthest-corner at 55% 40%, rgb(189, 131, 100) 0%, rgb(175, 113, 80) 65%, rgb(150, 90, 65) 90%, rgb(125, 65, 40) 100%),
+)  
