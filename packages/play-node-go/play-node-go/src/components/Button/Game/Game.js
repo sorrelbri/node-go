@@ -72,6 +72,7 @@ const GameButton = (props) => {
               <div className="table__player-bowl table__player-bowl--black"></div>
             </div>
             <div className="table__game-board">
+              <div className="table__game-board--grid"></div>
             </div>
             <div className="table__player-area table__player-area--white">
               <div className="table__player-bowl table__player-bowl--white"></div>
