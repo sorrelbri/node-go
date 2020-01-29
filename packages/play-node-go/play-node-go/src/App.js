@@ -2,8 +2,8 @@ import React, {useState, useEffect, useReducer} from 'react';
 import config from './config';
 import { Switch, Route, BrowserRouter as Router, Redirect } from 'react-router-dom';
 import MainWrapper from './pages/Layout/MainWrapper/MainWrapper';
-import { stateReducer } from './reducers/stateReducer';
-import { initState } from './reducers/init/stateReducer.init';
+import { stateReducer } from './reducers/reducer';
+import { initState } from './reducers/init/reducer.init';
 import indexServices from './services/api/indexServices';
 import './App.scss';
 

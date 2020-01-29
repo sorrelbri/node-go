@@ -1,5 +1,5 @@
 // @flow
-import type { state, action } from '../stateReducer';
+import type { state, action } from '../reducer';
 
 export const errorReducer = (state: state, action: action):state => {
   switch (action.message) {

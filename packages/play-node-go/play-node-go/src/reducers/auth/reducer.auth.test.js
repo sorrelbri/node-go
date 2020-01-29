@@ -1,4 +1,4 @@
-import {authReducer} from './stateReducer.auth';
+import {authReducer} from './reducer.auth';
 
 const newCredentials = {
   username: 'newUsername7',
