@@ -4,7 +4,10 @@ import './FormError.scss';
 const FormError = (props) => {
   const errorMessage = props.error;
   return (
-    <span data-testid="FormError" className="FormError">
+    <span 
+      className="error error--form"
+      data-testid="FormError" 
+    >
       {errorMessage}
     </span>
     );

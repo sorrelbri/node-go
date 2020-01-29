@@ -68,29 +68,42 @@ const Login = (props) => {
     <div className="Login" data-testid="Login">
       {formError(props.state.errors)}
       <form 
+        className="Login__form"
         data-testid="Login__form"
         onSubmit={e => handleSubmit(e)}
       >
 
-      <label htmlFor="username-input">Username:</label>
+      <label 
+        className="form__label form__label--username" 
+        htmlFor="username-input"
+      >Username:</label>
         <input 
           name="username"
           id="username-input"
+          className="form__input form__input--username"
           type="text"
           onChange={e => setUsername(e.target.value)}
           default="username"
           />
 
-        <label htmlFor="password-input">Password:</label>
+        <label 
+          className="form__label form__label--password"
+          htmlFor="password-input"
+        >Password:</label>
         <input 
           name="password"
           id="password-input"
+          className="form__input form__input--password"
           type="password"
           onChange={e => setPassword(e.target.value)}
           default=""
         />
 
-        <input type="submit" value="Login!" />
+        <input 
+          className="form__submit"
+          type="submit" 
+          value="Login!" 
+        />
 
       </form>
     </div>

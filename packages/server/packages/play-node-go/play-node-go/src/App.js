@@ -73,8 +73,7 @@ function App() {
           </Route>
 
         </Switch>
-        <h1>React Boilerplate</h1>
-        <p>{state.connect.type ? '✓' : ' ⃠'}</p>
+        <p className="App__socket-flag">{state.connect.type ? '✓' : ' ⃠'}</p>
       </div>
     </Router>
   );

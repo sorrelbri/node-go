@@ -1,5 +1,113 @@
-div.Game__playerData {
+
+div.GameButton {
+  align-items: stretch;
+  background-color: #aa9933;
+  display: flex;
+  flex-flow: column nowrap;
+  height: 20vw;
+  justify-content: space-around;
+  margin: 1vw;
+  width: 20vw;
+}
+
+div.GameButton__seat {
+  background-color: red;
+  height: 10%;
+  margin: 0 auto;
+  width: 50%;
+  
+  &.GameButton__seat--black {
+    border: transparent;
+    border-radius: 5vw 5vw 0 0;
+  }
+  
+  &.GameButton__seat--white {
+    border: transparent;
+    border-radius: 0 0 5vw 5vw;
+  }
+  
+}
+
+div.GameButton__table {
+  background-color: blue;
+  height: 80%;
+  margin: 0;
   width: 100%;
+}
+
+div.GameButton__table__meta {
+  background-color: transparent;
+  display: flex;
+  flex-flow: column nowrap;
+  height: 100%;
+  justify-content: space-around;
+  width: 100%;
+  z-index: 2;
+}
+
+div.GameButton__table__meta * {
+  z-index: 2;
+}
+
+div.GameButton__table__image {
+  align-items: center;
+  background: radial-gradient(farthest-corner at 55% 40%, rgb(150, 200, 220) 0%, rgb(97, 166, 194) 65%, rgb(70,100,120) 100%);
+  border: 0.15vw solid rgb(150, 200, 220);
+  // ! change border sides
+  border-radius: 0.3vw; 
+  display: flex;
+  flex-flow: column nowrap;
+  height: 100%;
+  justify-content: space-between;
+  position: relative;
+  top: -100%;
+  width: 100%;
+  z-index: 1;
+  
+  div.table__game-board {
+    background: radial-gradient(farthest-corner at 55% 40%, rgb(244, 230, 120) 0%, rgb(234, 178, 78) 65%, rgb(200, 160, 90) 90%, rgb(200, 140, 90) 100%);
+    height: 60%;
+    width: 60%;
+  }
+}
+
+div.table__player-area {
+  height: 20%;
+  width: 60%;
+
+  div.table__player-bowl {
+    background: radial-gradient(farthest-corner at 48% 54%, rgb(30, 5, 0) 0%, rgb(30, 5, 0) 2%, rgb(30, 5, 0) 32%, rgb(0,0,0)35%, rgb(116,48,17) 48%, rgb(140, 60, 40) 52%, rgb(100, 40, 5) 55%, rgb(116, 48, 17) 58%, rgb(140,60,40) 65%, rgb(100, 40, 5) 80%, rgb(80, 20, 0) 90%);
+    border-radius: 50%;
+    height: 2.75vw;
+    width: 2.75vw;
+
+    &--white {
+      margin: auto 75% auto auto;
+    }
+    
+    &--black {
+      margin: auto auto auto 75%;
+    }
+
+  }
+}
+
+div.GameButton__player-data {
+  background-color: rgba(155,155,155,0.5);
   display: flex;
   justify-content: space-between;
+  margin: 0.5vw;
+  max-width: 100%;
+
+  &.GameButton__player-data--white {
+    margin: 0 5vw 0 0.5vw;
+  }
+
+  &.GameButton__player-data--black {
+    margin: 0 0.5vw 0 5vw;
+  }
+}
+
+.GameButton__link {
+  margin: 0 auto;
 }

@@ -4,7 +4,10 @@ import './ActionError.scss';
 const ActionError = (props) => {
   const errorMessage = props.error;
   return (
-    <span data-testid="ActionError" className="ActionError">
+    <span 
+      className="error error--action"
+      data-testid="ActionError" 
+    >
       {errorMessage}
     </span>
     );
