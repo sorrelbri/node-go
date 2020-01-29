@@ -66,10 +66,18 @@ const Game = (props) => {
   // ! [end]
 
   return (  
-    <div className="Game" data-testid="Game">
+    <div 
+      className="Game" 
+      data-testid="Game"
+    >
       <p>Game</p>
-      <span className="Room__connection">{socket ? '✓' : ' ⃠'}</span>
+      
+      <span 
+        className="Game__socket-flag"
+      >{socket ? '✓' : ' ⃠'}</span>
+      
       <Development />
+    
     </div>
   );
 }

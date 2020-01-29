@@ -2,8 +2,8 @@ import React from 'react';
 
 const NewsSidebar = () => {
   return (  
-    <>
-    </>
+    <nav>
+    </nav>
   );
 }
 
