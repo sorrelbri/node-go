@@ -18,7 +18,8 @@ const Home = props => {
         />
       ))
     }
-    return <p>Loading Component</p>
+    // TODO stub loader
+    return <p className="loading">Loading Component</p>
   }
 
   const fetchRoomsAPI = async () => {
@@ -38,11 +39,8 @@ const Home = props => {
   }, [])
 
   return (  
-    <div className="page">
-
-      <div className="Home" data-testid="Home">
-        {renderRooms()}
-      </div>
+    <div className="Home" data-testid="Home">
+      {renderRooms()}
     </div>
   );
 }

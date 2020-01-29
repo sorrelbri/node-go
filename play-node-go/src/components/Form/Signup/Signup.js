@@ -87,39 +87,56 @@ const Signup = (props) => {
     <div className="Signup" data-testid="Signup">
       {formError(props.state.errors)}
       <form 
+        className="Signup__form"
         data-testid="Signup__form"
         onSubmit={e => handleSubmit(e)}
       >
 
-        <label htmlFor="username-input">Username:</label>
+        <label 
+          className="form__label form__label--username"
+          htmlFor="username-input"
+        >Username:</label>
         <input 
-          name="username"
-          id="username-input"
-          type="text"
-          onChange={e => setUsername(e.target.value)}
+          className="form__input form__input--username"
           default="username"
-        />
-
-        <label htmlFor="email-input">Email:</label>
-        <input 
-          name="email"
-          id="email-input"
+          id="username-input"
+          name="username"
+          onChange={e => setUsername(e.target.value)}
           type="text"
-          onChange={e => setEmail(e.target.value)}
+        />
+
+        <label 
+          className="form__label form__label--email"
+          htmlFor="email-input"
+        >Email:</label>
+        <input 
+          className="form__input form__input--email"
           default="email"
+          id="email-input"
+          name="email"
+          onChange={e => setEmail(e.target.value)}
+          type="text"
         />
 
-        <label htmlFor="password-input">Password:</label>
-        <input 
-          name="password"
-          id="password-input"
-          type="password"
-          onChange={e => setPassword(e.target.value)}
+        <label 
+          className="form__label form__label--password"
+          htmlFor="password-input"
+        >Password:</label>
+        <input
+          className="form__input form__input--password" 
           default=""
-        />
+          id="password-input"
+          name="password"
+          onChange={e => setPassword(e.target.value)}
+          type="password"
+          />
 
-        <label htmlFor="confirmPassword-input">Confirm password:</label>
+        <label 
+          className="form__label form__label--password"
+          htmlFor="confirmPassword-input"
+          >Confirm password:</label>
         <input 
+          className="form__input form__input--password" 
           name="confirmPassword"
           id="confirmPassword-input"
           type="password"
@@ -127,7 +144,11 @@ const Signup = (props) => {
           default=""
         />
 
-        <input type="submit" value="Create Account!"/>
+        <input 
+          className="form__submit"
+          type="submit" 
+          value="Create Account!"
+        />
 
       </form>
     </div>

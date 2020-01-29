@@ -16,15 +16,34 @@ const HomeSidebar = (props) => {
   </>
 
   const ifNoUser = <>
-    <p onClick={()=>{setShowForm('login')}}>Login</p>
-    {showForm === 'login' ? <Login dispatch={props.dispatch} state={props.state}/> : <></>}
-    <p onClick={()=>{setShowForm('signup')}}>Signup</p>
-    {showForm === 'signup' ? <Signup dispatch={props.dispatch} state={props.state}/> : <></>}
+    <p 
+      className="auth-label" 
+      onClick={()=>{setShowForm('login')}}
+    >Login</p>
+    {
+      showForm === 'login' 
+      ? <Login dispatch={props.dispatch} state={props.state}/> 
+      : <></>
+    }
+    
+    <p 
+      className="auth-label" 
+      onClick={()=>{setShowForm('signup')}}
+    >Signup</p>
+    {
+      showForm === 'signup' 
+      ? <Signup dispatch={props.dispatch} state={props.state}/> 
+      : <></>
+    }
   </>
 
   return (  
     <nav>
-      {props.state.user.username ? ifUser : ifNoUser}
+      {
+        props.state.user.username 
+        ? ifUser 
+        : ifNoUser
+      }
     </nav>
   );
 }
