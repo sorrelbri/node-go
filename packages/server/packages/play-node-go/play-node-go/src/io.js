@@ -23,6 +23,11 @@ const launch = (nsp, dispatch) => {
     dispatch({ type: 'ROOMS', message: 'NEW_USER', body: data })
   })
 
+  socket.on('game_connected', (data) => {
+    console.log(data)
+    console.log('game_connected received')
+  })
+
   return socket;
 }
 
