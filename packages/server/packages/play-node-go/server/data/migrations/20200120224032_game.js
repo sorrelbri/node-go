@@ -36,8 +36,8 @@ exports.up = function(knex) {
     
     table.enu('win_type', winType);
     table.float('score');
-    table.integer('black_captures');
-    table.integer('white_captures');
+    table.integer('captures_black');
+    table.integer('captures_white');
 
     table.integer('user_black').references('id').inTable('user');
     table.integer('user_white').references('id').inTable('user');

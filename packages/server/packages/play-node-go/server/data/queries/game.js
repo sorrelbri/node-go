@@ -4,7 +4,7 @@ const gameDetailSelect = [
   'game.id', 'application', 'application_version',
   'board_size', 'komi', 'handicap', 'open', 'win_type',
   'player_black', 'player_black_rank', 'player_white', 'player_white_rank',
-  'black_captures', 'white_captures', 'score', 'win_type',
+  'captures_black', 'captures_white', 'score', 'win_type',
   'description', 'event', 'round', 'name', 'room'
 ]
 
