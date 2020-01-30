@@ -31,7 +31,46 @@ const apiRoomSpec = (chai, knex, server) => {
   }
 
   const recordOne = [
-    // {}
+    {
+      game: 1,
+      game_record: true,
+      id: 1,
+      number: 1,
+      player: "black",
+      point_x: 3,
+      point_y: 3,
+      prior_move: null
+    },
+    {
+      game: 1,
+      game_record: true,
+      id: 2,
+      number: 2,
+      player: "white",
+      point_x: 15,
+      point_y: 15,
+      prior_move: 1
+    },
+    {
+      game: 1,
+      game_record: true,
+      id: 3,
+      number: 3,
+      player: "black",
+      point_x: 4,
+      point_y: 15,
+      prior_move: 2,
+    },
+    {
+      game: 1,
+      game_record: true,
+      id: 4,
+      number: 4,
+      player: "white",
+      point_x: 15,
+      point_y: 4,
+      prior_move: 3,
+    }
   ]
 
   it('request to api games/1 should return 1 room game information with moves', done => {
