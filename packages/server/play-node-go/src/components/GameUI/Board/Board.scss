@@ -2,19 +2,17 @@
 @import '../../../../public/stylesheets/partials/variables';
 
 div.Game__board {
-  display: grid;
   @include fullspan;
-
-  background: radial-gradient(farthest-corner at 55% 40%, rgba(244, 230, 120, 0.75) 0%, rgba(234, 178, 78, 0.5) 65%, rgba(200, 160, 90, 0.45) 90%, rgba(200, 140, 90, 0.45) 100%);
+  
+  background: radial-gradient(farthest-corner at 55% 40%, rgb(244, 230, 120) 0%, rgb(234, 178, 78) 65%, rgb(200, 160, 90) 90%, rgb(200, 140, 90) 100%);
   background-size: cover;
-
-  margin: 0 auto;
-  // background-image: url(../images/board.png);
-  z-index: 1;
   box-shadow: -2vmin 4vmin 3vmin rgba(145, 92, 23, 0.5);
-  flex: 1;
+  display: grid;
+  // flex: 1;
+  margin: 0 auto;
+  z-index: 1;
 
-  &__size__9 {
+  &--size-9 {
     grid-template-columns: repeat(9, 1fr);
     grid-template-rows: repeat(9, 1fr);
     
@@ -29,7 +27,7 @@ div.Game__board {
     }
   }
   
-  &__size__13 {
+  &--size-13 {
     grid-template-columns: repeat(13, 1fr);
     grid-template-rows: repeat(13, 1fr);
     
@@ -44,7 +42,7 @@ div.Game__board {
     }
   }
   
-  &__size__19 {
+  &--size-19 {
     grid-template-columns: repeat(19, 1fr);
     grid-template-rows: repeat(19, 1fr);
     
@@ -59,12 +57,4 @@ div.Game__board {
     }
   }
   
-  div.board__point {
-    background: conic-gradient(#000 0%, rgba(0,0,0,0) 1%, rgba(0,0,0,0) 24%, #000 25%, rgba(0,0,0,0) 26%, rgba(0,0,0,0) 49%, #000 50%, rgba(0,0,0,0) 51%, rgba(0,0,0,0) 74%, #000 75%, rgba(0,0,0,0) 76%, rgba(0,0,0,0) 99%, #000 100%);
-    border-radius: 50% solid black;
-    color: black;
-    margin: auto;
-    padding: 0;
-    vertical-align: middle;
-  }
 }

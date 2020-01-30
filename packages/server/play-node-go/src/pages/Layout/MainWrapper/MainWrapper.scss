@@ -34,18 +34,3 @@ div.main-wrapper {
     }
   }
 }
-
-div.Game {
-  display: flex;
-  justify-content: space-between;
-  @include fullspan;
-  aside {
-    @include flexAround(column);
-    flex-grow: 1;
-  }
-  
-  div.game-area {
-    @include flexAround(column);
-    flex-grow: 2;
-  }
-}
