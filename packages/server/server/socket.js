@@ -11,11 +11,18 @@ io.on('connection', socket=> {
     if (data.user && data.user.email) {
       delete data.user.email;
     }
-    const roomIo = io.of(data.room);
+    const room= data.room;
+    const roomIo = io.of(room);
     roomIo.on('connection', socket => {
       socket.emit('connected')
       socket.emit('new_user', data);
-    })
+      socket.on('connect_game', data => {
+        const game = `game-${data.game.id}`;
+        socket.join(game, () => {
+          io.of(room).to(game).emit('game_connected', {})
+        });
+      });
+    });
   })
 })
 
