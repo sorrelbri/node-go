@@ -29,8 +29,31 @@ export const socketReducer = (state: state, action: action):state => {
       const socket = io.launch(room, dispatch);
       return {...state, socket}
     }
-    
+
+    case 'CONNECT_GAME': {
+      return connectGame(state, action);
+    }
+
     default:
       return state;
   }
+}
+
+function connectGame (state, action) {
+  const { user, game, dispatch } = action.body;
+  const priorSocket = state.socket;
+  let updatedState;
+  if ( !priorSocket.nsp || priorSocket.nsp !== `/${game.room}` ) {
+    const connectRoomAction = {
+      type: 'SOCKET',
+      message: 'CONNECT_ROOM',
+      body: { user, room: game.room, dispatch}
+    }
+    updatedState = stateReducer(state, connectRoomAction);
+    
+  }
+  if (!updatedState) updatedState = {...state};
+  const socket = updatedState.socket;
+  socket.emit('connect_game', {user, game});
+  return {...updatedState};
 }
