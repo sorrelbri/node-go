@@ -8,7 +8,7 @@ const state = initState();
 test('renders Game without crashing', () => {
   const { getByTestId } = render(
     <Router>
-      <Game state={state} />
+      <Game state={state} dispatch={()=>{}}/>
     </Router>
   );
   const GameDiv = getByTestId('Game');

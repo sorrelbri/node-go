@@ -10,12 +10,9 @@ import Development from '../../components/Display/Development/Development';
 const Game = (props) => {
   const { state, dispatch } = props;
   const gameId = parseInt(useParams().id) || 0;
-  const [ socket, setSocket ] = useState(false)
 
   const fetchGameAPI = async () => {
-    console.log(gameId)
     const response = await gamesServices.getGameService(gameId);
-    console.log(response)
     if (response) {
       const action = {
         type: 'GAMES',
@@ -32,36 +29,20 @@ const Game = (props) => {
 
   // ! [start] gameSocket
 
-  const roomSocketConnect = (roomSocket) => {
-    roomSocket.on('connect', socket => {
-      roomSocket.emit('joined game', gameId)
-      roomSocket.on('success', () => setSocket(true))
-    });
-    roomSocket.on('connect_error', err => {
-      setSocket(false)
-      console.log(err);
-    });
-    roomSocket.on('error', err => {
-      setSocket(false)
-      console.log(err);
-    });
+  const roomSocketConnect = () => {
+    const game = state.active.game;
+    const user = state.user;
+    const action = {
+      type: 'SOCKET',
+      message: 'CONNECT_GAME',
+      body: { game, user, dispatch }
+    }
+    return dispatch(action);
   }
 
   useEffect(() => {
-    if (!state.active) return;
-    const roomSocket = socketIOClient(`${config.socketAddress}/${state.active.game.room}`)
-    roomSocketConnect(roomSocket);
-  }, [state.active])
-
-  useEffect(() => {
-    const data = {
-      user: state.user,
-      game: state.joinGame
-    };
-    console.log('emitting request')
-    console.log(data)
-    // socket.emit('join_game_request', data)
-  }, [state.joinGame])
+    roomSocketConnect();
+  }, [state.active] )
 
   // ! [end]
 
@@ -74,7 +55,7 @@ const Game = (props) => {
       
       <span 
         className="Game__socket-flag"
-      >{socket ? '✓' : ' ⃠'}</span>
+      >{state.socket ? '✓' : ' ⃠'}</span>
       
       <Development />
     
