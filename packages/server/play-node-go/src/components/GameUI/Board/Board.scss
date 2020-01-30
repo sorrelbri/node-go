@@ -1,0 +1,70 @@
+@import '../../../../public/stylesheets/partials/mixins';
+@import '../../../../public/stylesheets/partials/variables';
+
+div.Game__board {
+  display: grid;
+  @include fullspan;
+
+  background: radial-gradient(farthest-corner at 55% 40%, rgba(244, 230, 120, 0.75) 0%, rgba(234, 178, 78, 0.5) 65%, rgba(200, 160, 90, 0.45) 90%, rgba(200, 140, 90, 0.45) 100%);
+  background-size: cover;
+
+  margin: 0 auto;
+  // background-image: url(../images/board.png);
+  z-index: 1;
+  box-shadow: -2vmin 4vmin 3vmin rgba(145, 92, 23, 0.5);
+  flex: 1;
+
+  &__size__9 {
+    grid-template-columns: repeat(9, 1fr);
+    grid-template-rows: repeat(9, 1fr);
+    
+    div.board__point {
+      width: 9vmin;
+      height: 9vmin;
+
+      @media #{map-get($break-points, "570")} {
+        height: 7.5vh;
+        width: 7.5vh;
+      }
+    }
+  }
+  
+  &__size__13 {
+    grid-template-columns: repeat(13, 1fr);
+    grid-template-rows: repeat(13, 1fr);
+    
+    div.board__point {
+      width: 7vmin;
+      height: 7vmin;
+
+      @media #{map-get($break-points, "570")} {
+        height: 5vh;
+        width: 5vh;
+      }
+    }
+  }
+  
+  &__size__19 {
+    grid-template-columns: repeat(19, 1fr);
+    grid-template-rows: repeat(19, 1fr);
+    
+    div.board__point {
+      width: 5vmin;
+      height: 5vmin;
+      
+      @media #{map-get($break-points, "590")} {
+        height: 3.5vh;
+        width: 3.5vh;
+      }
+    }
+  }
+  
+  div.board__point {
+    background: conic-gradient(#000 0%, rgba(0,0,0,0) 1%, rgba(0,0,0,0) 24%, #000 25%, rgba(0,0,0,0) 26%, rgba(0,0,0,0) 49%, #000 50%, rgba(0,0,0,0) 51%, rgba(0,0,0,0) 74%, #000 75%, rgba(0,0,0,0) 76%, rgba(0,0,0,0) 99%, #000 100%);
+    border-radius: 50% solid black;
+    color: black;
+    margin: auto;
+    padding: 0;
+    vertical-align: middle;
+  }
+}
