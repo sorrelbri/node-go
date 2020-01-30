@@ -4,8 +4,8 @@ import socketIOClient from 'socket.io-client';
 import config from '../../config';
 import gamesServices from '../../services/api/gamesServices';
 import './Game.scss';
-
-import Development from '../../components/Display/Development/Development';
+import Logo from '../../components/Display/Logo/Logo';
+import Board from '../../components/GameUI/Board/Board';
 
 const Game = (props) => {
   const { state, dispatch } = props;
@@ -27,8 +27,6 @@ const Game = (props) => {
     fetchGameAPI();
   }, [])
 
-  // ! [start] gameSocket
-
   const roomSocketConnect = () => {
     const game = state.active.game;
     const user = state.user;
@@ -44,21 +42,37 @@ const Game = (props) => {
     roomSocketConnect();
   }, [state.active] )
 
-  // ! [end]
-
   return (  
     <div 
       className="Game" 
       data-testid="Game"
     >
-      <p>Game</p>
-      
-      <span 
-        className="Game__socket-flag"
-      >{state.socket ? '✓' : ' ⃠'}</span>
-      
-      <Development />
-    
+      <div className="Game__meta-container">
+        <span 
+          className="Game__socket-flag"
+        >{state.socket ? '✓' : ' ⃠'}</span>
+        <Logo />
+        <p>Timer</p>
+        <p>? Game Tree</p>
+      </div>
+
+      <div className="Game__board-container">
+        <p>Player Area</p>
+        <ul><li>Bowl</li><li>? Kifu</li><li>Captures</li></ul>
+        <Board 
+          dispatch
+          game={state.active.game} 
+          record={state.active.record}
+          user={state.user} 
+        />
+        <p>Player Area</p>
+        <ul><li>Captures</li><li>? Kifu</li><li>Bowl</li></ul>
+      </div>
+
+      <div className="Game__message-container">
+        <p>Messages</p>
+        <p>Message Form</p>
+      </div>
     </div>
   );
 }

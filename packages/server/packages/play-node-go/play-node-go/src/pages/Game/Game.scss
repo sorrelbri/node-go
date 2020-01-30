@@ -1,0 +1,12 @@
+div.Game {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+}
+
+div.Game__board-container {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-evenly;
+  max-width: 50vw;
+  max-height: 100vh;
+}
