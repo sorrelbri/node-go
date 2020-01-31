@@ -94,6 +94,10 @@ class Game {
     }, {})
   }
 
+  getMeta = () => {
+    return { winner: this.winner, turn: this.turn, pass: this.pass, playerState: this.playerState, gameRecord: this.gameRecord }
+  }
+
   findPointFromIdx = (arr) => {
     return this.boardState.find( point => point.pos[0] === arr[0] && point.pos[1] === arr[1] );
   }
@@ -108,9 +112,9 @@ class Game {
     point.stone = this.turn;
     point.joinGroup(this);
     clearCaptures(this);
-    this.gameRecord.push(`${STONES_DATA[this.turn]}: ${point.pos}`)
+    this.gameRecord.push(move)
     this.turn*= -1;
-    return this.getBoardState();
+    return { board: this.getBoardState(), meta: this.getMeta()};
   }
 
   clickBoard = (evt) => {
