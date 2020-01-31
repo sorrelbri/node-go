@@ -62,7 +62,8 @@ class Game {
     this.winner = null;
     this.pass = null;
     this.turn = this.handicap ? -1 : 1;
-    return this.initBoard();
+    this.initBoard();
+    return this.getBoardState();
   }
 
   initBoard = () => {
@@ -79,16 +80,55 @@ class Game {
     if (this.handicap < 2) return;
     HANDI_PLACE[this.boardSize][this.handicap].forEach(pt => {
       if (!pt) return;
-      let handi = findPointFromIdx(pt);
+      let handi = this.findPointFromIdx(pt);
       handi.stone = 1;
-      handi.joinGroup();
+      handi.joinGroup(this);
     })
   }
 
   getBoardState = () => {
     return this.boardState.reduce((boardState, point) => {
-      boardState[point.pos[0]][point.pos[1]] = point.legal || point.stone
+      boardState[`${point.pos[0]}-${point.pos[1]}`] = point.legal || point.stone;
+      return boardState;
     }, {})
+  }
+
+  findPointFromIdx = (arr) => {
+    return this.boardState.find( point => point.pos[0] === arr[0] && point.pos[1] === arr[1] );
+  }
+
+  makeMove = (move) => {
+    const player = move.player === 'white' ? -1 : 1;
+    const point = this.findPointFromIdx([move.pos.X, move.pos.Y])
+    if ( !checkLegal(point, this) ) throw 'illegal move';
+    clearKo(this);
+    clearPass(this);
+    resolveCaptures(point, this);
+    point.stone = this.turn;
+    point.joinGroup(this);
+    clearCaptures(this);
+    this.gameRecord.push(`${STONES_DATA[this.turn]}: ${point.pos}`)
+    this.turn*= -1;
+    return this.getBoardState();
+  }
+
+  clickBoard = (evt) => {
+    evt.stopPropagation();
+    if (gameState.pass > 1 || gameState.winner) return editTerritory(evt);
+    // checks for placement and pushes to cell
+    let placement = [ parseInt(evt.target.closest('td').id.split('-')[0]), parseInt(evt.target.closest('td').id.split('-')[1]) ];
+    let point = findPointFromIdx(placement);
+    //checks that this placement was marked as legal
+    if ( !checkLegal(point) ) return;
+    clearKo();
+    clearPass();
+    resolveCaptures(point);
+    point.stone = gameState.turn;
+    point.joinGroup();
+    playSound(point);
+    clearCaptures();
+    gameState.gameRecord.push(`${STONES_DATA[gameState.turn]}: ${point.pos}`)
+    gameState.turn*= -1;
   }
 
 }
@@ -146,28 +186,28 @@ class Point {
     this.neighbors.lft = y > 1 ? [ x, y - 1 ] : null;
   } 
 
-  checkNeighbors = () => {
+  checkNeighbors = (Game) => {
     let neighborsArr = [];
     for (let neighbor in this.neighbors) {
       let nbr = this.neighbors[neighbor];
       // neighbor exists it's point is stored as { rPos, cPos}
       if ( nbr !== null ) {
-      neighborsArr.push(boardState.find(pt =>  pt.pos[0] === nbr[0] && pt.pos[1] === nbr[1]))
+      neighborsArr.push(Game.boardState.find(pt =>  pt.pos[0] === nbr[0] && pt.pos[1] === nbr[1]))
       }
     };
     // returns array of existing neighbors to calling function
     return neighborsArr;
   }
 
-  getLiberties = () => { 
-    let neighborsArr = this.checkNeighbors().filter(pt => pt.stone === 0);
+  getLiberties = (Game) => { 
+    let neighborsArr = this.checkNeighbors(Game).filter(pt => pt.stone === 0);
     return neighborsArr;
   }
 
-  joinGroup = () => {
+  joinGroup = (Game) => {
     this.groupMembers = this.groupMembers.filter(grp => grp.stone === this.stone);
     this.groupMembers.push(this);
-    let frns = this.checkNeighbors().filter(nbr => nbr.stone === this.stone);
+    let frns = this.checkNeighbors(Game).filter(nbr => nbr.stone === this.stone);
     for (let frn of frns) {
       this.groupMembers.push(frn);
     }
@@ -180,8 +220,8 @@ class Point {
     }
   }
 
-  checkCapture = () => {
-    let opps = this.checkNeighbors().filter(nbr => nbr.stone === gameState.turn * -1 
+  checkCapture = (Game) => {
+    let opps = this.checkNeighbors(Game).filter(nbr => nbr.stone === Game.turn * -1 
       && nbr.getLiberties().every(liberty => liberty === this));
     for (let opp of opps) {
       if (opp.groupMembers.every(stone => stone.getLiberties().filter(liberty => liberty !== this).length === 0)) {
@@ -221,63 +261,41 @@ class Point {
   }
 }
 
-function findPointFromIdx(arr) {
-  return pointFromIdx = boardState.find( point => point.pos[0] === arr[0] && point.pos[1] === arr[1] );
-}
 
-function clickBoard(evt) {
-  evt.stopPropagation();
-  if (gameState.pass > 1 || gameState.winner) return editTerritory(evt);
-  // checks for placement and pushes to cell
-  let placement = [ parseInt(evt.target.closest('td').id.split('-')[0]), parseInt(evt.target.closest('td').id.split('-')[1]) ];
-  let point = findPointFromIdx(placement);
-  //checks that this placement was marked as legal
-  if ( !checkLegal(point) ) return;
-  clearKo();
-  clearPass();
-  resolveCaptures(point);
-  point.stone = gameState.turn;
-  point.joinGroup();
-  playSound(point);
-  clearCaptures();
-  gameState.gameRecord.push(`${STONES_DATA[gameState.turn]}: ${point.pos}`)
-  gameState.turn*= -1;
-}
-
-function clearKo() {
-  for (let point in boardState) {
-    point = boardState[point];
+function clearKo(Game) {
+  for (let point in Game.boardState) {
+    point = Game.boardState[point];
     point.stone = point.stone === 'k' ? 0 : point.stone;
   }
 }
 
-function clearPass() {
-  gameState.pass = 0;
+function clearPass(Game) {
+  Game.pass = 0;
 }
 
-function resolveCaptures(point) {
+function resolveCaptures(point, Game) {
   if(!point.capturing.length) {
-    point.checkCapture();
+    point.checkCapture(Game);
   }
   if(point.capturing.length) {
     point.capturing.forEach(cap => {
-      gameState.playerState[gameState.turn > 0 ? 'bCaptures' : 'wCaptures']++;
+      Game.playerState[gameState.turn > 0 ? 'bCaptures' : 'wCaptures']++;
       cap.stone = checkKo(point) ? 'k' : 0;
       cap.groupMembers = [];
     })
   }
 }
 
-function checkLegal(point) {
-  clearOverlay();
+function checkLegal(point, Game) {
+  // clearOverlay();
   // first step in logic: is point occupied, or in ko
   if (point.stone) return false;
   // if point is not empty check if liberties
-  if (point.getLiberties().length < 1) {
+  if (point.getLiberties(Game).length < 1) {
     //if no liberties check if enemy group has liberties
-    if ( point.checkCapture().length ) return true;
+    if ( point.checkCapture(Game).length ) return true;
     //if neighboring point is not empty check if friendly group is alive
-    if (point.checkGroup()) return true;
+    if (point.checkGroup(Game)) return true;
     return false;
   }
   return true;
@@ -295,9 +313,9 @@ function checkKo(point) { // currently prevents snapback // capturing point has 
 }
 
 
-function clearCaptures() {
-  for (let point in boardState) {
-    point = boardState[point];
+function clearCaptures(Game) {
+  for (let point in Game.boardState) {
+    point = Game.boardState[point];
     point.capturing = [];
   }
 }
