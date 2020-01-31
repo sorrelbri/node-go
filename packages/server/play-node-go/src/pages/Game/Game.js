@@ -60,7 +60,7 @@ const Game = (props) => {
         <p>Player Area</p>
         <ul><li>Bowl</li><li>? Kifu</li><li>Captures</li></ul>
         <Board 
-          dispatch
+          dispatch={dispatch}
           game={state.active.game} 
           record={state.active.record}
           user={state.user} 

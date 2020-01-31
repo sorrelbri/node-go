@@ -17,6 +17,7 @@ const Board = (props) => {
           posX={posX}
           posY={posY}
           // point={board[posX][posY]}
+          dispatch={dispatch}
           {...props}
         />
       ); i++;
