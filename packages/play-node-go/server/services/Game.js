@@ -87,6 +87,7 @@ class Game {
   }
 
   getBoardState = () => {
+    this.boardState.forEach(point => point.legal = checkLegal(point, this))
     return this.boardState.reduce((boardState, point) => {
       boardState[`${point.pos[0]}-${point.pos[1]}`] = point.legal || point.stone;
       return boardState;
@@ -100,7 +101,7 @@ class Game {
   makeMove = (move) => {
     const player = move.player === 'white' ? -1 : 1;
     const point = this.findPointFromIdx([move.pos.X, move.pos.Y])
-    if ( !checkLegal(point, this) ) throw 'illegal move';
+    if ( !checkLegal(point, this) ) throw Error('illegal move');
     clearKo(this);
     clearPass(this);
     resolveCaptures(point, this);
@@ -289,16 +290,16 @@ function resolveCaptures(point, Game) {
 function checkLegal(point, Game) {
   // clearOverlay();
   // first step in logic: is point occupied, or in ko
-  if (point.stone) return false;
+  if (point.stone) return 0;
   // if point is not empty check if liberties
   if (point.getLiberties(Game).length < 1) {
     //if no liberties check if enemy group has liberties
-    if ( point.checkCapture(Game).length ) return true;
+    if ( point.checkCapture(Game).length ) return 'l';
     //if neighboring point is not empty check if friendly group is alive
-    if (point.checkGroup(Game)) return true;
-    return false;
+    if (point.checkGroup(Game)) return 'l';
+    return 0;
   }
-  return true;
+  return 'l';
 }
 
 function clearOverlay() {
