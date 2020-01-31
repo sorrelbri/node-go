@@ -12,9 +12,8 @@ const initGame = (game) => {
 }
 
 const makeMove = (game, move) => {
-  let meta = {};
-  const board = gamesInProgress[game.id].makeMove(move);
-  return {board, meta}
+  const newState = gamesInProgress[game.id].makeMove(move);
+  return {...newState}
 }
 
 const getBoard = (gameId) => {
