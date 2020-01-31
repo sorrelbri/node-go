@@ -34,6 +34,10 @@ export const socketReducer = (state: state, action: action):state => {
       return connectGame(state, action);
     }
 
+    case 'MAKE_MOVE': {
+      return makeMove(state, action);
+    }
+
     default:
       return state;
   }
@@ -56,4 +60,11 @@ function connectGame (state, action) {
   const socket = updatedState.socket;
   socket.emit('connect_game', {user, game});
   return {...updatedState};
+}
+
+function makeMove (state, action) {
+  const { user, game, room, board, move } = action.body;
+  const socket = state.socket;
+  socket.emit('make_move', {...action.body});
+  return state;
 }

@@ -3,6 +3,7 @@ const socketIO = require('socket.io');
 const io = socketIO({ cookie: false });
 
 const gameQueries = require('./data/queries/game');
+const gameServices = require('./services/gameServices');
 
 io.on('connection', socket=> {
   socket.emit('connected', {message: 'socket connected'});
@@ -22,6 +23,11 @@ io.on('connection', socket=> {
           io.of(room).to(game).emit('game_connected', {})
         });
       });
+      socket.on('make_move', data => {
+        const { user, move, board, game, room } = data;
+        gameServices.placeMove(1, {player: 'black', move: '7,4'})
+        console.log(data)
+      })
     });
   })
 })
