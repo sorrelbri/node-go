@@ -11,14 +11,9 @@ const initGame = (game) => {
   return gamesInProgress[game.id].initGame();
 }
 
-const placeMove = (game, move) => {
-  if (!gamesInProgress[game]) {
-    gamesInProgress[game] = storeGame(game)
-  }
-  // gamesInProgress[]
+const makeMove = (game, move) => {
   let meta = {};
-  // let newBoard = {...board};
-  let board = [];
+  const board = gamesInProgress[game.id].makeMove(move);
   return {board, meta}
 }
 
@@ -31,7 +26,7 @@ const getAllGames = () => {
 }
 
 module.exports = {
-  placeMove,
+  makeMove,
   getAllGames,
   getBoard,
   initGame
