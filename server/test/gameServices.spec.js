@@ -12,7 +12,7 @@ describe('game services', () => {
   it('games services places move', done => {
     gameServices.initGame({id: 1, handicap: 4})
     const afterMoveOne = gameServices.makeMove({id: 1}, {player: 'white', pos: { X:6, Y:3 }});
-    const afterMoveOneShould = { board:{ ...fourHandicapBoard, '6-3': -1}, meta: {} };
+    const afterMoveOneShould = { board:{ ...fourHandicapBoard, '6-3': -1}, meta: moveOneMeta };
     afterMoveOne.should.eql(afterMoveOneShould);
     done();
   });
@@ -52,3 +52,18 @@ const fourHandicapBoard = {
   '18-1': 'l','18-2': 'l','18-3': 'l','18-4': 'l','18-5': 'l','18-6': 'l','18-7': 'l','18-8': 'l','18-9': 'l','18-10': 'l','18-11': 'l','18-12': 'l','18-13': 'l','18-14': 'l','18-15': 'l','18-16': 'l','18-17': 'l','18-18': 'l','18-19': 'l',
   '19-1': 'l','19-2': 'l','19-3': 'l','19-4': 'l','19-5': 'l','19-6': 'l','19-7': 'l','19-8': 'l','19-9': 'l','19-10': 'l','19-11': 'l','19-12': 'l','19-13': 'l','19-14': 'l','19-15': 'l','19-16': 'l','19-17': 'l','19-18': 'l','19-19': 'l'
 };
+
+const moveOneMeta = {
+  gameRecord: [
+    {player: 'white', pos: { X:6, Y:3 }}
+  ],
+  pass: 0,
+  playerState: {
+    bCaptures: 0,
+    bScore: 0,
+    wCaptures: 0,
+    wScore: 0
+  },
+  turn: 1,
+  winner: null
+}
