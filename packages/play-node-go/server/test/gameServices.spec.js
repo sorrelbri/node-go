@@ -11,7 +11,7 @@ describe('game services', () => {
   
   it('games services places move', done => {
     gameServices.initGame({id: 1, handicap: 4})
-    const afterMoveOne = gameServices.makeMove({id: 1}, {player: 'white', pos: { X:6, Y:3 }});
+    const afterMoveOne = gameServices.makeMove({id: 1}, {player: 'white', pos: { x:6, y:3 }});
     const afterMoveOneShould = { board:{ ...fourHandicapBoard, '6-3': -1}, meta: moveOneMeta };
     afterMoveOne.should.eql(afterMoveOneShould);
     done();
@@ -20,7 +20,7 @@ describe('game services', () => {
   it('illegal move throws error', done => {
     try {
       gameServices.initGame({id: 1, handicap: 4})
-      const afterIllegalMove = gameServices.makeMove({id: 1}, {player: 'white', pos: { X:4, Y:4 }});
+      const afterIllegalMove = gameServices.makeMove({id: 1}, {player: 'white', pos: { x:4, y:4 }});
     }
     catch (err) { 
       err.message.should.equal('illegal move')
