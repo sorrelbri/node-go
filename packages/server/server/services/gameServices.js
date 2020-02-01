@@ -12,6 +12,7 @@ const initGame = (game) => {
 }
 
 const makeMove = (game, move) => {
+  if (!gamesInProgress[game.id]) initGame(game);
   const newState = gamesInProgress[game.id].makeMove(move);
   return {...newState}
 }

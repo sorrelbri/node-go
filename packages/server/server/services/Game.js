@@ -99,12 +99,14 @@ class Game {
   }
 
   findPointFromIdx = (arr) => {
+    console.log(this.boardState)
     return this.boardState.find( point => point.pos[0] === arr[0] && point.pos[1] === arr[1] );
   }
 
   makeMove = (move) => {
     const player = move.player === 'white' ? -1 : 1;
-    const point = this.findPointFromIdx([move.pos.X, move.pos.Y])
+    const point = this.findPointFromIdx([move.pos.x, move.pos.y])
+    console.log([move.pos.x, move.pos.y])
     if ( !checkLegal(point, this) ) throw Error('illegal move');
     clearKo(this);
     clearPass(this);

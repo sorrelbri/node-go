@@ -8,7 +8,6 @@ const gameServices = require('./services/gameServices');
 io.on('connection', socket=> {
   socket.emit('connected', {message: 'socket connected'});
   socket.on('connect_room', data => {
-    console.log(data)
     if (data.user && data.user.email) {
       delete data.user.email;
     }
@@ -19,35 +18,24 @@ io.on('connection', socket=> {
       socket.emit('new_user', data);
       socket.on('connect_game', data => {
         const game = `game-${data.game.id}`;
-        socket.join(game, () => {
-          io.of(room).to(game).emit('game_connected', {})
+        socket.join(game, async () => {
+          // ! temp 
+          gameServices.initGame({id: data.game.id})
+          // ! end-temp
+          const gameData = await gameServices.getBoard(data.game.id);
+          io.of(room).to(game).emit('game_connected', gameData)
         });
       });
       socket.on('make_move', data => {
         const { user, move, board, game, room } = data;
-        gameServices.placeMove(1, {player: 'black', move: '7,4'})
+        console.log(move)
         console.log(data)
+        gameServices.makeMove(1, move)
       })
     });
   })
 })
 
-const roomSocket = (roomId) => {
-  
-  const roomIo = io.of(roomId)
-  roomIo.on('connection', socket => {
-    console.log('connected room')
-    socket.on('connect_room', data => {
-      if (data.user && data.user.email) {
-        delete data.user.email;
-      }
-      socket.emit('new_user', data);
-    })
-  })
-  return roomIo;
-}
-
 module.exports = {
-  io,
-  roomSocket
+  io
 }

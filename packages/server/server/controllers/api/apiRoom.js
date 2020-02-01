@@ -21,7 +21,6 @@ const show = async (req, res, next) => {
     if (!roomId) throw('missing room parameter')
     
     // TODO eventually add check for user's private rooms
-    // socket.roomSocket(roomId);
 
     const currentRoom = await roomQueries.findRoomById(roomId);
     const messages = await messageQueries.findMessageByRoom(roomId);
