@@ -21,6 +21,10 @@ export const gamesReducer = (state: state, action: action):state => {
       const id = action.body;
       return {...state, joinGame: id};
 
+    case 'UPDATE_BOARD':
+      console.log(action.body)
+      return {...state, board: action.body};
+
     case 'SET_ACTIVE':
       return {...state, active: action.body};
       

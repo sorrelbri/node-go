@@ -17,6 +17,8 @@ export const initState = (): state => {
       },
       record: []
     },
+
+    board: {},
     
     connect: { location: '', type: '' },
     
