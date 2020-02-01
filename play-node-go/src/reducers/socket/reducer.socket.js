@@ -65,6 +65,7 @@ function connectGame (state, action) {
 function makeMove (state, action) {
   const { user, game, room, board, move } = action.body;
   const socket = state.socket;
+  console.log(action)
   socket.emit('make_move', {...action.body});
   return state;
 }
