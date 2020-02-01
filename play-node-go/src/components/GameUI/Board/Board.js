@@ -11,11 +11,13 @@ const Board = (props) => {
     while (i < boardSize * boardSize) {
       const posX = Math.floor(i/boardSize) + 1;
       const posY = i % boardSize + 1;
+      console.log(board[`${posX}-${posY}`])
       boardPoints.push(
         <Point 
           key={`${posX}-${posY}`} 
           posX={posX}
           posY={posY}
+          pointData={board[`${posX}-${posY}`]}
           // point={board[posX][posY]}
           dispatch={dispatch}
           {...props}

@@ -38,3 +38,33 @@ div.board__point--bottom.board__point--left {
 div.board__point--bottom.board__point--right {
   background: conic-gradient(#000 0%, rgba(0,0,0,0) 1%, rgba(0,0,0,0) 74%, #000 75%, rgba(0,0,0,0) 76%, rgba(0,0,0,0) 99%, #000 100%);
 }
+
+div.board__point__stone {
+  width: 85%;
+  height: 85%;
+  border-radius: 50%;
+  margin: auto;
+  vertical-align: middle;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+div.board__point div.board__point__stone div.board__point__dot {
+  width: 35%;
+  height: 35%;
+  border-radius: 50%;
+  margin: auto;
+  vertical-align: middle;
+}
+
+div.board__point__stone[data-stone="white"] {
+  background: radial-gradient(farthest-side at 55% 40%, white 0%, rgb(200,200,200) 65%, rgb(100,100,100) 90%, rgb(68, 50, 0) 100%);
+  box-shadow: -.25vmin .5vmin .5vmin rgba(145, 92, 23, 0.5);
+}
+
+div.board__point__stone[data-stone="black"] {
+  background-color: black;
+  background: radial-gradient(farthest-side at 55% 40%, rgb(220,220,220) 0%, rgb(60,60,60) 45%, rgb(15,15,15) 90%, rgb(5, 5, 0) 100%);
+  box-shadow: -.25vmin .5vmin .5vmin rgba(145, 92, 23, 0.75);
+}

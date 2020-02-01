@@ -41,7 +41,6 @@ const Game = (props) => {
   useEffect(() => {
     roomSocketConnect();
   }, [state.active] )
-
   return (  
     <div 
       className="Game" 
@@ -63,7 +62,8 @@ const Game = (props) => {
           dispatch={dispatch}
           game={state.active.game} 
           record={state.active.record}
-          user={state.user} 
+          user={state.user}
+          board={state.board}
         />
         <p>Player Area</p>
         <ul><li>Captures</li><li>? Kifu</li><li>Bowl</li></ul>
