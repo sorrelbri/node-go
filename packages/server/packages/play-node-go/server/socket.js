@@ -27,10 +27,22 @@ io.on('connection', socket=> {
         });
       });
       socket.on('make_move', data => {
+        
         const { user, move, board, game, room } = data;
-        console.log(move)
-        console.log(data)
-        gameServices.makeMove(1, move)
+        const gameNsp = `game-${data.game.id}`;
+        
+        try {
+          const updatedBoard = gameServices.makeMove(1, move);
+          socket.join(gameNsp, () => {
+            io.of(room).to(gameNsp).emit('update_board', updatedBoard)
+          });
+        }
+        catch (err) {
+          socket.join(gameNsp, () => {
+            io.of(room).to(gameNsp).emit('error', err)
+          });
+
+        }
       })
     });
   })

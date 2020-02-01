@@ -55,7 +55,7 @@ const fourHandicapBoard = {
 
 const moveOneMeta = {
   gameRecord: [
-    {player: 'white', pos: { X:6, Y:3 }}
+    {player: 'white', pos: { x:6, y:3 }}
   ],
   pass: 0,
   playerState: {

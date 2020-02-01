@@ -26,6 +26,13 @@ const launch = (nsp, dispatch) => {
   socket.on('game_connected', (data) => {
     console.log(data)
     console.log('game_connected received')
+    dispatch({ type: 'GAMES', message: 'UPDATE_BOARD', body: data })
+  })
+  
+  socket.on('update_board', (data) => {
+    console.log(data)
+    console.log('update_board received')
+    dispatch({ type: 'GAMES', message: 'UPDATE_BOARD', body: data.board })
   })
 
   return socket;

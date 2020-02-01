@@ -99,7 +99,6 @@ class Game {
   }
 
   findPointFromIdx = (arr) => {
-    console.log(this.boardState)
     return this.boardState.find( point => point.pos[0] === arr[0] && point.pos[1] === arr[1] );
   }
 
