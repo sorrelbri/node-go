@@ -6,6 +6,7 @@ import gamesServices from '../../services/api/gamesServices';
 import './Game.scss';
 import Logo from '../../components/Display/Logo/Logo';
 import Board from '../../components/GameUI/Board/Board';
+import PlayerArea from '../../components/GameUI/PlayerArea/PlayerArea';
 
 const Game = (props) => {
   const { state, dispatch } = props;
@@ -56,8 +57,7 @@ const Game = (props) => {
       </div>
 
       <div className="Game__board-container">
-        <p>Player Area</p>
-        <ul><li>Bowl</li><li>? Kifu</li><li>Captures</li></ul>
+        <PlayerArea />
         <Board 
           dispatch={dispatch}
           game={state.active.game} 
@@ -65,8 +65,7 @@ const Game = (props) => {
           user={state.user}
           board={state.board}
         />
-        <p>Player Area</p>
-        <ul><li>Captures</li><li>? Kifu</li><li>Bowl</li></ul>
+        <PlayerArea />
       </div>
 
       <div className="Game__message-container">
