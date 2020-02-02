@@ -1,0 +1,101 @@
+@import '../../../../public/stylesheets/partials/variables';
+
+div.player-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  flex: 5;
+  height: 9vmin;
+  width: 100%;
+  
+  &:last-child {
+    align-items: flex-start;
+    flex-direction: row-reverse;
+    justify-self: flex-end;
+  }
+  
+  @media #{map-get($break-points, "500")} {
+    height: 14vh;
+  }
+  
+  div.player-container__bowl {
+    order: -1;
+    margin: 4vh;
+    height: 15vh;
+    width: 15vh;
+    border-radius: 50%;
+    background-color: rgb(116, 48, 17);
+    background: radial-gradient(farthest-corner at 48% 54%, rgba(30, 5, 0, 0.25) 0%, rgba(30, 5, 0, 0.45) 2%, rgba(30, 5, 0, 0.75) 32%, rgba(0,0,0,0.85)35%, rgb(116,48,17) 48%, rgb(140, 60, 40) 52%, rgb(100, 40, 5) 55%, rgb(116, 48, 17) 58%, rgb(140,60,40) 65%, rgb(100, 40, 5) 80%, rgb(80, 20, 0) 90%);
+    box-shadow: -1vmin 2vmin 1.5vmin rgba(83, 53, 35, 0.61);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @media #{map-get($break-points, "570")} {
+      margin: 3vh;
+      height: 10vh;
+      width: 10vh;
+    }
+    
+    &[data-turn]:hover p {
+      display: block;
+      color: #FFF;
+      background-color: rgba(0,0,0,0.3);
+      padding: .5em;
+      cursor: grab;
+    }
+    &[data-turn] {
+      box-shadow: 0 0 3vh 3vh rgb(255, 175, 2);
+        
+      & + .player-container__name-space .player-container__caps-space:hover :first-child {
+        display: block;
+        position: absolute;
+        background-color: rgba(0,0,0,0.7);
+        padding: .5em;
+        cursor: grab;
+      }
+    }
+
+    p {
+      display: none;
+    }
+  }
+}
+
+div.player-container__caps-space {
+  color: #FFF;
+  margin: 1vh;
+  height: 10vh;
+  width: 10vh;
+  border-radius: 50%;
+  background: radial-gradient(farthest-side at 49% 52%, rgb(150, 75, 50) 0%, rgb(116,48,17) 35%, rgb(116,48,17) 64%, rgb(80, 20, 0) 65%, rgb(175, 140, 95) 70%, rgb(120, 50, 40) 80%, rgb(80, 20, 0) 95%, rgb(175, 140, 95) 100%);
+  box-shadow: -0.5vmin 1vmin 1vmin rgba(83, 53, 35, 0.61);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  @media #{map-get($break-points, "570")} {
+    margin: 2vh;
+    height: 7vh;
+    width: 7vh;
+  }
+
+  & :first-child {
+    display: none;
+  }
+}
+
+div.player-container__name-space {
+  order: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  h4 {
+    font-size: 120%;
+    color: rgb(255,240,230);
+    background-color: rgba(0,0,0,0.7);
+    padding: 0.25em;
+    z-index: 1;
+  }
+}
