@@ -2,8 +2,7 @@
 @import '../../../../public/stylesheets/partials/variables';
 
 div.Game__board {
-  @include fullspan;
-  
+  // @include fullspan;
   background: radial-gradient(farthest-corner at 55% 40%, rgb(244, 230, 120) 0%, rgb(234, 178, 78) 65%, rgb(200, 160, 90) 90%, rgb(200, 140, 90) 100%);
   background-size: cover;
   box-shadow: -2vmin 4vmin 3vmin rgba(145, 92, 23, 0.5);
