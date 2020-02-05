@@ -10,34 +10,35 @@ import News from '../../News/News';
 import Room from '../../Room/Room';
 
 const MainWrapper = (props) => {
+  const { state, page, dispatch } = props;
 
-  const setWrapperWithSidebarAndPage = props => {
-    if (props.page === 'game') return selectPage(props)
+  const setWrapperWithSidebarAndPage = () => {
+    if (page === 'game') return selectPage()
     return (
       <div className="main-wrapper" data-testid="main-wrapper">
-        <NavBar user={props.state.user}/>
+        <NavBar state={state}/>
         <div className="content-wrapper">
-          <Sidebar page={props.page} state={props.state} dispatch={props.dispatch}/>
+          <Sidebar page={page} state={state} dispatch={dispatch}/>
           <main>
-            {selectPage(props)}
+            {selectPage()}
           </main>
         </div>
       </div>
     )
   }
 
-  const selectPage = props =>{
-    switch (props.page) {
+  const selectPage = () =>{
+    switch (page) {
       case 'account':
-        return <Account state={props.state} dispatch={props.dispatch}/>
+        return <Account state={state} dispatch={dispatch}/>
       case 'game':
-        return <Game state={props.state} dispatch={props.dispatch}/>
+        return <Game state={state} dispatch={dispatch}/>
       case 'home':
-        return <Home state={props.state} dispatch={props.dispatch}/>
+        return <Home state={state} dispatch={dispatch}/>
       case 'news':
-        return <News state={props.state} dispatch={props.dispatch}/>
+        return <News state={state} dispatch={dispatch}/>
       case 'room':
-        return <Room state={props.state} dispatch={props.dispatch}/>
+        return <Room state={state} dispatch={dispatch}/>
       default:
         return <></>
     }
@@ -45,7 +46,7 @@ const MainWrapper = (props) => {
 
   return (
     <>
-      { setWrapperWithSidebarAndPage(props) }
+      { setWrapperWithSidebarAndPage() }
     </>
   );
 }
