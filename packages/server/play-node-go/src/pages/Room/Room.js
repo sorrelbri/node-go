@@ -81,8 +81,6 @@ const Room = (props) => {
     <div className="Room" data-testid="Room">
     
       <div className="Room__heading">
-        <h2 className="heading--two">{state.currentRoom ? state.currentRoom.name : 'Loading'}</h2>
-        {/* <span className="Room__connection">{socket ? '✓' : ' ⃠'}</span> */}
         {state.errors.joinGame ? <ActionError error={state.errors.joinGame}/> : <></>}
       </div>
 
