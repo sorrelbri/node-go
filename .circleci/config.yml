@@ -16,10 +16,10 @@ jobs:
 
     working_directory: ~/node-go
 
-    steps:
-      api:
-        path: ~/node-go/server
-        # - checkout
+    api:
+      path: ~/node-go/server
+      steps:
+        - checkout
 
         # Download and cache dependencies
         - restore_cache:
@@ -36,9 +36,10 @@ jobs:
             key: v1-dependencies-{{ checksum "package.json" }}
 
         # run tests!
+    play:
+      path: ~/node-go/play-node-go
+      steps:
         - run: yarn test
-      play:
-        path: ~/node-go/play-node-go
         - checkout
 
         # Download and cache dependencies
