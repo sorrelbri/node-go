@@ -3,9 +3,15 @@ import './NewGame.scss';
 
 const NewGameButton = () => {
   return (
-    <>
-      New Game
-    </>
+    <div 
+      className="nav__section" 
+    >
+      <p 
+        className="nav__section__label"
+      >
+        New Game
+      </p>
+    </div>
   );
 }
 

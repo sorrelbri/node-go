@@ -9,25 +9,35 @@ const Auth = (props) => {
 
   return (
     <>
-      <p 
-        className="auth-label" 
+      <div 
+        className="nav__section nav__section--auth" 
         onClick={()=>{setShowForm('login')}}
-      >Login</p>
-      {
-        showForm === 'login' 
-        ? <Login dispatch={dispatch} state={state}/> 
-        : <></>
-      }
+      >
+        <p 
+          className="nav__section__label"
+        >Login</p>
 
-      <p 
-        className="auth-label" 
+        {
+          showForm === 'login' 
+          ? <Login dispatch={dispatch} state={state}/> 
+          : <></>
+        }
+      </div>
+
+      <div
+        className="nav__section nav__section--auth" 
         onClick={()=>{setShowForm('signup')}}
-      >Signup</p>
+      >
+        <p 
+          className="nav__section__label"
+        >Signup</p>
+
       {
         showForm === 'signup' 
         ? <Signup dispatch={dispatch} state={state}/> 
         : <></>
       }
+      </div>
     </>
   );
 }
