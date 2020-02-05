@@ -1,4 +1,5 @@
 @import '../../../../public/stylesheets/partials/variables';
+@import '../../../../public/stylesheets/partials/mixins';
 
 div.player-container {
   display: flex;
@@ -92,10 +93,8 @@ div.player-container__name-space {
   align-items: center;
   
   h4 {
+    @include gameViewLabel;
     font-size: 120%;
-    color: rgb(255,240,230);
-    background-color: rgba(0,0,0,0.7);
-    padding: 0.25em;
     z-index: 1;
   }
 }
