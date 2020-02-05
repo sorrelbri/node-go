@@ -19,7 +19,7 @@ jobs:
     steps:
       api:
         path: ~/node-go/server
-        - checkout
+        # - checkout
 
         # Download and cache dependencies
         - restore_cache:
