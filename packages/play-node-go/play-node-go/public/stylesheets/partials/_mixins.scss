@@ -9,3 +9,9 @@
   align-items: center;
   justify-content: space-around;
 }
+
+@mixin gameViewLabel {
+  color: rgb(255,240,230);
+  background-color: rgba(0,0,0,0.7);
+  padding: 0.25em;
+}

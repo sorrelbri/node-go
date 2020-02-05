@@ -1,3 +1,4 @@
+@import '../../../../public/stylesheets/partials/mixins';
 
 div.GameButton {
   align-items: stretch;
@@ -112,7 +113,7 @@ div.table__player-area {
 }
 
 div.GameButton__player-data {
-  background-color: rgba(255,255,255,0.65);
+  @include gameViewLabel;
   display: flex;
   justify-content: space-around;
   max-width: 100%;
@@ -127,7 +128,10 @@ div.GameButton__player-data {
 }
 
 .GameButton__link {
-  background-color: rgba(255, 255, 255, 0.95);
+  @include gameViewLabel;
   margin: 0 auto;
-  padding: .5vw;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
 }

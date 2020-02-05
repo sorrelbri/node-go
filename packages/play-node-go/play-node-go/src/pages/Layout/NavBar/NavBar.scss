@@ -1,5 +1,22 @@
+@import '../../../../public/stylesheets/partials/_variables.scss';
+
 div.NavBar {
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;
+  align-items: center;
+  background-color: map-get($colors, "nav_bar");
+  color: map-get($colors, "nav_link");
+
+  p {
+    font-size: 1.4em;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  a{
+    color: inherit;
+  }
 }

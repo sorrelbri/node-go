@@ -14,7 +14,6 @@ import Loading from '../../components/Display/Loading/Loading';
 const Room = (props) => {
   const { state, dispatch } = props;
   const roomId = parseInt(useParams().id) || 0;
-  // const socket = socketIOClient(`${config.socketAddress}/${roomId}`);
 
   const fetchRoomAPI = async () => {
     const response = await roomsServices.getRoomService(roomId);
