@@ -3,9 +3,15 @@ import './RoomArchive.scss';
 
 const RoomArchiveButton = () => {
   return (
-    <>
-      Room Archive
-    </>
+    <div 
+      className="nav__section" 
+    >
+      <p 
+        className="nav__section__label"
+      >
+        Room Archive
+      </p>
+    </div>
   );
 }
 

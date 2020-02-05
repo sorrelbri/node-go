@@ -19,6 +19,7 @@ const RoomSidebar = props => {
 
   return (  
     <nav>
+      <h3>{ state.currentRoom.name }</h3>
       {showAuth()}
       <FindGameForm />
       <NewGameButton />

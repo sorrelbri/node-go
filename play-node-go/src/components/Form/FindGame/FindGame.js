@@ -3,9 +3,15 @@ import './FindGame.scss';
 
 const FindGameForm = () => {
   return (
-    <>
-      Find Game
-    </>
+    <div 
+      className="nav__section" 
+    >
+      <p 
+        className="nav__section__label"
+      >
+        Find Game
+      </p>
+    </div>
   );
 }
 
