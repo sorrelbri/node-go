@@ -7,17 +7,17 @@ import NewsSidebar from '../../News/NewsSidebar';
 import RoomSidebar from '../../Room/RoomSidebar';
 
 const Sidebar = (props) => {
-
-  const displayComponent = props =>{
-    switch (props.page) {
+  const {page, state, dispatch} = props
+  const displayComponent = () =>{
+    switch (page) {
       case 'account':
-        return <AccountSidebar state={props.state} dispatch={props.dispatch}/>
+        return <AccountSidebar state={state} dispatch={dispatch}/>
       case 'home':
-        return <HomeSidebar state={props.state} dispatch={props.dispatch}/>
+        return <HomeSidebar state={state} dispatch={dispatch}/>
       case 'news':
-        return <NewsSidebar state={props.state} dispatch={props.dispatch}/>
+        return <NewsSidebar state={state} dispatch={dispatch}/>
       case 'room':
-        return <RoomSidebar state={props.state} dispatch={props.dispatch}/>
+        return <RoomSidebar state={state} dispatch={dispatch}/>
       default:
         return <></>
     }
@@ -25,7 +25,7 @@ const Sidebar = (props) => {
 
   return (
     <aside className="Sidebar" data-testid="Sidebar">
-      {displayComponent(props)}
+      {displayComponent()}
     </aside>
   );
 }
