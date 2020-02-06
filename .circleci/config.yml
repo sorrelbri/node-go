@@ -37,8 +37,8 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             
 
-      # - run: npm install
-      - run: npm run bootstrap
+      - run: npm install
+      # - run: npm run bootstrap
 
       - save_cache:
           paths:
