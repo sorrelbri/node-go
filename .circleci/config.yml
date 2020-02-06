@@ -37,7 +37,7 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             
 
-      - run: npm install
+      - run: lerna run install
 
       - save_cache:
           paths:
@@ -46,4 +46,4 @@ jobs:
             v1-dependencies-{{ checksum "package-lock.json" }}
 
       # run tests!
-      - run: npm test
+      - run: lerna run test
