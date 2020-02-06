@@ -1,7 +1,45 @@
 {
-  "name": "root",
+  "name": "react-boilerplate",
+  "version": "0.1.0",
   "private": true,
+  "dependencies": {
+    "@mars/heroku-js-runtime-env": "^3.0.2",
+    "@testing-library/user-event": "^7.1.2",
+    "flow-bin": "^0.114.0",
+    "node-sass": "^4.13.0",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "3.3.0",
+    "socket.io-client": "^2.3.0"
+  },
+  "scripts": {
+    "start": "REACT_APP_ENVIRONMENT='development' react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "flow": "./node_modules/.bin/flow",
+    "predeploy": "REACT_APP_ENVIRONMENT=production npm run build",
+    "postinstall": "react-scripts build"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
   "devDependencies": {
-    "lerna": "^3.20.2"
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.4.0",
+    "react-test-renderer": "^16.12.0"
   }
 }
