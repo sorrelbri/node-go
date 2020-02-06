@@ -2,7 +2,7 @@
 `hk-play=https://git.heroku.com/play-node-go.git`
 
 ### Server
-`$ git subtree push --prefix server hk-api master`
+`$ git subtree push --prefix packages/server hk-api master`
 
 ### React
-`$ git subtree push --prefix play-node-go hk-play master`
+`$ git subtree push --prefix packages/play-node-go hk-play master`
