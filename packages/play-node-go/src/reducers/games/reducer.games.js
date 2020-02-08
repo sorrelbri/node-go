@@ -39,6 +39,8 @@ function parseRank(rank) {
       return `${rank.slice(1)}${rank[0].toLowerCase()}`
     case 'U':
       return '?'
+    default: 
+      return '?'
   }
 }
 
