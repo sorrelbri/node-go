@@ -29,7 +29,7 @@ jobs:
 
     steps:
       - checkout
-      - run: sudo apt-get install postgresql-client-11.4
+      - run: sudo apt-get install postgresql-11.4
       - run: psql CREATE DATABASE circle_test
 
       # Download and cache dependencies
