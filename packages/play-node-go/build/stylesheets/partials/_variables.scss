@@ -1,0 +1,31 @@
+$dev-colors: (
+  "a": #34dc90,
+  "b": #9034dc,
+  "c": #dc9034,
+  "d": #dc34dc,
+  "e": #34dcdc,
+  "f": #dcdc34
+);
+
+/* Responsive Design */
+$break-points: (
+  "500": "only screen and (min-width: 500px)",
+  "570": "only screen and (min-width: 570px)",
+  "590": "only screen and (min-width: 590px)",
+  "700": "only screen and (min-width: 700px)",
+  "900": "only screen and (min-width: 900px)"
+);
+
+$colors: (
+  "error": #aa3333,
+  "nav_bar": #6f3e68,
+  "nav_link": #dae1b7,
+  "sidebar": #3c013f,
+  "sidebar_link": #f2ce3d,
+  "main": #95acae,
+  "home": #444444
+  );
+
+$backgrounds: (
+  "game_room": radial-gradient(farthest-corner at 55% 40%, rgb(189, 131, 100) 0%, rgb(175, 113, 80) 65%, rgb(150, 90, 65) 90%, rgb(125, 65, 40) 100%),
+)  

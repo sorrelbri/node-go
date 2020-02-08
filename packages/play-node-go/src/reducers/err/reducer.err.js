@@ -1,7 +1,4 @@
-// @flow
-import type { state, action } from '../reducer';
-
-export const errorReducer = (state: state, action: action):state => {
+export const errorReducer = (state, action) => {
   switch (action.message) {
     case 'AUTH_ERROR':
       return authErrorReducer(state, action);
@@ -17,17 +14,17 @@ export const errorReducer = (state: state, action: action):state => {
   } 
 }
 
-function authErrorReducer(state: state, action: action): state {
+function authErrorReducer(state, action) {
   const auth = action.body.authError;
   return {...state, errors: {auth} };
 }
 
-function joinRoomErrorReducer(state: state, action: action): state {
+function joinRoomErrorReducer(state, action) {
   const joinRoom = action.body.joinRoomError;
   return { ...state, errors: {joinRoom} }
 }
 
-function joinGameErrorReducer(state: state, action: action): state {
+function joinGameErrorReducer(state, action) {
   const joinGame = action.body.joinGameError;
   return { ...state, errors: {joinGame} }
 }

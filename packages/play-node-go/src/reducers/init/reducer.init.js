@@ -1,8 +1,4 @@
-//@ flow
-
-import type { state } from '../reducer';
-
-export const initState = (): state => {
+export const initState = () => {
   return {
     active: {
       game: {

@@ -1,7 +1,4 @@
-// @flow
-import type { state, action } from '../reducer';
-
-export const indexReducer = (state: state, action: action):state => {
+export const indexReducer = (state, action) => {
   switch(action.message) {
 
     case 'SET_USER':

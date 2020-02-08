@@ -1,4 +1,3 @@
-// @flow
 import { initState } from './init/reducer.init';
 import { authReducer } from './auth/reducer.auth';
 import { errorReducer } from './err/reducer.err';
@@ -8,20 +7,8 @@ import { messagesReducer } from './messages/reducer.messages';
 import { gamesReducer } from './games/reducer.games';
 import { socketReducer } from './socket/reducer.socket';
 
-export type state = {
-  user: {},
-  errors: {},
-  messages: [],
-  state: {}
-}
 
-export type action = {
-  type: string,
-  message: ?string,
-  body: {} | Array<{}>,
-}
-
-export const stateReducer = (state: state, action: action): state => {
+export const stateReducer = (state, action) => {
   const errorStrippedState = stripErrors({...state});
   
   switch (action.type) {
@@ -52,6 +39,6 @@ export const stateReducer = (state: state, action: action): state => {
   }
 }
 
-function stripErrors(state: state): state {
+function stripErrors(state) {
   return {...state, errors: {}}
 }

@@ -1,9 +1,7 @@
-// @flow
-import type { state, action } from '../reducer';
 import { stateReducer } from '../reducer';
 const io = require('../../io');
 
-export const socketReducer = (state: state, action: action):state => {
+export const socketReducer = (state, action) => {
   switch(action.message) {
 
     case 'CONNECTED':

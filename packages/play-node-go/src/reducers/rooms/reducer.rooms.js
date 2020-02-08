@@ -1,8 +1,6 @@
-// @flow
-import type { state, action } from '../reducer';
 import { stateReducer } from '../reducer';
 
-export const roomsReducer = (state: state, action: action):state => {
+export const roomsReducer = (state, action) => {
   switch(action.message) {
 
     case 'SET_ROOMS':

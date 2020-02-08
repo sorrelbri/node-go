@@ -1,7 +1,4 @@
-// @flow
-import type { state, action } from '../reducer';
-
-export const authReducer = (state: state, action: action):state => {
+export const authReducer = (state, action) => {
   switch (action.message) {
     case 'LOGIN':
       return loginReducer(state, action);
@@ -17,7 +14,7 @@ export const authReducer = (state: state, action: action):state => {
   } 
 }
 
-function loginReducer(state: state, action: action): state {
+function loginReducer(state, action) {
   const newUser = action.body;
   return {...state, user: newUser };  
 }

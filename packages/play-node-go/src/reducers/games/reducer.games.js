@@ -1,8 +1,6 @@
-// @flow
-import type { state, action } from '../reducer';
 import { stateReducer } from '../reducer';
 
-export const gamesReducer = (state: state, action: action):state => {
+export const gamesReducer = (state, action) => {
   switch(action.message) {
 
     case 'SET_GAMES':
@@ -33,7 +31,7 @@ export const gamesReducer = (state: state, action: action):state => {
   }
 }
 
-function parseRank(rank: string): string {
+function parseRank(rank) {
   switch(rank[0]) {
     case 'D':
       return `${rank.slice(1)}${rank[0].toLowerCase()}`
@@ -44,7 +42,7 @@ function parseRank(rank: string): string {
   }
 }
 
-function formatGames(action: action): Array<{}> {
+function formatGames(action) {
   const games = [...action.body].map(game => {
 
     if (game.playerBlackRank) {
