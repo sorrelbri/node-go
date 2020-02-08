@@ -16,6 +16,7 @@
     "@testing-library/react": "^9.4.0",
     "chai": "^4.2.0",
     "chai-http": "^4.3.0",
+    "flow-bin": "^0.114.0",
     "lerna": "^3.20.2",
     "mocha": "^7.0.0",
     "react-test-renderer": "^16.12.0"
