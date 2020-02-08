@@ -1,5 +1,3 @@
-import { stateReducer } from '../reducer';
-
 export const messagesReducer = (state, action) => {
   switch(action.message) {
 

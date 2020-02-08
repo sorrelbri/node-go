@@ -3,11 +3,12 @@ import { stateReducer } from '../reducer';
 export const gamesReducer = (state, action) => {
   switch(action.message) {
 
-    case 'SET_GAMES':
+    case 'SET_GAMES': {
       const games = formatGames(action);;
       return {...state, games};
+    }
     
-    case 'JOIN_REQUEST':
+    case 'JOIN_REQUEST': {
       if (!Object.entries(state.user).length) {
         const errAction = {
           type: 'ERR',
@@ -18,16 +19,18 @@ export const gamesReducer = (state, action) => {
       }
       const id = action.body;
       return {...state, joinGame: id};
+    }
 
-    case 'UPDATE_BOARD':
+    case 'UPDATE_BOARD': {
       console.log(action.body)
       return {...state, board: action.body};
+    }
 
-    case 'SET_ACTIVE':
+    case 'SET_ACTIVE': {
       return {...state, active: action.body};
+    }
       
-    default:
-      return state;
+    default: return state;
   }
 }
 
