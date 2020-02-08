@@ -37,7 +37,7 @@ const Home = props => {
       }
     }
     fetchRoomsAPI();
-  }, [])
+  }, [ dispatch ])
 
   return (  
     <div className="Home" data-testid="Home">

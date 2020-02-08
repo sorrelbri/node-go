@@ -24,7 +24,7 @@ const Game = (props) => {
       }
     }
     fetchGameAPI();
-  }, [ gameId ])
+  }, [ gameId, dispatch ])
 
   
   useEffect(() => {
@@ -39,7 +39,7 @@ const Game = (props) => {
       return dispatch(action);
     }
     roomSocketConnect();
-  }, [ state.active ] )
+  }, [ state.active , dispatch, state.user ] )
 
   return (  
     <div 

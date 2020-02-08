@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer} from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 import MainWrapper from './pages/Layout/MainWrapper/MainWrapper';
 import { stateReducer } from './reducers/reducer';
@@ -13,7 +13,6 @@ function App() {
     {},
     initState
   );
-
   
   useEffect(() => {
     const fetchIndexAPI = async () => {
@@ -28,7 +27,7 @@ function App() {
       }
     }
     fetchIndexAPI();
-  }, [])
+  }, [ ])
 
   
   useEffect(() => {

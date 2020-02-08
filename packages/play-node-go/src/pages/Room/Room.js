@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './Room.scss';
-import socketIOClient from 'socket.io-client';
-import config from '../../config';
 import roomsServices from '../../services/api/roomsServices';
 import GameButton from '../../components/Button/Game/Game';
 import Message from '../../components/Display/Message/Message';
@@ -29,7 +27,7 @@ const Room = (props) => {
       }
     }
     fetchRoomAPI();
-  }, [ roomId ])
+  }, [ roomId, dispatch ])
 
   useEffect(() => {
     const roomSocketConnect = () => {
@@ -41,7 +39,7 @@ const Room = (props) => {
       dispatch(action)
     }
     roomSocketConnect();
-  }, [ roomId, state.user ])
+  }, [ roomId, state.user, dispatch ])
 
   const renderGames = () => {
     const games = state.games || [];
