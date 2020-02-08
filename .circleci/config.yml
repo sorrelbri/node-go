@@ -45,6 +45,7 @@ jobs:
             - node_modules
           key: 
             v1-dependencies-{{ checksum "package-lock.json" }}
-      - run: npm build
+      - run: npm install react
+      - run: npm install react-dom
       # run tests!
       - run: npm test
