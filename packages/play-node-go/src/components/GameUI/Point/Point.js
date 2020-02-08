@@ -2,7 +2,7 @@ import React from 'react';
 import './Point.scss';
 
 const Point = (props) => {
-  const { posX, posY, user, game, record, dispatch, pointData } = props;
+  const { posX, posY, user, game, dispatch, pointData } = props;
   const turn = game.turn > 0 ? 'black' : 'white';
   
   const stone = () => {

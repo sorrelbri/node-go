@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './Signup.scss';
 import authServices from '../../../services/authServices';
 import FormError from '../../Error/FormError/FormError';
@@ -22,7 +22,7 @@ const Signup = (props) => {
       })
     }
 
-    if (password.length < 8) {
+    if (password.length < minimumPasswordLength) {
       return props.dispatch({
         ...errorDispatchAction,
         body: { authError: 'Password must be at least 8 characters'}

@@ -15,38 +15,33 @@ const Room = (props) => {
   const { state, dispatch } = props;
   const roomId = parseInt(useParams().id) || 0;
 
-  const fetchRoomAPI = async () => {
-    const response = await roomsServices.getRoomService(roomId);
-    if (response) {
-      const action = {
-        type: 'ROOMS',
-        message: 'JOIN_ROOM',
-        body: response
-      }
-      return dispatch(action);
-    }
-  }
   
   useEffect(() => {
-    fetchRoomAPI();
-  }, [])
-
-  // ! [start] roomSocket
-
-  const roomSocketConnect = () => {
-    const action = {
-      type: 'SOCKET',
-      message: 'CONNECT_ROOM',
-      body: {user: state.user, room: roomId, dispatch}
+    const fetchRoomAPI = async () => {
+      const response = await roomsServices.getRoomService(roomId);
+      if (response) {
+        const action = {
+          type: 'ROOMS',
+          message: 'JOIN_ROOM',
+          body: response
+        }
+        return dispatch(action);
+      }
     }
-    dispatch(action)
-  }
+    fetchRoomAPI();
+  }, [ roomId ])
 
   useEffect(() => {
+    const roomSocketConnect = () => {
+      const action = {
+        type: 'SOCKET',
+        message: 'CONNECT_ROOM',
+        body: {user: state.user, room: roomId, dispatch}
+      }
+      dispatch(action)
+    }
     roomSocketConnect();
-  }, [])
-
-  // ! [end]
+  }, [ roomId, state.user ])
 
   const renderGames = () => {
     const games = state.games || [];

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import Auth from '../../components/Form/Auth/Auth';
 import NewRoomButton from '../../components/Button/NewRoom/NewRoom';
@@ -14,7 +14,7 @@ const HomeSidebar = (props) => {
     <LibraryButton />
   </>
 
-  const ifNoUser = <Auth state={state} dispatch={state} />
+  const ifNoUser = <Auth state={state} dispatch={dispatch} />
 
   return (  
     <nav>

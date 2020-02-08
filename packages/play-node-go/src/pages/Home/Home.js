@@ -23,19 +23,19 @@ const Home = props => {
     return <Loading />
   }
 
-  const fetchRoomsAPI = async () => {
-    const response = await roomsServices.indexService();
-    if (response) {
-      const action = {
-        type: 'ROOMS',
-        message: 'SET_ROOMS',
-        body: response.rooms
-      }
-      return dispatch(action)
-    }
-  }
   
   useEffect(() => {
+    const fetchRoomsAPI = async () => {
+      const response = await roomsServices.indexService();
+      if (response) {
+        const action = {
+          type: 'ROOMS',
+          message: 'SET_ROOMS',
+          body: response.rooms
+        }
+        return dispatch(action)
+      }
+    }
     fetchRoomsAPI();
   }, [])
 

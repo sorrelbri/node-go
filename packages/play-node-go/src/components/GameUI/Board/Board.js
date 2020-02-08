@@ -3,7 +3,7 @@ import './Board.scss';
 import Point from '../Point/Point';
 
 const Board = (props) => {
-  const { game, record, user, dispatch, board } = props;
+  const { game, user, dispatch, board } = props;
   const sizeFlag = `Game__board--size-${ game.boardSize }`
 
   const renderPoints = boardSize => {
@@ -20,6 +20,7 @@ const Board = (props) => {
           pointData={board[`${posX}-${posY}`]}
           // point={board[posX][posY]}
           dispatch={dispatch}
+          user={user}
           {...props}
         />
       ); i++;

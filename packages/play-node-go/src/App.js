@@ -1,6 +1,5 @@
-import React, {useState, useEffect, useReducer} from 'react';
-import config from './config';
-import { Switch, Route, BrowserRouter as Router, Redirect } from 'react-router-dom';
+import React, { useEffect, useReducer} from 'react';
+import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 import MainWrapper from './pages/Layout/MainWrapper/MainWrapper';
 import { stateReducer } from './reducers/reducer';
 import { initState } from './reducers/init/reducer.init';
@@ -15,30 +14,30 @@ function App() {
     initState
   );
 
-  const fetchIndexAPI = async () => {
-    const response = await indexServices.indexService();
-    if (response) {
-      const action = {
-        type: 'INDEX',
-        message: 'SET_USER',
-        body: response
-      }
-      dispatch(action)
-    }
-  }
-
+  
   useEffect(() => {
+    const fetchIndexAPI = async () => {
+      const response = await indexServices.indexService();
+      if (response) {
+        const action = {
+          type: 'INDEX',
+          message: 'SET_USER',
+          body: response
+        }
+        dispatch(action)
+      }
+    }
     fetchIndexAPI();
   }, [])
 
-  const socketConnect = () => {
-    if (state.connect.type) return;
-    dispatch({type:'SOCKET', message: 'LAUNCH', body:{nsp:'', dispatch}});
-  }
-
+  
   useEffect(() => {
+    const socketConnect = () => {
+      if (state.connect.type) return;
+      dispatch({type:'SOCKET', message: 'LAUNCH', body:{nsp:'', dispatch}});
+    }
     socketConnect();
-  }, [])
+  }, [ state.connect ])
 
   return (
     <Router>

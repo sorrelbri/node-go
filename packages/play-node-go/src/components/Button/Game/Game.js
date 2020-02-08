@@ -18,7 +18,7 @@ const GameButton = (props) => {
   const renderOpenGame = () => {
     return (
       <>
-        <a onClick={() => requestJoinGame()} >Request to Join Game</a>
+        <div onClick={() => requestJoinGame()} >Request to Join Game</div>
 
         <div className="GameButton__player-data GameButton__player-data--black">
           <span className="GameButton__player-data__name GameButton__player-data__name--black">{game.playerBlack}</span>

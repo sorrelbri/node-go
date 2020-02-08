@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './MainWrapper.scss';
 
 import NavBar from '../NavBar/NavBar';

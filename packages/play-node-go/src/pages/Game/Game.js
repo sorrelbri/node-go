@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import socketIOClient from 'socket.io-client';
-import config from '../../config';
 import gamesServices from '../../services/api/gamesServices';
 import './Game.scss';
 import Logo from '../../components/Display/Logo/Logo';
@@ -12,36 +10,37 @@ const Game = (props) => {
   const { state, dispatch } = props;
   const gameId = parseInt(useParams().id) || 0;
 
-  const fetchGameAPI = async () => {
-    const response = await gamesServices.getGameService(gameId);
-    if (response) {
+  
+  useEffect(() => {
+    const fetchGameAPI = async () => {
+      const response = await gamesServices.getGameService(gameId);
+      if (response) {
+        const action = {
+          type: 'GAMES',
+          message: 'SET_ACTIVE',
+          body: response
+        }
+        return dispatch(action);
+      }
+    }
+    fetchGameAPI();
+  }, [ gameId ])
+
+  
+  useEffect(() => {
+    const roomSocketConnect = () => {
+      const game = state.active.game;
+      const user = state.user;
       const action = {
-        type: 'GAMES',
-        message: 'SET_ACTIVE',
-        body: response
+        type: 'SOCKET',
+        message: 'CONNECT_GAME',
+        body: { game, user, dispatch }
       }
       return dispatch(action);
     }
-  }
-  
-  useEffect(() => {
-    fetchGameAPI();
-  }, [])
-
-  const roomSocketConnect = () => {
-    const game = state.active.game;
-    const user = state.user;
-    const action = {
-      type: 'SOCKET',
-      message: 'CONNECT_GAME',
-      body: { game, user, dispatch }
-    }
-    return dispatch(action);
-  }
-
-  useEffect(() => {
     roomSocketConnect();
-  }, [state.active] )
+  }, [ state.active ] )
+
   return (  
     <div 
       className="Game" 
