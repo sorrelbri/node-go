@@ -30,7 +30,9 @@ export const gamesReducer = (state, action) => {
       return {...state, active: action.body};
     }
       
-    default: return state;
+    default: {
+      return state;
+    }
   }
 }
 
