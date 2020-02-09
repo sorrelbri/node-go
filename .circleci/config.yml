@@ -20,7 +20,7 @@ jobs:
       # specify the version you desire here
       - image: circleci/node:12.6
         environment:
-          DATABASE_URL: postgresql://root@localhost/circle_test
+          DATABASE_URL: postgresql://root@localhost/circlecitest
           
     # Service container image
       - image: circleci/postgres:11.4
