@@ -31,18 +31,18 @@ const setupDb = () => {
   })
 }
 
-describe('Auth Routes', function() {
-  // setupDb();
+// describe('Auth Routes', function() {
+//   // setupDb();
   
-  authSignupSpec(chai, knex, server);
-  authLoginSpec(chai, knex, server);
-});
+//   authSignupSpec(chai, knex, server);
+//   authLoginSpec(chai, knex, server);
+// });
 
-describe('API Routes', function() {
-  // setupDb();
+// describe('API Routes', function() {
+//   // setupDb();
   
-  apiIndexSpec(chai, knex, server)
-  apiRoomSpec(chai, knex, server)
-  apiGameSpec(chai, knex, server)
+//   apiIndexSpec(chai, knex, server)
+//   apiRoomSpec(chai, knex, server)
+//   apiGameSpec(chai, knex, server)
   
-});
+// });
