@@ -32,14 +32,14 @@ const setupDb = () => {
 }
 
 describe('Auth Routes', function() {
-  setupDb();
+  // setupDb();
   
   authSignupSpec(chai, knex, server);
   authLoginSpec(chai, knex, server);
 });
 
 describe('API Routes', function() {
-  setupDb();
+  // setupDb();
   
   apiIndexSpec(chai, knex, server)
   apiRoomSpec(chai, knex, server)
