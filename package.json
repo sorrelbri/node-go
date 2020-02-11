@@ -5,6 +5,10 @@
     "test": "lerna run test",
     "bootstrap": "lerna bootstrap"
   },
+  "dependencies": {
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
   "devDependencies": {
     "@babel/preset-flow": "^7.8.3",
     "@testing-library/jest-dom": "^4.2.4",
