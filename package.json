@@ -3,7 +3,8 @@
   "private": true,
   "scripts": {
     "test": "lerna run test",
-    "bootstrap": "lerna bootstrap"
+    "bootstrap": "lerna bootstrap",
+    "deploy": "git subtree push --prefix packages/server hk-api master && git subtree push --prefix packages/play-node-go hk-play master"
   },
   "dependencies": {
     "react": "^16.12.0",

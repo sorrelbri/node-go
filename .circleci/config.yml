@@ -46,4 +46,5 @@ jobs:
       # - run: npm install react
       # - run: npm install react-dom
       # run tests!
-      - run: npm test
+      - run: npm audit
+      - run: npm run deploy

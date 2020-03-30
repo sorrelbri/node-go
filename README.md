@@ -2,7 +2,8 @@
 A browser application to play Go in real time.
 
 ## Development Demo
-[The project in it's current state](https://play-node-go.herokuapp.com/)
+[The project in it's current state](https://play-node-go.herokuapp.com/)  
+[Client only prototype](https://sorrelbri.github.io/browser-go-proto/)
 
 ## Features
 - [ ] Realtime communications
@@ -16,3 +17,6 @@ A browser application to play Go in real time.
 - [PostgreSQL](https://postgresql.org)
 - [Socket.io](https://socket.io)
 - [Sass](https://sass-lang.com)
+### Management & Deployment
+- Lerna
+- CircleCI
