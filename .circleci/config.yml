@@ -51,4 +51,4 @@ jobs:
       
       # DEPLOY
       - run: git subtree push --prefix packages/server https://heroku:$HEROKU_API_KEY@git.heroku.com/$HK_API.git master
-      - run: git subtree push --prefix packages/play-node-go https://heroku:$HEROKU_API_KEY@git.heroku.com/$HK_PLAY.git master
+      - run: git subtree push --prefix packages/play-node-go/build https://heroku:$HEROKU_API_KEY@git.heroku.com/$HK_PLAY.git master
