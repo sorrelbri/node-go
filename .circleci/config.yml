@@ -48,4 +48,12 @@ jobs:
       
       # ! temporary fix for deprecated package: minimist
       - run: npm audit --audit-level=moderate
-      - run: npm run deploy
+
+  deploy:
+    requires: 
+      - build
+    working_directory: ~/node-go
+    steps:
+      - checkout
+      - run: git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HK_API.git master
+      - run: git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HK_PLAY.git master
