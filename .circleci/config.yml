@@ -50,6 +50,8 @@ jobs:
       - run: npm audit --audit-level=moderate
 
   deploy:
+    machine:
+      enabled: true
     requires: 
       - build
     working_directory: ~/node-go
