@@ -25,15 +25,16 @@ const GameButton = (props) => {
     return gameData;
   }
 
-  const requestJoinGame = () => {
-    console.log(`request to Join Game ${game.id}!`)
-    const requestAction = {
-      type: 'GAMES',
-      message: 'JOIN_REQUEST',
-      body: {id: game.id}
-    }
-    dispatch(requestAction);
-  }
+  // TODO add to open game link
+  // const requestJoinGame = () => {
+  //   console.log(`request to Join Game ${game.id}!`)
+  //   const requestAction = {
+  //     type: 'GAMES',
+  //     message: 'JOIN_REQUEST',
+  //     body: {id: game.id}
+  //   }
+  //   dispatch(requestAction);
+  // }
 
   const renderGame = () => {
     const {
