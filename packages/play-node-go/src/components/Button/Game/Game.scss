@@ -2,7 +2,6 @@
 
 div.GameButton {
   align-items: stretch;
-  box-shadow: -2vmin 4vmin 2vmin rgba(83, 53, 35, 0.81);
   display: flex;
   flex-flow: column nowrap;
   height: 20vh;
@@ -30,6 +29,7 @@ div.GameButton__seat {
 }
 
 div.GameButton__table {
+  box-shadow: -2vmin 4vmin 2vmin rgba(83, 53, 35, 0.81);
   height: 80%;
   margin: 0;
   width: 100%;
@@ -117,7 +117,9 @@ div.GameButton__player-data {
   display: flex;
   justify-content: space-around;
   max-width: 100%;
-  
+  &.GameButton__player-data--invisible {
+    visibility: hidden;
+  }
   &.GameButton__player-data--white {
     margin: 0 5vw 1vw 0.5vw;
   }

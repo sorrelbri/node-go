@@ -5,6 +5,26 @@ import './Game.scss';
 const GameButton = (props) => {
   const { game, dispatch, user } = props;
 
+  const setGameDisplayData = () => {
+    const gameData = {
+      playerBlack: game.playerBlack,
+      playerBlackRank: game.playerBlackRank,
+      gameId: game.id,
+    }
+    if (game.open) {
+      gameData.gameLinkText = 'Request to Join Game';
+      gameData.playerWhite = '';
+      gameData.playerWhiteRank = 'could be you!';
+    }
+    if (!game.open) {
+      gameData.playerWhite = game.playerWhite;
+      gameData.playerWhiteRank = game.playerWhiteRank;
+      gameData.gameLinkText = game.winType ? 'Study Game' 
+      : user ? 'Rejoin Game' : 'Watch Game' 
+    }
+    return gameData;
+  }
+
   const requestJoinGame = () => {
     console.log(`request to Join Game ${game.id}!`)
     const requestAction = {
@@ -28,9 +48,15 @@ const GameButton = (props) => {
     )
   }
 
-  const renderInProgressGame = () => {
-    const gameLinkText = game.winType ? 'Study Game' 
-      : user ? 'Rejoin Game' : 'Watch Game' 
+  const renderGame = () => {
+    const {
+      gameLinkText,
+      playerBlack,
+      playerBlackRank,
+      gameId,
+      playerWhite,
+      playerWhiteRank
+    } = setGameDisplayData();
     return (
       <>
         <div className="GameButton__seat GameButton__seat--black">
@@ -44,26 +70,29 @@ const GameButton = (props) => {
               >
               <span 
                 className="GameButton__player-data__name GameButton__player-data__name--black"
-                >{game.playerBlack}</span>
+                >{playerBlack}</span>
               <span 
                 className="GameButton__player-data__rank GameButton__player-data__rank"
-                >{game.playerBlackRank}</span>
+                >{playerBlackRank}</span>
             </div>
             
             <Link 
               className="GameButton__link"
-              to={`/games/${game.id}`}
+              to={`/games/${gameId}`}
               >{gameLinkText}</Link>
 
-            <div 
-              className="GameButton__player-data GameButton__player-data--white"
+              <div 
+                className={`GameButton__player-data GameButton__player-data--white ${
+                    playerWhite ? '' : 'GameButton__player-data--invisible'
+                  }`
+                }
               >
-              <span 
-                className="GameButton__player-data__name GameButton__player-data__name--white"
-                >{game.playerWhite}</span>
-              <span 
-                className="GameButton__player-data__rank GameButton__player-data__rank--white"
-                >{game.playerWhiteRank}</span>
+                <span 
+                  className="GameButton__player-data__name GameButton__player-data__name--white"
+                  >{playerWhite}</span>
+                <span 
+                  className="GameButton__player-data__rank GameButton__player-data__rank--white"
+                  >{playerWhiteRank}</span> 
             </div>
           </div>
 
@@ -90,7 +119,7 @@ const GameButton = (props) => {
 
   return (
     <div className="GameButton" data-testid="GameButton">
-      {game.open ? renderOpenGame() : renderInProgressGame()}
+      {renderGame()}
     </div>
   );
 }
