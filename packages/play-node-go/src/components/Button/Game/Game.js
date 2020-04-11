@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './Game.scss';
 
 const GameButton = (props) => {
-  const { game, dispatch, user } = props;
+  const { game, user } = props;
 
   const setGameDisplayData = () => {
     const gameData = {
