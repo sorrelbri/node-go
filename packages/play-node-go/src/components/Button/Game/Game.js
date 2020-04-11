@@ -35,19 +35,6 @@ const GameButton = (props) => {
     dispatch(requestAction);
   }
 
-  const renderOpenGame = () => {
-    return (
-      <>
-        <div onClick={() => requestJoinGame()} >Request to Join Game</div>
-
-        <div className="GameButton__player-data GameButton__player-data--black">
-          <span className="GameButton__player-data__name GameButton__player-data__name--black">{game.playerBlack}</span>
-          <span className="GameButton__player-data__rank GameButton__player-data__rank--black">{game.playerBlackRank}</span>
-        </div>
-      </>
-    )
-  }
-
   const renderGame = () => {
     const {
       gameLinkText,
