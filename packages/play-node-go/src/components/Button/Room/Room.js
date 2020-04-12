@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import RoomDetail from '../../Display/RoomDetail/RoomDetail';
 import './Room.scss';
 
-const RoomButton = ({room}) => {
+const RoomButton = ({room, roomDetail, showRoomDetail}) => {
   const smallRoom = (
     <div className="small-room">
       <div className="small-room__roof">
@@ -49,15 +50,21 @@ const RoomButton = ({room}) => {
   )
 
   return (
-    <div className="RoomButton" data-testid="RoomButton">
-      <h4 className="RoomButton__room-link RoomButton__room-link--action">
-        <Link to={`/rooms/${room.id}`}>Join {room.name}</Link>
-      </h4>
-      <h4 className="RoomButton__room-link RoomButton__room-link--info">
-        ?
-      </h4>
-      {smallRoom}
-    </div>
+    <>
+      <div className="RoomButton" data-testid="RoomButton">
+        <h4 className="RoomButton__room-link RoomButton__room-link--action">
+          <Link to={`/rooms/${room.id}`}>Join {room.name}</Link>
+        </h4>
+        <h4 
+          className="RoomButton__room-link RoomButton__room-link--info"
+          onClick={e => showRoomDetail(room.id)}
+        >
+          ?
+        </h4>
+        {smallRoom}
+      </div>
+      {roomDetail ? <RoomDetail room={room} /> : <></>}
+    </>
   );
 }
 

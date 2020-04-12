@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Home.scss';
 import roomsServices from '../../services/api/roomsServices';
 import RoomButton from '../../components/Button/Room/Room';
@@ -8,6 +8,9 @@ import Loading from '../../components/Display/Loading/Loading';
 const Home = props => {
   const state =     props.state || {};
   const dispatch =  props.dispatch;
+  const [ roomDetail, setRoomDetail ] = useState(0);
+
+  const showRoomDetail = id => setRoomDetail(id);
   
   const renderRooms = () => {
     const rooms = state.rooms || [];
@@ -16,6 +19,8 @@ const Home = props => {
         <RoomButton 
           key={`room-${roomData.id}`}
           room={roomData}
+          roomDetail={roomDetail === roomData.id}
+          showRoomDetail={showRoomDetail}
         />
       ))
     }
