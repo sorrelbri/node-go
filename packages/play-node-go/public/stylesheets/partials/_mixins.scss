@@ -15,3 +15,7 @@
   background-color: rgba(0,0,0,0.7);
   padding: 0.25em;
 }
+
+@function place-below($grid-column, $grid-row) {
+  @return $grid-row + 1 + '/' + $grid-column + 2 + '/ span 1 / span 1';
+}

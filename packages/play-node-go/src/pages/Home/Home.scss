@@ -3,10 +3,9 @@
 
 div.Home {
   @include fullspan;
-  display: flex;
-  flex-flow: row wrap;
-  align-items: flex-start;
-  justify-content: flex-start;
   background-color: map-get($colors, "home");
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 22vh);
+  grid-template-rows: repeat(auto-fill, minmax(22vh, 1fr));
   overflow: scroll;
 }

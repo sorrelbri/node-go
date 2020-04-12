@@ -10,7 +10,7 @@ const Home = props => {
   const dispatch =  props.dispatch;
   const [ roomDetail, setRoomDetail ] = useState(0);
 
-  const showRoomDetail = id => setRoomDetail(id);
+  const showRoomDetail = id => roomDetail === id ? setRoomDetail(0) : setRoomDetail(id);
   
   const renderRooms = () => {
     const rooms = state.rooms || [];

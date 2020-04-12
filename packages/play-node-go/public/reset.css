@@ -1,5 +1,6 @@
-a {
+a, a:link, a:visited, a:focus, a:active {
   color: unset;
+  text-decoration: none;
 }
 
 /* http://meyerweb.com/eric/tools/css/reset/

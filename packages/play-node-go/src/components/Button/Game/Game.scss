@@ -129,11 +129,7 @@ div.GameButton__player-data {
   }
 }
 
-.GameButton__link {
+a.GameButton__link {
   @include gameViewLabel;
   margin: 0 auto;
-  text-decoration: none;
-  &:hover {
-    text-decoration: underline;
-  }
 }
