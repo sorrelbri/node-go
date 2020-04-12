@@ -21,5 +21,5 @@ const RoomDetail = ({room}) => {
     </div>
   );
 }
- 
+
 export default RoomDetail;
