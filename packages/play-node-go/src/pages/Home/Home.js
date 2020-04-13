@@ -8,7 +8,7 @@ import Loading from '../../components/Display/Loading/Loading';
 const Home = props => {
   const state =     props.state || {};
   const dispatch =  props.dispatch;
-  const [ roomDetail, setRoomDetail ] = useState(0);
+  const [ roomDetail, setRoomDetail ] = useState(1);
 
   const showRoomDetail = id => roomDetail === id ? setRoomDetail(0) : setRoomDetail(id);
   
