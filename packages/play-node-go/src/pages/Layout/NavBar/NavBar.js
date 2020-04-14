@@ -12,15 +12,15 @@ const NavBar = (props) => {
       </Link>
 
       <Link to="/home" >
-        <div className="NavBar__menu-item NavBar__home"><p>Find a Game</p></div>
+        <div className="NavBar__menu-item NavBar__home"><p className="--link">Find a Game</p></div>
       </Link>
       
       <Link to="/news">
-        <div className="NavBar__menu-item NavBar__news"><p>News</p></div>
+        <div className="NavBar__menu-item NavBar__news"><p className="--link">News</p></div>
       </Link>
 
       <Link to="/account">
-        <div className="NavBar__menu-item NavBar__acount">{props.user ? props.user.username : <></>}</div>
+        <div className="NavBar__menu-item NavBar__account">{props.user ? props.user.username : <></>}</div>
       </Link>
     </div>
   );

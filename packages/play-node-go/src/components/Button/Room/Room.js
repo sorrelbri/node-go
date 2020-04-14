@@ -56,7 +56,7 @@ const RoomButton = ({room, roomDetail, showRoomDetail}) => {
           <Link to={`/rooms/${room.id}`}>Join {room.name}</Link>
         </h4>
         <h4 
-          className="RoomButton__room-link RoomButton__room-link--info"
+          className="RoomButton__room-link RoomButton__room-link--info --link"
           onClick={e => showRoomDetail(room.id)}
         >
           ?
