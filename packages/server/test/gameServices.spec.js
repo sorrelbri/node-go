@@ -32,10 +32,8 @@ describe('game services', () => {
     gameServices.initGame({ id: 1, handicap:4 });
     const afterMoveOne = gameServices.makeMove({ id: 1 }, { player: 'white', pos: { x: 4, y: 3 } });
     afterMoveOne.should.not.eql(fourHandicapBoard);
-    console.log (afterMoveOne)
     done();
   })
-
 })
 
 
