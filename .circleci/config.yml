@@ -43,8 +43,8 @@ jobs:
             - node_modules
           key: 
             v1-dependencies-{{ checksum "package-lock.json" }}
-      # - run: npm install react
-      # - run: npm install react-dom
+      - run: npm install react
+      - run: npm install react-dom
       
       # ! temporary fix for deprecated package: minimist
       - run: npm audit --audit-level=moderate
