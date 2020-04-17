@@ -228,7 +228,7 @@ class Point {
 
   checkCapture = (Game) => {
     let opps = this.checkNeighbors(Game).filter(nbr => nbr.stone === Game.turn * -1 
-      && nbr.getLiberties().every(liberty => liberty === this));
+      && nbr.getLiberties(Game).every(liberty => liberty === this));
     for (let opp of opps) {
       if (opp.groupMembers.every(stone => stone.getLiberties().filter(liberty => liberty !== this).length === 0)) {
         this.capturing = this.capturing.concat(opp.groupMembers);
