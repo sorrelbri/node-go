@@ -3,7 +3,7 @@ import { render } from '@testing-library/react';
 import FormError from './FormError';
 
 test('renders FormError without crashing', () => {
-  const { getByTestId } = render(<FormError />);
+  const { getByTestId } = render(<FormError error={''}/>);
   const FormErrorSpan = getByTestId('FormError');
   expect(FormErrorSpan).toBeInTheDocument();
 });
