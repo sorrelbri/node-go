@@ -1,4 +1,4 @@
-const {check, sanitize, validationResult} = require('express-validator');
+const {check, body, validationResult} = require('express-validator');
 
 const signupValidationRules = () => {
   return [
@@ -7,7 +7,7 @@ const signupValidationRules = () => {
     check('password', 'invalid password').isString().isLength({min: 8}),
     check('confirmPassword', 'invalid password').isString()
       .custom((confirmPassword, { req }) => confirmPassword === req.body.password),
-    sanitize('username').escape()
+    body('username').escape()
   ]
 }
 
