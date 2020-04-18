@@ -38,30 +38,63 @@ const HANDI_REC = {
   ]
 }
 
+// index represents handicap placement for different board-sizes, eg handiPlace['9][1] = { (3, 3), (7, 7) }
+// last array in each property also used for hoshi rendering 
+const HANDI_PLACE = {
+  '9' : [
+    0, 0,
+    [[ 7, 3 ], [ 3, 7 ] ], 
+    [ [ 7, 7 ], [ 7, 3 ], [ 3, 7 ] ], 
+    [ [ 3, 3 ], [ 7, 7 ], [ 3, 7 ], [ 7, 3 ] ] 
+  ],
+  '13' : [
+    0, 0,
+    [ [ 4, 10 ], [ 10, 4 ] ],
+    [ [ 10, 10 ], [ 4, 10 ], [ 10, 4] ],
+    [ [ 4, 4 ], [ 10, 10 ], [ 4, 10 ], [ 10, 4] ],
+    [ [ 7, 7 ], [ 4, 4 ], [ 10, 10 ], [ 4, 10 ], [ 10, 4] ],
+    [ [ 7, 4 ], [ 4, 7 ], [ 4, 4 ], [ 10, 10 ], [ 4, 10 ], [ 10, 4] ],
+    [ [ 7, 7 ], [ 7, 4 ], [ 4, 7 ], [ 4, 4 ], [ 10, 10 ], [ 4, 10 ], [ 10, 4] ],
+    [ [ 10, 7 ], [ 7, 4 ], [ 7, 10 ], [ 4, 7 ], [ 4, 4 ], [ 10, 10 ], [ 4, 10 ], [ 10, 4] ],
+    [ [ 7, 7 ], [ 10, 7 ], [ 7, 4 ], [ 7, 10 ], [ 4, 7 ], [ 4, 4 ], [ 10, 10 ], [ 4, 10 ], [ 10, 4] ],
+  ],
+  '19' : [
+    0, 0,
+    [ [ 4, 16 ], [ 16, 4 ] ],
+    [ [ 16, 16 ], [ 4, 16 ], [ 16, 4] ],
+    [ [ 4, 4 ], [ 16, 16 ], [ 4, 16 ], [ 16, 4] ],
+    [ [ 10, 10 ], [ 4, 4 ], [ 16, 16 ], [ 4, 16 ], [ 16, 4] ],
+    [ [ 10, 4 ], [ 4, 10 ], [ 4, 4 ], [ 16, 16 ], [ 4, 16 ], [ 16, 4] ],
+    [ [ 10, 10 ], [ 10, 4 ], [ 4, 10 ], [ 4, 4 ], [ 16, 16 ], [ 4, 16 ], [ 16, 4] ],
+    [ [ 16, 10 ], [ 10, 4 ], [ 10, 16 ], [ 4, 10 ], [ 4, 4 ], [ 16, 16 ], [ 4, 16 ], [ 16, 4] ],
+    [ [ 10, 10 ], [ 16, 10 ], [ 10, 4 ], [ 10, 16 ], [ 4, 10 ], [ 4, 4 ], [ 16, 16 ], [ 4, 16 ], [ 16, 4] ],
+  ]
+};
+
 class Game {
   constructor(gameData, gameRecord) {
-    this.winner = gameData.winner || null,
-    this.turn = gameData.turn || 1, // turn logic depends on handicap stones
-    this.pass = gameData.pass || 0, // -1 represents state in which resignation has been submitted, not confirmed
-    this.komi = gameData.komi || 6.5, // komi depends on handicap stones + player rank
-    this.handicap = gameData.handicap || 0,
-    this.boardSize = gameData.boardSize || 19,
-    this.playerState = gameData.playerState || {
+    this.winner =       gameData.winner || null,
+    this.turn =         gameData.turn || 1, // turn logic depends on handicap stones
+    this.pass =         gameData.pass || 0, // -1 represents state in which resignation has been submitted, not confirmed
+    this.komi =         gameData.komi || 6.5, // komi depends on handicap stones + player rank
+    this.handicap =     gameData.handicap || 0,
+    this.boardSize =    gameData.boardSize || 19,
+    this.groups =       {},
+    this.boardState =   [],
+    this.gameRecord =   gameRecord || [],
+    this.playerState =  gameData.playerState || {
       bCaptures: 0,
       wCaptures: 0,
       bScore: 0,
       wScore: 0
-    },
-    this.gameRecord = gameRecord || [],
-    
-    this.groups = {},
-    this.boardState = []
+    }
   }
 
   initGame = () => {
     this.winner = null;
-    this.pass = null;
-    this.turn = this.handicap ? -1 : 1;
+    this.pass =   null;
+    this.turn =   this.handicap ? -1 : 1;
+
     this.initBoard();
     return this.getBoardState();
   }
@@ -139,38 +172,6 @@ class Game {
 
 }
 
-// index represents handicap placement for different board-sizes, eg handiPlace['9][1] = { (3, 3), (7, 7) }
-// last array in each property also used for hoshi rendering 
-const HANDI_PLACE = {
-  '9' : [
-    0, 0,
-    [[ 7, 3 ], [ 3, 7 ] ], 
-    [ [ 7, 7 ], [ 7, 3 ], [ 3, 7 ] ], 
-    [ [ 3, 3 ], [ 7, 7 ], [ 3, 7 ], [ 7, 3 ] ] 
-  ],
-  '13' : [
-    0, 0,
-    [ [ 4, 10 ], [ 10, 4 ] ],
-    [ [ 10, 10 ], [ 4, 10 ], [ 10, 4] ],
-    [ [ 4, 4 ], [ 10, 10 ], [ 4, 10 ], [ 10, 4] ],
-    [ [ 7, 7 ], [ 4, 4 ], [ 10, 10 ], [ 4, 10 ], [ 10, 4] ],
-    [ [ 7, 4 ], [ 4, 7 ], [ 4, 4 ], [ 10, 10 ], [ 4, 10 ], [ 10, 4] ],
-    [ [ 7, 7 ], [ 7, 4 ], [ 4, 7 ], [ 4, 4 ], [ 10, 10 ], [ 4, 10 ], [ 10, 4] ],
-    [ [ 10, 7 ], [ 7, 4 ], [ 7, 10 ], [ 4, 7 ], [ 4, 4 ], [ 10, 10 ], [ 4, 10 ], [ 10, 4] ],
-    [ [ 7, 7 ], [ 10, 7 ], [ 7, 4 ], [ 7, 10 ], [ 4, 7 ], [ 4, 4 ], [ 10, 10 ], [ 4, 10 ], [ 10, 4] ],
-  ],
-  '19' : [
-    0, 0,
-    [ [ 4, 16 ], [ 16, 4 ] ],
-    [ [ 16, 16 ], [ 4, 16 ], [ 16, 4] ],
-    [ [ 4, 4 ], [ 16, 16 ], [ 4, 16 ], [ 16, 4] ],
-    [ [ 10, 10 ], [ 4, 4 ], [ 16, 16 ], [ 4, 16 ], [ 16, 4] ],
-    [ [ 10, 4 ], [ 4, 10 ], [ 4, 4 ], [ 16, 16 ], [ 4, 16 ], [ 16, 4] ],
-    [ [ 10, 10 ], [ 10, 4 ], [ 4, 10 ], [ 4, 4 ], [ 16, 16 ], [ 4, 16 ], [ 16, 4] ],
-    [ [ 16, 10 ], [ 10, 4 ], [ 10, 16 ], [ 4, 10 ], [ 4, 4 ], [ 16, 16 ], [ 4, 16 ], [ 16, 4] ],
-    [ [ 10, 10 ], [ 16, 10 ], [ 10, 4 ], [ 10, 16 ], [ 4, 10 ], [ 4, 4 ], [ 16, 16 ], [ 4, 16 ], [ 16, 4] ],
-  ]
-};
 
 class Point {
   constructor(x, y, Game) {
