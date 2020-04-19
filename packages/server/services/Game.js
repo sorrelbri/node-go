@@ -6,12 +6,6 @@ const STONES_DATA = {
   'k': 'ko'
 }
 
-const DOTS_DATA = {
-  '-1': 'white',
-  '0': 'none',
-  '1': 'black',
-  'd': 'dame',
-}
 
 // index corresponds to difference in player rank
 const KOMI_REC = {
@@ -138,7 +132,6 @@ class Game {
   makeMove = (move) => {
     const player = move.player === 'white' ? -1 : 1;
     const point = this.findPointFromIdx([move.pos.x, move.pos.y])
-    console.log([move.pos.x, move.pos.y])
     if ( !checkLegal(point, this) ) throw Error('illegal move');
     clearKo(this);
     clearPass(this);
