@@ -35,35 +35,36 @@ const HANDI_REC = {
 // index represents handicap placement for different board-sizes, eg handiPlace['9][1] = { (3, 3), (7, 7) }
 // last array in each property also used for hoshi rendering 
 const HANDI_PLACE = {
-  '9' : [
+  9 : [
     0, 0,
-    [[ 7, 3 ], [ 3, 7 ] ], 
-    [ [ 7, 7 ], [ 7, 3 ], [ 3, 7 ] ], 
-    [ [ 3, 3 ], [ 7, 7 ], [ 3, 7 ], [ 7, 3 ] ] 
+    [ '7-3', '3-7' ], // 2 
+    [ '7-7', '7-3', '3-7' ], 
+    [ '3-3', '7-7', '3-7', '7-3' ] 
   ],
-  '13' : [
+  13 : [
     0, 0,
-    [ [ 4, 10 ], [ 10, 4 ] ],
-    [ [ 10, 10 ], [ 4, 10 ], [ 10, 4] ],
-    [ [ 4, 4 ], [ 10, 10 ], [ 4, 10 ], [ 10, 4] ],
-    [ [ 7, 7 ], [ 4, 4 ], [ 10, 10 ], [ 4, 10 ], [ 10, 4] ],
-    [ [ 7, 4 ], [ 4, 7 ], [ 4, 4 ], [ 10, 10 ], [ 4, 10 ], [ 10, 4] ],
-    [ [ 7, 7 ], [ 7, 4 ], [ 4, 7 ], [ 4, 4 ], [ 10, 10 ], [ 4, 10 ], [ 10, 4] ],
-    [ [ 10, 7 ], [ 7, 4 ], [ 7, 10 ], [ 4, 7 ], [ 4, 4 ], [ 10, 10 ], [ 4, 10 ], [ 10, 4] ],
-    [ [ 7, 7 ], [ 10, 7 ], [ 7, 4 ], [ 7, 10 ], [ 4, 7 ], [ 4, 4 ], [ 10, 10 ], [ 4, 10 ], [ 10, 4] ],
+    [ '4-10', '10-4' ], // 2
+    [ '10-10', '4-10', '10-4' ],
+    [ '4-4', '10-10', '4-10', '10-4' ],
+    [ '7-7', '4-4', '10-10', '4-10', '10-4' ],
+    [ '7-4', '4-7', '4-4', '10-10', '4-10', '10-4' ],
+    [ '7-7', '7-4', '4-7', '4-4', '10-10', '4-10', '10-4' ],
+    [ '10-7', '7-4', '7-10', '4-7', '4-4', '10-10', '4-10', '10-4' ],
+    [ '7-7', '10-7', '7-4', '7-10', '4-7', '4-4', '10-10', '4-10', '10-4' ],
   ],
-  '19' : [
+  19 : [
     0, 0,
-    [ [ 4, 16 ], [ 16, 4 ] ],
-    [ [ 16, 16 ], [ 4, 16 ], [ 16, 4] ],
-    [ [ 4, 4 ], [ 16, 16 ], [ 4, 16 ], [ 16, 4] ],
-    [ [ 10, 10 ], [ 4, 4 ], [ 16, 16 ], [ 4, 16 ], [ 16, 4] ],
-    [ [ 10, 4 ], [ 4, 10 ], [ 4, 4 ], [ 16, 16 ], [ 4, 16 ], [ 16, 4] ],
-    [ [ 10, 10 ], [ 10, 4 ], [ 4, 10 ], [ 4, 4 ], [ 16, 16 ], [ 4, 16 ], [ 16, 4] ],
-    [ [ 16, 10 ], [ 10, 4 ], [ 10, 16 ], [ 4, 10 ], [ 4, 4 ], [ 16, 16 ], [ 4, 16 ], [ 16, 4] ],
-    [ [ 10, 10 ], [ 16, 10 ], [ 10, 4 ], [ 10, 16 ], [ 4, 10 ], [ 4, 4 ], [ 16, 16 ], [ 4, 16 ], [ 16, 4] ],
+    [ '4-16', '16-4' ], // 2
+    [ '16-16', '4-16', '16-4' ],
+    [ '4-4', '16-16', '4-16', '16-4' ],
+    [ '10-10', '4-4', '16-16', '4-16', '16-4' ],
+    [ '10-4', '4-10', '4-4', '16-16', '4-16', '16-4' ],
+    [ '10-10', '10-4', '4-10', '4-4', '16-16', '4-16', '16-4' ],
+    [ '16-10', '10-4', '10-16', '4-10', '4-4', '16-16', '4-16', '16-4' ],
+    [ '10-10', '16-10', '10-4', '10-16', '4-10', '4-4', '16-16', '4-16', '16-4' ],
   ]
 };
+
 
 const pipeMap = (...funcs) => obj => {
   const arr = Object.entries(obj).reduce((acc, [key, value]) => {
@@ -76,7 +77,7 @@ const pipeMap = (...funcs) => obj => {
 }
 
 const checkLegal = ({ point, Game }) => {
-  return 'l';
+  return point.stone || 'l';
 }
 
 const getBoardState = (Game) => {
@@ -84,7 +85,7 @@ const getBoardState = (Game) => {
   return pipeMap(getLegal)(Game.boardState);
 }
 
-const initBoard = boardSize => {
+const initBoard = ({ boardSize, handicap }) => {
   const boardState = {};
   for (let i = 0; i < Math.pow(boardSize, 2); i++) {
     const point = Point({
@@ -94,21 +95,26 @@ const initBoard = boardSize => {
     });
     boardState[`${point.pos.x}-${point.pos.y}`] = point;
   }
+  if (handicap) {
+    HANDI_PLACE[boardSize][handicap].forEach(pt => {
+      boardState[pt].stone = 1;
+    });
+  }
   return boardState;
 }
 
 // returns Game object
-const Game = ({gameData, gameRecord} = {}) => ({
-  winner:       gameData ? gameData.winner    : null,
-  turn:         gameData ? gameData.turn      : 1, // turn logic depends on handicap stones
-  pass:         gameData ? gameData.pass      : 0, // -1 represents state in which resignation has been submitted, not confirmed
-  komi:         gameData ? gameData.komi      : 6.5, // komi depends on handicap stones + player rank
-  handicap:     gameData ? gameData.handicap  : 0,
-  boardSize:    gameData ? gameData.boardSize : 19,
+const Game = ({gameData = {}, gameRecord = []} = {}) => ({
+  winner:       gameData.winner    ||null,
+  turn:         gameData.turn      || 1, // turn logic depends on handicap stones
+  pass:         gameData.pass      || 0, // -1 represents state in which resignation has been submitted, not confirmed
+  komi:         gameData.komi      || 6.5, // komi depends on handicap stones + player rank
+  handicap:     gameData.handicap  || 0,
+  boardSize:    gameData.boardSize || 19,
   groups:       {},
   boardState:   {},
-  gameRecord:   gameRecord || [],
-  playerState:  gameData ? gameData.playerState : {
+  gameRecord:   gameRecord,
+  playerState:  gameData.playerState || {
     bCaptures: 0,
     wCaptures: 0,
     bScore: 0,
@@ -119,7 +125,8 @@ const Game = ({gameData, gameRecord} = {}) => ({
     this.winner =     null;
     this.pass =       0;
     this.turn =       this.handicap ? -1 : 1;
-    this.boardState = initBoard(this.boardSize)
+    this.boardState = initBoard({ boardSize: this.boardSize, handicap: this.handicap})
+    // return this.boardState
     return getBoardState(this);
   }
 });
