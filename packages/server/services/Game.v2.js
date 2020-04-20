@@ -127,7 +127,11 @@ const Game = ({gameData = {}, gameRecord = []} = {}) => ({
     this.turn =       this.handicap ? -1 : 1;
     this.boardState = initBoard({ boardSize: this.boardSize, handicap: this.handicap})
     // return this.boardState
-    return getBoardState(this);
+    return { ...this, boardState: getBoardState(this)};
+  },
+
+  getMeta: function() {
+    return { winner: this.winner, turn: this.turn, pass: this.pass, playerState: this.playerState, gameRecord: this.gameRecord }
   }
 });
 

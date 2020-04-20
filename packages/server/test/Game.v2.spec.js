@@ -2,7 +2,7 @@ const chai = require('chai');
 const should = chai.should();
 const { Game, Point } = require('../services/Game.v2');
 
-describe('Game v2', () => {
+describe('Game', () => {
   it('smoke test Game', done => {
     (typeof Game())
       .should.eql('object');
@@ -19,85 +19,113 @@ describe('Game v2', () => {
     (typeof Game().initGame())
       .should.eql('object');
     done();
+  });
+
+  it('Get meta returns proper data for games with no record', done => {
+    Game().getMeta()
+      .should.eql(initialMeta);
+    Game().initGame().getMeta()
+      .should.eql(initialMeta);
+    done();
   })
 });
 
 describe('Game.initGame() returns boardState', () => {
   it('init Game returns default 19x19', done => {
-    Game().initGame()
+    Game().initGame().boardState
       .should.eql(emptyBoard);
     done();
   });
   
   it('init Game with 2 handicap returns boardState with stones', done => {
-    Game({gameData: { handicap: 2 }}).initGame()
+    Game({gameData: { handicap: 2 }}).initGame().boardState
       .should.eql({...emptyBoard, '4-16': 1, '16-4': 1});
     done();
   });
 
   it('init 19x19 Game with all levels of handicap returns boardState with stones', done => {
-    Game({gameData: { boardSize: 19, handicap: 2 }}).initGame()
+    Game({gameData: { boardSize: 19, handicap: 2 }}).initGame().boardState
       .should.eql({...emptyBoard, '4-16': 1, '16-4': 1 });
-    Game({gameData: { boardSize: 19, handicap: 3 }}).initGame()
+    Game({gameData: { boardSize: 19, handicap: 3 }}).initGame().boardState
       .should.eql({...emptyBoard, '16-16': 1, '4-16': 1, '16-4': 1 });
-    Game({gameData: { boardSize: 19, handicap: 4 }}).initGame()
+    Game({gameData: { boardSize: 19, handicap: 4 }}).initGame().boardState
       .should.eql({...emptyBoard, '4-4': 1, '16-16': 1, '4-16': 1, '16-4': 1 });
-    Game({gameData: { boardSize: 19, handicap: 5 }}).initGame()
+    Game({gameData: { boardSize: 19, handicap: 5 }}).initGame().boardState
       .should.eql({...emptyBoard, '10-10': 1, '4-4': 1, '16-16': 1, '4-16': 1, '16-4': 1 });
-    Game({gameData: { boardSize: 19, handicap: 6 }}).initGame()
+    Game({gameData: { boardSize: 19, handicap: 6 }}).initGame().boardState
       .should.eql({...emptyBoard, '10-4': 1, '4-10': 1, '4-4': 1, '16-16': 1, '4-16': 1, '16-4': 1 });
-    Game({gameData: { boardSize: 19, handicap: 7 }}).initGame()
+    Game({gameData: { boardSize: 19, handicap: 7 }}).initGame().boardState
       .should.eql({...emptyBoard, '10-10': 1, '10-4': 1, '4-10': 1, '4-4': 1, '16-16': 1, '4-16': 1, '16-4': 1 });
-    Game({gameData: { boardSize: 19, handicap: 8 }}).initGame()
+    Game({gameData: { boardSize: 19, handicap: 8 }}).initGame().boardState
       .should.eql({...emptyBoard, '16-10': 1, '10-4': 1, '10-16': 1, '4-10': 1, '4-4': 1, '16-16': 1, '4-16': 1, '16-4': 1 });
-    Game({gameData: { boardSize: 19, handicap: 9 }}).initGame()
+    Game({gameData: { boardSize: 19, handicap: 9 }}).initGame().boardState
       .should.eql({...emptyBoard, '10-10': 1, '16-10': 1, '10-4': 1, '10-16': 1, '4-10': 1, '4-4': 1, '16-16': 1, '4-16': 1, '16-4': 1 });
     done();
   })
 
   it('init 13x13 Game returns boardState', done => {
-    Game({gameData: { boardSize: 13 }}).initGame()
+    Game({gameData: { boardSize: 13 }}).initGame().boardState
       .should.eql(emptyBoard13);
     done();
   });
   
   it('init 13x13 Game with all levels of handicap returns boardState with stones', done => {
-    Game({gameData: { boardSize: 13, handicap: 2 }}).initGame()
+    Game({gameData: { boardSize: 13, handicap: 2 }}).initGame().boardState
       .should.eql({...emptyBoard13, '4-10': 1, '10-4': 1 });
-    Game({gameData: { boardSize: 13, handicap: 3 }}).initGame()
+    Game({gameData: { boardSize: 13, handicap: 3 }}).initGame().boardState
       .should.eql({...emptyBoard13, '10-10': 1, '4-10': 1, '10-4': 1 });
-    Game({gameData: { boardSize: 13, handicap: 4 }}).initGame()
+    Game({gameData: { boardSize: 13, handicap: 4 }}).initGame().boardState
       .should.eql({...emptyBoard13, '4-4': 1, '10-10': 1, '4-10': 1, '10-4': 1 });
-    Game({gameData: { boardSize: 13, handicap: 5 }}).initGame()
+    Game({gameData: { boardSize: 13, handicap: 5 }}).initGame().boardState
       .should.eql({...emptyBoard13, '7-7': 1, '4-4': 1, '10-10': 1, '4-10': 1, '10-4': 1 });
-    Game({gameData: { boardSize: 13, handicap: 6 }}).initGame()
+    Game({gameData: { boardSize: 13, handicap: 6 }}).initGame().boardState
       .should.eql({...emptyBoard13, '7-4': 1, '4-7': 1, '4-4': 1, '10-10': 1, '4-10': 1, '10-4': 1 });
-    Game({gameData: { boardSize: 13, handicap: 7 }}).initGame()
+    Game({gameData: { boardSize: 13, handicap: 7 }}).initGame().boardState
       .should.eql({...emptyBoard13, '7-7': 1, '7-4': 1, '4-7': 1, '4-4': 1, '10-10': 1, '4-10': 1, '10-4': 1 });
-    Game({gameData: { boardSize: 13, handicap: 8 }}).initGame()
+    Game({gameData: { boardSize: 13, handicap: 8 }}).initGame().boardState
       .should.eql({...emptyBoard13, '10-7': 1, '7-4': 1, '7-10': 1, '4-7': 1, '4-4': 1, '10-10': 1, '4-10': 1, '10-4': 1 });
-    Game({gameData: { boardSize: 13, handicap: 9 }}).initGame()
+    Game({gameData: { boardSize: 13, handicap: 9 }}).initGame().boardState
       .should.eql({...emptyBoard13, '7-7': 1, '10-7': 1, '7-4': 1, '7-10': 1, '4-7': 1, '4-4': 1, '10-10': 1, '4-10': 1, '10-4': 1 });
     done();
   });
 
   it('init 9x9 Game returns boardState', done => {
-    Game({gameData: { boardSize: 9 }}).initGame()
+    Game({gameData: { boardSize: 9 }}).initGame().boardState
       .should.eql(emptyBoard9);
     done();
   });
 
   it('init 9x9 Game with all levels of handicap returns boardState with stones', done => {
-    Game({gameData: { boardSize: 9, handicap: 2 }}).initGame()
+    Game({gameData: { boardSize: 9, handicap: 2 }}).initGame().boardState
       .should.eql({...emptyBoard9, '3-7': 1, '7-3': 1 });
-    Game({gameData: { boardSize: 9, handicap: 3 }}).initGame()
+    Game({gameData: { boardSize: 9, handicap: 3 }}).initGame().boardState
       .should.eql({...emptyBoard9, '7-7': 1, '3-7': 1, '7-3': 1 });
-    Game({gameData: { boardSize: 9, handicap: 4 }}).initGame()
+    Game({gameData: { boardSize: 9, handicap: 4 }}).initGame().boardState
       .should.eql({...emptyBoard9, '3-3': 1, '7-7': 1, '3-7': 1, '7-3': 1 });
     done();
   });
+});
 
+describe('Game.makeMove({ player: str, pos: { x: int, y: int } })', () => {
+  it('place move returns game object with proper board', done => {
+    Game().initGame().makeMove({ player: 'black', pos: { x: 4, y: 4 } }).boardState
+      .should.eql({ ...emptyBoard, '4-4': 1 });
+    done();
+  })
 })
+
+const initialMeta = {
+  winner: null, 
+  turn: 1, 
+  pass: 0, 
+  playerState: {
+    bCaptures: 0,
+    wCaptures: 0,
+    bScore: 0,
+    wScore: 0
+  }, 
+  gameRecord: []
+}
 
 const emptyBoard9 = {
   '1-1': 'l','1-2': 'l','1-3': 'l','1-4': 'l','1-5': 'l','1-6': 'l','1-7': 'l','1-8': 'l','1-9': 'l',
