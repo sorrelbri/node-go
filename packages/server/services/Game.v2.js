@@ -106,7 +106,7 @@ const initBoard = ({ boardSize, handicap }) => {
 // returns Game object
 const Game = ({gameData = {}, gameRecord = []} = {}) => ({
   winner:       gameData.winner    ||null,
-  turn:         gameData.turn      || 1, // turn logic depends on handicap stones
+  turn:         gameData.turn      || 0, // turn logic depends on handicap stones
   pass:         gameData.pass      || 0, // -1 represents state in which resignation has been submitted, not confirmed
   komi:         gameData.komi      || 6.5, // komi depends on handicap stones + player rank
   handicap:     gameData.handicap  || 0,
@@ -127,18 +127,33 @@ const Game = ({gameData = {}, gameRecord = []} = {}) => ({
     this.turn =       this.handicap ? -1 : 1;
     this.boardState = initBoard({ boardSize: this.boardSize, handicap: this.handicap})
     // return this.boardState
-    return { ...this, boardState: getBoardState(this)};
+    return { ...this, legalMoves: getBoardState(this)};
   },
 
   getMeta: function() {
     return { winner: this.winner, turn: this.turn, pass: this.pass, playerState: this.playerState, gameRecord: this.gameRecord }
+  },
+
+  makeMove: function({ player, pos: {x, y}}) {
+    let success = false;
+    const point = this.boardState[`${x}-${y}`];
+    const isTurn = ( this.turn === 1 && player === 'black' ) 
+                || ( this.turn === -1 && player === 'white' );
+    if (isTurn) {
+      if (point.legal) {
+        point.makeMove(this.turn);
+        this.turn *= -1;
+        success = true;
+      }
+    }
+    return {...this, legalMoves: getBoardState(this), success };
   }
 });
 
 const Point = ({x, y, boardSize = 19}) => ({
   pos:          {x, y},
   stone:        0, // can be 1, -1, 0, or 'k' for ko
-  legal:        0,
+  legal:        true,
   territory:    0,
   capturing:    [],
   groupMembers: [ this ],
@@ -147,6 +162,11 @@ const Point = ({x, y, boardSize = 19}) => ({
     btm: x < boardSize  ? `${ x + 1 }-${ y }` : null,
     rgt: y < boardSize  ? `${ x }-${ y + 1 }` : null,
     lft: y > 1          ? `${ x }-${ y - 1 }` : null
+  },
+
+  makeMove: function(turn) {
+    this.stone = turn;
+    this.legal = false;
   }
 });
 
