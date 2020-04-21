@@ -3,19 +3,19 @@ const should = chai.should();
 const { Game, Point } = require('../services/Game.v2');
 
 describe('Game', () => {
-  it('smoke test Game', done => {
+  it('smoke test Game()', done => {
     (typeof Game())
       .should.eql('object');
     done();
   });
 
-  it('smoke test Point', done => {
+  it('smoke test Point()', done => {
     (typeof Point({x: 1, y: 1}))
       .should.eql('object');
     done();
   });
 
-  it('smoke test init Game', done => {
+  it('smoke test initGame()', done => {
     (typeof Game().initGame())
       .should.eql('object');
     done();
@@ -27,23 +27,44 @@ describe('Game', () => {
     Game().initGame().getMeta()
       .should.eql({ ...initialMeta, turn: 1 });
     done();
-  })
+  });
 });
 
-describe('Game.initGame() returns boardState', () => {
-  it('init Game returns default 19x19', done => {
+describe('Game().initGame() returns boardState', () => {
+  it('initGame() returns default 19x19', done => {
     Game().initGame().legalMoves
       .should.eql(emptyBoard);
     done();
   });
   
-  it('init Game with 2 handicap returns boardState with stones', done => {
+  it('initGame() with 2 handicap returns legalMoves with stones', done => {
     Game({gameData: { handicap: 2 }}).initGame().legalMoves
       .should.eql({...emptyBoard, '4-16': 1, '16-4': 1});
     done();
   });
 
-  it('init 19x19 Game with all levels of handicap returns boardState with stones', done => {
+  it('initGame() returns Game with all Points having neighbors', done => {
+    const boardState = Game().initGame().boardState;
+    const oneOneNeighbors = boardState['1-1'].neighbors;
+    const fiveSevenNeighbors = boardState['5-7'].neighbors;
+    const nineteenTenNeighbors = boardState['19-10'].neighbors;
+    
+    oneOneNeighbors.rgt.pos.should.eql({x: 1, y: 2});
+    oneOneNeighbors.btm.pos.should.eql({x: 2, y: 1});
+    
+    fiveSevenNeighbors.top.pos.should.eql({x: 4, y: 7});
+    fiveSevenNeighbors.btm.pos.should.eql({x: 6, y: 7});
+    fiveSevenNeighbors.lft.pos.should.eql({x: 5, y: 6});
+    fiveSevenNeighbors.rgt.pos.should.eql({x: 5, y: 8});
+
+    nineteenTenNeighbors.top.pos.should.eql({x: 18, y: 10});
+    nineteenTenNeighbors.lft.pos.should.eql({x: 19, y: 9});
+    nineteenTenNeighbors.rgt.pos.should.eql({x: 19, y: 11});
+    
+    done();
+  });
+
+  it('initGame( 19x19 ) with all levels of handicap returns legalMoves with stones', done => {
     Game({gameData: { boardSize: 19, handicap: 2 }}).initGame().legalMoves
       .should.eql({...emptyBoard, '4-16': 1, '16-4': 1 });
     Game({gameData: { boardSize: 19, handicap: 3 }}).initGame().legalMoves
@@ -63,13 +84,13 @@ describe('Game.initGame() returns boardState', () => {
     done();
   })
 
-  it('init 13x13 Game returns boardState', done => {
+  it('initGame( 13x13) returns legalMoves', done => {
     Game({gameData: { boardSize: 13 }}).initGame().legalMoves
       .should.eql(emptyBoard13);
     done();
   });
   
-  it('init 13x13 Game with all levels of handicap returns boardState with stones', done => {
+  it('initGame( 13x13 ) with all levels of handicap returns legalMoves with stones', done => {
     Game({gameData: { boardSize: 13, handicap: 2 }}).initGame().legalMoves
       .should.eql({...emptyBoard13, '4-10': 1, '10-4': 1 });
     Game({gameData: { boardSize: 13, handicap: 3 }}).initGame().legalMoves
@@ -89,13 +110,13 @@ describe('Game.initGame() returns boardState', () => {
     done();
   });
 
-  it('init 9x9 Game returns boardState', done => {
+  it('initGame( 9x9 ) returns legalMoves', done => {
     Game({gameData: { boardSize: 9 }}).initGame().legalMoves
       .should.eql(emptyBoard9);
     done();
   });
 
-  it('init 9x9 Game with all levels of handicap returns boardState with stones', done => {
+  it('initGame( 9x9 ) with all levels of handicap returns legalMoves with stones', done => {
     Game({gameData: { boardSize: 9, handicap: 2 }}).initGame().legalMoves
       .should.eql({...emptyBoard9, '3-7': 1, '7-3': 1 });
     Game({gameData: { boardSize: 9, handicap: 3 }}).initGame().legalMoves
@@ -108,12 +129,23 @@ describe('Game.initGame() returns boardState', () => {
 
 describe('Game.makeMove({ player: str, pos: { x: int, y: int } })', () => {
   it('place move returns game object with proper board', done => {
-    Game().initGame().makeMove({ player: 'black', pos: { x: 4, y: 4 } }).success
-      .should.eql(true)
-    // .should.eql({ ...emptyBoard, '4-4': 1 });
+    Game().initGame().makeMove({ player: 'black', pos: { x: 4, y: 4 } }).legalMoves
+      .should.eql({ ...emptyBoard, '4-4': 1 });
+    Game({ gameData: { handicap: 2 } }).initGame().makeMove({ player: 'white', pos: { x: 4, y: 4 } }).legalMoves
+      .should.eql({ ...emptyBoard, '4-16': 1, '16-4': 1, '4-4': -1 });
     done();
-  })
-})
+  });
+  
+  it('make move returns success: false with move out of turn', done => {
+    Game().initGame().makeMove({ player: 'white', pos: { x: 4, y: 4 } }).success
+      .should.eql(false);
+    Game({ gameData: { handicap: 2 } }).initGame().makeMove({ player: 'black', pos: { x: 4, y: 4 } }).success
+      .should.eql(false);
+    done();
+  });
+});
+
+// describe('Point.joinGroup() ')
 
 const initialMeta = {
   winner: null, 

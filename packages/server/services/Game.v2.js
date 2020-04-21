@@ -67,8 +67,8 @@ const HANDI_PLACE = {
 
 
 const pipeMap = (...funcs) => obj => {
-  const arr = Object.entries(obj).reduce((acc, [key, value]) => {
-    funcs.forEach(func => value = func(value));
+  const arr = Object.entries(obj).reduce((acc, [key, value], i, arr) => {
+    funcs.forEach(func => value = func(value, i, arr));
     return [...acc, [key, value]];
   },[]);
   return arr.reduce((acc, [key, value]) => {
@@ -83,6 +83,15 @@ const checkLegal = ({ point, Game }) => {
 const getBoardState = (Game) => {
   const getLegal = point => checkLegal({ point, Game });
   return pipeMap(getLegal)(Game.boardState);
+}
+
+const getNeighbors = (point, _, boardState) => {
+  const { top, btm, lft, rgt} = point.neighbors;
+  point.neighbors.top = top ? boardState.find(val => val[0] === top)[1] : top;
+  point.neighbors.btm = btm ? boardState.find(val => val[0] === btm)[1] : btm;
+  point.neighbors.lft = lft ? boardState.find(val => val[0] === lft)[1] : lft;
+  point.neighbors.rgt = rgt ? boardState.find(val => val[0] === rgt)[1] : rgt;
+  return point;
 }
 
 const initBoard = ({ boardSize, handicap }) => {
@@ -100,7 +109,8 @@ const initBoard = ({ boardSize, handicap }) => {
       boardState[pt].stone = 1;
     });
   }
-  return boardState;
+  const boardStateWithNeighbors = pipeMap(getNeighbors)(boardState)
+  return boardStateWithNeighbors;
 }
 
 // returns Game object
