@@ -85,12 +85,13 @@ const getBoardState = (Game) => {
   return pipeMap(getLegal)(Game.boardState);
 }
 
-const getNeighbors = (point, _, boardState) => {
+const getNeighbors = boardSize => (point, i, boardState) => {
   const { top, btm, lft, rgt} = point.neighbors;
-  point.neighbors.top = top ? boardState.find(val => val[0] === top)[1] : top;
-  point.neighbors.btm = btm ? boardState.find(val => val[0] === btm)[1] : btm;
-  point.neighbors.lft = lft ? boardState.find(val => val[0] === lft)[1] : lft;
-  point.neighbors.rgt = rgt ? boardState.find(val => val[0] === rgt)[1] : rgt;
+  // boardState[0] = [ '1-1', Point({x:1, y:1, boardSize}) ]
+  point.neighbors.top = top ? boardState[i - boardSize][1] : top;
+  point.neighbors.btm = btm ? boardState[i + boardSize][1] : btm;
+  point.neighbors.lft = lft ? boardState[i - 1][1] : lft;
+  point.neighbors.rgt = rgt ? boardState[i + 1][1] : rgt;
   return point;
 }
 
@@ -109,7 +110,7 @@ const initBoard = ({ boardSize, handicap }) => {
       boardState[pt].stone = 1;
     });
   }
-  const boardStateWithNeighbors = pipeMap(getNeighbors)(boardState)
+  const boardStateWithNeighbors = pipeMap(getNeighbors(boardSize))(boardState)
   return boardStateWithNeighbors;
 }
 
