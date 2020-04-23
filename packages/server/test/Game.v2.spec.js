@@ -158,14 +158,16 @@ describe('Game.makeMove({ player: str, pos: { x: int, y: int } })', () => {
     .makeMove({ player: 'black', pos: { x: 4, y: 14 }})
     .makeMove({ player: 'white', pos: { x: 4, y: 5 }})
     
-    const blackGroup = game.boardState['4-14'].group;
-    game.groups[blackGroup].has(game.boardState['4-14']).should.eql(true);
-    game.groups[blackGroup].has(game.boardState['4-15']).should.eql(true);
-    game.groups[blackGroup].has(game.boardState['4-16']).should.eql(true);
-    const whiteGroup = game.boardState['4-4'].group;
-    game.groups[whiteGroup].has(game.boardState['4-4']).should.eql(true);
-    game.groups[whiteGroup].has(game.boardState['3-4']).should.eql(true);
-    game.groups[whiteGroup].has(game.boardState['4-5']).should.eql(true);
+    const blackGroupKey = game.boardState['4-14'].group;
+    const blackGroup = game.groups[blackGroupKey].stones;
+    blackGroup.has(game.boardState['4-14']).should.eql(true);
+    blackGroup.has(game.boardState['4-15']).should.eql(true);
+    blackGroup.has(game.boardState['4-16']).should.eql(true);
+    const whiteGroupKey = game.boardState['4-4'].group;
+    const whiteGroup = game.groups[whiteGroupKey].stones;
+    whiteGroup.has(game.boardState['4-4']).should.eql(true);
+    whiteGroup.has(game.boardState['3-4']).should.eql(true);
+    whiteGroup.has(game.boardState['4-5']).should.eql(true);
     done();
   });
   
@@ -176,23 +178,24 @@ describe('Game.makeMove({ player: str, pos: { x: int, y: int } })', () => {
     .makeMove({ player: 'white', pos: { x: 3, y: 16 } })          // 16 -1  1h
     .makeMove({ player: 'black', pos: { x: 3, y: 15 }})
     
-    const hoshiGroup = game.boardState['4-16'].group;
-    game.groups[hoshiGroup].has(game.boardState['4-16']).should.eql(true);
-    game.groups[hoshiGroup].has(game.boardState['4-15']).should.eql(false);
-    game.groups[hoshiGroup].has(game.boardState['3-14']).should.eql(false);
-    game.groups[hoshiGroup].has(game.boardState['3-15']).should.eql(false);
+    const hoshiGroupKey = game.boardState['4-16'].group;
+    const hoshiGroup = game.groups[hoshiGroupKey].stones;
+    hoshiGroup.has(game.boardState['4-16']).should.eql(true);
+    hoshiGroup.has(game.boardState['4-15']).should.eql(false);
+    hoshiGroup.has(game.boardState['3-14']).should.eql(false);
+    hoshiGroup.has(game.boardState['3-15']).should.eql(false);
     done();
   })
 
-  // it('makeMove returns success: false when move is made in point with no liberties', done => {
-  //   Game({ gameData: { handicap: 2 } }).initGame()
-  //     .makeMove({ player: 'white', pos: { x: 4, y: 4 } }).makeMove({ player: 'black', pos: { x: 6, y: 16 } })
-  //     .makeMove({ player: 'white', pos: { x: 16, y: 16 }}).makeMove({ player: 'black', pos: { x: 5, y: 15 } })
-  //     .makeMove({ player: 'white', pos: { x: 16, y: 10 }}).makeMove({ player: 'black', pos: { x: 5, y: 17 } })
-  //     .makeMove({ player: 'white', pos: { x: 5, y: 16 }})
-  //     .success.should.eql(false);
-  //   done();
-  // })
+  it('makeMove returns success: false when move is made in point with no liberties', done => {
+    Game({ gameData: { handicap: 2 } }).initGame()
+      .makeMove({ player: 'white', pos: { x: 4, y: 4 } }).makeMove({ player: 'black', pos: { x: 6, y: 16 } })
+      .makeMove({ player: 'white', pos: { x: 16, y: 16 }}).makeMove({ player: 'black', pos: { x: 5, y: 15 } })
+      .makeMove({ player: 'white', pos: { x: 16, y: 10 }}).makeMove({ player: 'black', pos: { x: 5, y: 17 } })
+      .makeMove({ player: 'white', pos: { x: 5, y: 16 }})
+      .success.should.eql(false);
+    done();
+  })
 });
 
 const initialMeta = {

@@ -1,12 +1,3 @@
-/*----- constants -----*/
-const STONES_DATA = {
-  '-1': 'white',
-  '0': 'none',
-  '1': 'black',
-  'k': 'ko'
-}
-
-
 // index corresponds to difference in player rank
 const KOMI_REC = {
   '9': [
@@ -77,11 +68,21 @@ const pipeMap = (...funcs) => obj => {
 }
 
 const checkLegal = ({ point, Game }) => {
-  return point.stone || 'l';
+  // if stone (includes ko) return false
+  let legal = false;
+  if (point.stone) {
+    return { ...point, legal };
+  }
+  // if liberties return true
+  // if group has liberties return true
+  // if move would capture opposing group 
+    // set capturing object and return true
+  point.legal = !point.stone ? true : false;
+  return point;
 }
 
 const getBoardState = (Game) => {
-  const getLegal = point => checkLegal({ point, Game });
+  const getLegal = point => checkLegal({ point, Game }).legal ? 'l' : point.stone;
   return pipeMap(getLegal)(Game.boardState);
 }
 
@@ -163,7 +164,7 @@ const Game = ({gameData = {}, gameRecord = []} = {}) => ({
 
   initGroup: function(point) {
     const newSymbol = Symbol(`${point.pos.x}-${point.pos.y}`);
-    this.groups[newSymbol] = new Set();
+    this.groups[newSymbol] = { stones: new Set(), liberties: new Set()};
     return newSymbol;
   }
 });
@@ -195,17 +196,26 @@ const Point = ({x, y, boardSize = 19}) => ({
         point.group = game.initGroup(point);
       }
       
-      // add current point to global group
-      game.groups[point.group].add(this);
+      // add current point to global group and override current group
+      game.groups[point.group].stones.add(this);
       this.group = point.group;
+      this.setLiberties(game);
       for (let neighbor of Object.values(this.neighbors)) {
-        if (neighbor.stone === this.stone
-          && neighbor.group !== this.group) {
-            neighbor.joinGroup({ point: this, game });
-          }
+        if ( neighbor.stone === this.stone
+          // this check prevents infinite call chains
+          && neighbor.group !== this.group 
+        ) {
+          neighbor.joinGroup({ point: this, game });
         }
+      }
     }
+  },
 
+  setLiberties: function(game) {
+    const neighbors = Object.values(this.neighbors);
+    const liberties = game.groups[this.group].liberties;
+    // if point is occupied remove it from liberties set of point group, else add it
+    neighbors.forEach( pt => pt ? liberties.delete(pt) : liberties.add(pt) );
   }
 });
 
