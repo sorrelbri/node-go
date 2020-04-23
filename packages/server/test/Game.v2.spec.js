@@ -32,14 +32,14 @@ describe('Game', () => {
 
 describe('Game().initGame() returns boardState', () => {
   it('initGame() returns default 19x19', done => {
-    Game().initGame().legalMoves
-      .should.eql(emptyBoard);
+    Game().initGame()
+      .legalMoves.should.eql(emptyBoard);
     done();
   });
   
   it('initGame() with 2 handicap returns legalMoves with stones', done => {
-    Game({gameData: { handicap: 2 }}).initGame().legalMoves
-      .should.eql({...emptyBoard, '4-16': 1, '16-4': 1});
+    Game({gameData: { handicap: 2 }}).initGame()
+      .legalMoves.should.eql({...emptyBoard, '4-16': 1, '16-4': 1});
     done();
   });
 
@@ -65,87 +65,135 @@ describe('Game().initGame() returns boardState', () => {
   });
 
   it('initGame( 19x19 ) with all levels of handicap returns legalMoves with stones', done => {
-    Game({gameData: { boardSize: 19, handicap: 2 }}).initGame().legalMoves
-      .should.eql({...emptyBoard, '4-16': 1, '16-4': 1 });
-    Game({gameData: { boardSize: 19, handicap: 3 }}).initGame().legalMoves
-      .should.eql({...emptyBoard, '16-16': 1, '4-16': 1, '16-4': 1 });
-    Game({gameData: { boardSize: 19, handicap: 4 }}).initGame().legalMoves
-      .should.eql({...emptyBoard, '4-4': 1, '16-16': 1, '4-16': 1, '16-4': 1 });
-    Game({gameData: { boardSize: 19, handicap: 5 }}).initGame().legalMoves
-      .should.eql({...emptyBoard, '10-10': 1, '4-4': 1, '16-16': 1, '4-16': 1, '16-4': 1 });
-    Game({gameData: { boardSize: 19, handicap: 6 }}).initGame().legalMoves
-      .should.eql({...emptyBoard, '10-4': 1, '4-10': 1, '4-4': 1, '16-16': 1, '4-16': 1, '16-4': 1 });
-    Game({gameData: { boardSize: 19, handicap: 7 }}).initGame().legalMoves
-      .should.eql({...emptyBoard, '10-10': 1, '10-4': 1, '4-10': 1, '4-4': 1, '16-16': 1, '4-16': 1, '16-4': 1 });
-    Game({gameData: { boardSize: 19, handicap: 8 }}).initGame().legalMoves
-      .should.eql({...emptyBoard, '16-10': 1, '10-4': 1, '10-16': 1, '4-10': 1, '4-4': 1, '16-16': 1, '4-16': 1, '16-4': 1 });
-    Game({gameData: { boardSize: 19, handicap: 9 }}).initGame().legalMoves
-      .should.eql({...emptyBoard, '10-10': 1, '16-10': 1, '10-4': 1, '10-16': 1, '4-10': 1, '4-4': 1, '16-16': 1, '4-16': 1, '16-4': 1 });
+    Game({gameData: { boardSize: 19, handicap: 2 }}).initGame()
+      .legalMoves.should.eql({...emptyBoard, '4-16': 1, '16-4': 1 });
+    Game({gameData: { boardSize: 19, handicap: 3 }}).initGame()
+      .legalMoves.should.eql({...emptyBoard, '16-16': 1, '4-16': 1, '16-4': 1 });
+    Game({gameData: { boardSize: 19, handicap: 4 }}).initGame()
+      .legalMoves.should.eql({...emptyBoard, '4-4': 1, '16-16': 1, '4-16': 1, '16-4': 1 });
+    Game({gameData: { boardSize: 19, handicap: 5 }}).initGame()
+      .legalMoves.should.eql({...emptyBoard, '10-10': 1, '4-4': 1, '16-16': 1, '4-16': 1, '16-4': 1 });
+    Game({gameData: { boardSize: 19, handicap: 6 }}).initGame()
+      .legalMoves.should.eql({...emptyBoard, '10-4': 1, '4-10': 1, '4-4': 1, '16-16': 1, '4-16': 1, '16-4': 1 });
+    Game({gameData: { boardSize: 19, handicap: 7 }}).initGame()
+      .legalMoves.should.eql({...emptyBoard, '10-10': 1, '10-4': 1, '4-10': 1, '4-4': 1, '16-16': 1, '4-16': 1, '16-4': 1 });
+    Game({gameData: { boardSize: 19, handicap: 8 }}).initGame()
+      .legalMoves.should.eql({...emptyBoard, '16-10': 1, '10-4': 1, '10-16': 1, '4-10': 1, '4-4': 1, '16-16': 1, '4-16': 1, '16-4': 1 });
+    Game({gameData: { boardSize: 19, handicap: 9 }}).initGame()
+      .legalMoves.should.eql({...emptyBoard, '10-10': 1, '16-10': 1, '10-4': 1, '10-16': 1, '4-10': 1, '4-4': 1, '16-16': 1, '4-16': 1, '16-4': 1 });
     done();
   })
 
   it('initGame( 13x13) returns legalMoves', done => {
-    Game({gameData: { boardSize: 13 }}).initGame().legalMoves
-      .should.eql(emptyBoard13);
+    Game({gameData: { boardSize: 13 }}).initGame()
+      .legalMoves.should.eql(emptyBoard13);
     done();
   });
   
   it('initGame( 13x13 ) with all levels of handicap returns legalMoves with stones', done => {
-    Game({gameData: { boardSize: 13, handicap: 2 }}).initGame().legalMoves
-      .should.eql({...emptyBoard13, '4-10': 1, '10-4': 1 });
-    Game({gameData: { boardSize: 13, handicap: 3 }}).initGame().legalMoves
-      .should.eql({...emptyBoard13, '10-10': 1, '4-10': 1, '10-4': 1 });
-    Game({gameData: { boardSize: 13, handicap: 4 }}).initGame().legalMoves
-      .should.eql({...emptyBoard13, '4-4': 1, '10-10': 1, '4-10': 1, '10-4': 1 });
-    Game({gameData: { boardSize: 13, handicap: 5 }}).initGame().legalMoves
-      .should.eql({...emptyBoard13, '7-7': 1, '4-4': 1, '10-10': 1, '4-10': 1, '10-4': 1 });
-    Game({gameData: { boardSize: 13, handicap: 6 }}).initGame().legalMoves
-      .should.eql({...emptyBoard13, '7-4': 1, '4-7': 1, '4-4': 1, '10-10': 1, '4-10': 1, '10-4': 1 });
-    Game({gameData: { boardSize: 13, handicap: 7 }}).initGame().legalMoves
-      .should.eql({...emptyBoard13, '7-7': 1, '7-4': 1, '4-7': 1, '4-4': 1, '10-10': 1, '4-10': 1, '10-4': 1 });
-    Game({gameData: { boardSize: 13, handicap: 8 }}).initGame().legalMoves
-      .should.eql({...emptyBoard13, '10-7': 1, '7-4': 1, '7-10': 1, '4-7': 1, '4-4': 1, '10-10': 1, '4-10': 1, '10-4': 1 });
-    Game({gameData: { boardSize: 13, handicap: 9 }}).initGame().legalMoves
-      .should.eql({...emptyBoard13, '7-7': 1, '10-7': 1, '7-4': 1, '7-10': 1, '4-7': 1, '4-4': 1, '10-10': 1, '4-10': 1, '10-4': 1 });
+    Game({gameData: { boardSize: 13, handicap: 2 }}).initGame()
+      .legalMoves.should.eql({...emptyBoard13, '4-10': 1, '10-4': 1 });
+    Game({gameData: { boardSize: 13, handicap: 3 }}).initGame()
+      .legalMoves.should.eql({...emptyBoard13, '10-10': 1, '4-10': 1, '10-4': 1 });
+    Game({gameData: { boardSize: 13, handicap: 4 }}).initGame()
+      .legalMoves.should.eql({...emptyBoard13, '4-4': 1, '10-10': 1, '4-10': 1, '10-4': 1 });
+    Game({gameData: { boardSize: 13, handicap: 5 }}).initGame()
+      .legalMoves.should.eql({...emptyBoard13, '7-7': 1, '4-4': 1, '10-10': 1, '4-10': 1, '10-4': 1 });
+    Game({gameData: { boardSize: 13, handicap: 6 }}).initGame()
+      .legalMoves.should.eql({...emptyBoard13, '7-4': 1, '4-7': 1, '4-4': 1, '10-10': 1, '4-10': 1, '10-4': 1 });
+    Game({gameData: { boardSize: 13, handicap: 7 }}).initGame()
+      .legalMoves.should.eql({...emptyBoard13, '7-7': 1, '7-4': 1, '4-7': 1, '4-4': 1, '10-10': 1, '4-10': 1, '10-4': 1 });
+    Game({gameData: { boardSize: 13, handicap: 8 }}).initGame()
+      .legalMoves.should.eql({...emptyBoard13, '10-7': 1, '7-4': 1, '7-10': 1, '4-7': 1, '4-4': 1, '10-10': 1, '4-10': 1, '10-4': 1 });
+    Game({gameData: { boardSize: 13, handicap: 9 }}).initGame()
+      .legalMoves.should.eql({...emptyBoard13, '7-7': 1, '10-7': 1, '7-4': 1, '7-10': 1, '4-7': 1, '4-4': 1, '10-10': 1, '4-10': 1, '10-4': 1 });
     done();
   });
 
   it('initGame( 9x9 ) returns legalMoves', done => {
-    Game({gameData: { boardSize: 9 }}).initGame().legalMoves
-      .should.eql(emptyBoard9);
+    Game({gameData: { boardSize: 9 }}).initGame()
+      .legalMoves.should.eql(emptyBoard9);
     done();
   });
 
   it('initGame( 9x9 ) with all levels of handicap returns legalMoves with stones', done => {
-    Game({gameData: { boardSize: 9, handicap: 2 }}).initGame().legalMoves
-      .should.eql({...emptyBoard9, '3-7': 1, '7-3': 1 });
-    Game({gameData: { boardSize: 9, handicap: 3 }}).initGame().legalMoves
-      .should.eql({...emptyBoard9, '7-7': 1, '3-7': 1, '7-3': 1 });
-    Game({gameData: { boardSize: 9, handicap: 4 }}).initGame().legalMoves
-      .should.eql({...emptyBoard9, '3-3': 1, '7-7': 1, '3-7': 1, '7-3': 1 });
+    Game({gameData: { boardSize: 9, handicap: 2 }}).initGame()
+      .legalMoves.should.eql({...emptyBoard9, '3-7': 1, '7-3': 1 });
+    Game({gameData: { boardSize: 9, handicap: 3 }}).initGame()
+      .legalMoves.should.eql({...emptyBoard9, '7-7': 1, '3-7': 1, '7-3': 1 });
+    Game({gameData: { boardSize: 9, handicap: 4 }}).initGame()
+      .legalMoves.should.eql({...emptyBoard9, '3-3': 1, '7-7': 1, '3-7': 1, '7-3': 1 });
     done();
   });
 });
 
 describe('Game.makeMove({ player: str, pos: { x: int, y: int } })', () => {
-  it('place move returns game object with proper board', done => {
-    Game().initGame().makeMove({ player: 'black', pos: { x: 4, y: 4 } }).legalMoves
-      .should.eql({ ...emptyBoard, '4-4': 1 });
-    Game({ gameData: { handicap: 2 } }).initGame().makeMove({ player: 'white', pos: { x: 4, y: 4 } }).legalMoves
-      .should.eql({ ...emptyBoard, '4-16': 1, '16-4': 1, '4-4': -1 });
+  it('makeMove returns game object with proper board', done => {
+    Game().initGame().makeMove({ player: 'black', pos: { x: 4, y: 4 } })
+      .legalMoves.should.eql({ ...emptyBoard, '4-4': 1 });
+    Game({ gameData: { handicap: 2 } }).initGame().makeMove({ player: 'white', pos: { x: 4, y: 4 } })
+      .legalMoves.should.eql({ ...emptyBoard, '4-16': 1, '16-4': 1, '4-4': -1 });
     done();
   });
   
-  it('make move returns success: false with move out of turn', done => {
-    Game().initGame().makeMove({ player: 'white', pos: { x: 4, y: 4 } }).success
-      .should.eql(false);
-    Game({ gameData: { handicap: 2 } }).initGame().makeMove({ player: 'black', pos: { x: 4, y: 4 } }).success
-      .should.eql(false);
+  it('makeMove returns success: false with move out of turn', done => {
+    Game().initGame().makeMove({ player: 'white', pos: { x: 4, y: 4 } })
+      .success.should.eql(false);
+    Game({ gameData: { handicap: 2 } }).initGame().makeMove({ player: 'black', pos: { x: 4, y: 4 } })
+      .success.should.eql(false);
     done();
   });
-});
 
-// describe('Point.joinGroup() ')
+  it('makeMove returns success: false when move is at occupied point', done => {
+    Game({ gameData: { handicap: 2 } }).initGame().makeMove({ player: 'white', pos: { x: 4, y: 16 } })
+      .success.should.eql(false);
+    done();
+  });
+  
+  it('makeMove next to adjacent stone of the same color joins stones as a group', done => {
+    const game = Game({ gameData: { handicap: 2 } }).initGame()   //     4        3  4
+    .makeMove({ player: 'white', pos: { x: 4, y: 4 } })           // 14  1     4 -1 -1
+    .makeMove({ player: 'black', pos: { x: 4, y: 15 }})           // 15  1     5    -1
+    .makeMove({ player: 'white', pos: { x: 3, y: 4 } })           // 16  1h      
+    .makeMove({ player: 'black', pos: { x: 4, y: 14 }})
+    .makeMove({ player: 'white', pos: { x: 4, y: 5 }})
+    
+    const blackGroup = game.boardState['4-14'].group;
+    game.groups[blackGroup].has(game.boardState['4-14']).should.eql(true);
+    game.groups[blackGroup].has(game.boardState['4-15']).should.eql(true);
+    game.groups[blackGroup].has(game.boardState['4-16']).should.eql(true);
+    const whiteGroup = game.boardState['4-4'].group;
+    game.groups[whiteGroup].has(game.boardState['4-4']).should.eql(true);
+    game.groups[whiteGroup].has(game.boardState['3-4']).should.eql(true);
+    game.groups[whiteGroup].has(game.boardState['4-5']).should.eql(true);
+    done();
+  });
+  
+  it('makeMove next to adjacent stone of different color does not join stones as a group', done => {
+    const game = Game({ gameData: { handicap: 2 } }).initGame()   //     3  4 
+    .makeMove({ player: 'white', pos: { x: 4, y: 15 } })          // 14     1
+    .makeMove({ player: 'black', pos: { x: 4, y: 14 }})           // 15  1 -1  no groups
+    .makeMove({ player: 'white', pos: { x: 3, y: 16 } })          // 16 -1  1h
+    .makeMove({ player: 'black', pos: { x: 3, y: 15 }})
+    
+    const hoshiGroup = game.boardState['4-16'].group;
+    game.groups[hoshiGroup].has(game.boardState['4-16']).should.eql(true);
+    game.groups[hoshiGroup].has(game.boardState['4-15']).should.eql(false);
+    game.groups[hoshiGroup].has(game.boardState['3-14']).should.eql(false);
+    game.groups[hoshiGroup].has(game.boardState['3-15']).should.eql(false);
+    done();
+  })
+
+  // it('makeMove returns success: false when move is made in point with no liberties', done => {
+  //   Game({ gameData: { handicap: 2 } }).initGame()
+  //     .makeMove({ player: 'white', pos: { x: 4, y: 4 } }).makeMove({ player: 'black', pos: { x: 6, y: 16 } })
+  //     .makeMove({ player: 'white', pos: { x: 16, y: 16 }}).makeMove({ player: 'black', pos: { x: 5, y: 15 } })
+  //     .makeMove({ player: 'white', pos: { x: 16, y: 10 }}).makeMove({ player: 'black', pos: { x: 5, y: 17 } })
+  //     .makeMove({ player: 'white', pos: { x: 5, y: 16 }})
+  //     .success.should.eql(false);
+  //   done();
+  // })
+});
 
 const initialMeta = {
   winner: null, 

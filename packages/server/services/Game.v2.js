@@ -95,8 +95,9 @@ const getNeighbors = boardSize => (point, i, boardState) => {
   return point;
 }
 
-const initBoard = ({ boardSize, handicap }) => {
+const initBoard = (game) => {
   const boardState = {};
+  const { boardSize, handicap } = game;
   for (let i = 0; i < Math.pow(boardSize, 2); i++) {
     const point = Point({
       x: Math.floor(i / boardSize) + 1, 
@@ -107,8 +108,9 @@ const initBoard = ({ boardSize, handicap }) => {
   }
   if (handicap) {
     HANDI_PLACE[boardSize][handicap].forEach(pt => {
-      boardState[pt].stone = 1;
+      boardState[pt].makeMove(game);
     });
+    game.turn *= -1;
   }
   const boardStateWithNeighbors = pipeMap(getNeighbors(boardSize))(boardState)
   return boardStateWithNeighbors;
@@ -135,9 +137,8 @@ const Game = ({gameData = {}, gameRecord = []} = {}) => ({
   initGame: function() {
     this.winner =     null;
     this.pass =       0;
-    this.turn =       this.handicap ? -1 : 1;
-    this.boardState = initBoard({ boardSize: this.boardSize, handicap: this.handicap})
-    // return this.boardState
+    this.turn =       1;
+    this.boardState = initBoard(this)
     return { ...this, legalMoves: getBoardState(this)};
   },
 
@@ -152,12 +153,18 @@ const Game = ({gameData = {}, gameRecord = []} = {}) => ({
                 || ( this.turn === -1 && player === 'white' );
     if (isTurn) {
       if (point.legal) {
-        point.makeMove(this.turn);
+        point.makeMove(this);
         this.turn *= -1;
         success = true;
       }
     }
     return {...this, legalMoves: getBoardState(this), success };
+  },
+
+  initGroup: function(point) {
+    const newSymbol = Symbol(`${point.pos.x}-${point.pos.y}`);
+    this.groups[newSymbol] = new Set();
+    return newSymbol;
   }
 });
 
@@ -167,7 +174,7 @@ const Point = ({x, y, boardSize = 19}) => ({
   legal:        true,
   territory:    0,
   capturing:    [],
-  groupMembers: [ this ],
+  group:        null,
   neighbors: {
     top: x > 1          ? `${ x - 1 }-${ y }` : null,
     btm: x < boardSize  ? `${ x + 1 }-${ y }` : null,
@@ -175,9 +182,30 @@ const Point = ({x, y, boardSize = 19}) => ({
     lft: y > 1          ? `${ x }-${ y - 1 }` : null
   },
 
-  makeMove: function(turn) {
-    this.stone = turn;
+  makeMove: function(game) {
+    this.stone = game.turn;
     this.legal = false;
+    return this.joinGroup({ point: this, game });
+  },
+  
+  joinGroup: function({ point, game }) {
+    if (point.group !== this.group || !point.group) {
+      // if point has no group set current group to new Symbol in game object
+      if (!point.group) {
+        point.group = game.initGroup(point);
+      }
+      
+      // add current point to global group
+      game.groups[point.group].add(this);
+      this.group = point.group;
+      for (let neighbor of Object.values(this.neighbors)) {
+        if (neighbor.stone === this.stone
+          && neighbor.group !== this.group) {
+            neighbor.joinGroup({ point: this, game });
+          }
+        }
+    }
+
   }
 });
 
