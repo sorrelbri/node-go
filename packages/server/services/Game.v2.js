@@ -71,13 +71,23 @@ const checkLegal = ({ point, Game }) => {
   // if stone (includes ko) return false
   let legal = false;
   if (point.stone) {
-    return { ...point, legal };
+    point.legal = legal;
+    return point;
   }
-  // if liberties return true
+  const isEmptyAdjacent = Object.values(point.neighbors).filter(pt => pt.stone === 0)[0]
+  // .length;
+
+  // if empty point adjacent return true
+  if (!isEmptyAdjacent) {
+    point.legal = legal;
+    return { ...point, adj: isEmptyAdjacent };
+    // TODO change to positive check with legal: true after remaining logic has been added
+  }
   // if group has liberties return true
   // if move would capture opposing group 
     // set capturing object and return true
   point.legal = !point.stone ? true : false;
+  point.adj = isEmptyAdjacent;
   return point;
 }
 
@@ -93,6 +103,11 @@ const getNeighbors = boardSize => (point, i, boardState) => {
   point.neighbors.btm = btm ? boardState[i + boardSize][1] : btm;
   point.neighbors.lft = lft ? boardState[i - 1][1] : lft;
   point.neighbors.rgt = rgt ? boardState[i + 1][1] : rgt;
+  for (let [direction, neighbor] of Object.entries(point.neighbors)) {
+    if (!neighbor) {
+      delete point.neighbors[direction];
+    }
+  }
   return point;
 }
 

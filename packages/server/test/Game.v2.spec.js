@@ -188,12 +188,13 @@ describe('Game.makeMove({ player: str, pos: { x: int, y: int } })', () => {
   })
 
   it('makeMove returns success: false when move is made in point with no liberties', done => {
-    Game({ gameData: { handicap: 2 } }).initGame()
-      .makeMove({ player: 'white', pos: { x: 4, y: 4 } }).makeMove({ player: 'black', pos: { x: 6, y: 16 } })
-      .makeMove({ player: 'white', pos: { x: 16, y: 16 }}).makeMove({ player: 'black', pos: { x: 5, y: 15 } })
-      .makeMove({ player: 'white', pos: { x: 16, y: 10 }}).makeMove({ player: 'black', pos: { x: 5, y: 17 } })
+    const point = Game({ gameData: { handicap: 2 } }).initGame()                                                              //    15 16 17
+      .makeMove({ player: 'white', pos: { x: 4, y: 4 } }).makeMove({ player: 'black', pos: { x: 6, y: 16 } })   // 4      1
+      .makeMove({ player: 'white', pos: { x: 16, y: 16 }}).makeMove({ player: 'black', pos: { x: 5, y: 15 } })  // 5   1  x  1
+      .makeMove({ player: 'white', pos: { x: 16, y: 10 }}).makeMove({ player: 'black', pos: { x: 5, y: 17 } })  // 6      1
       .makeMove({ player: 'white', pos: { x: 5, y: 16 }})
       .success.should.eql(false);
+
     done();
   })
 });
