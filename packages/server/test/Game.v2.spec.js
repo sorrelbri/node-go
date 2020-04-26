@@ -172,11 +172,11 @@ describe('Game.makeMove({ player: str, pos: { x: int, y: int } })', () => {
   });
   
   it('makeMove next to adjacent stone of different color does not join stones as a group', done => {
-    const game = Game({ gameData: { handicap: 2 } }).initGame()   //     3  4 
-    .makeMove({ player: 'white', pos: { x: 4, y: 15 } })          // 14     1
-    .makeMove({ player: 'black', pos: { x: 4, y: 14 }})           // 15  1 -1  no groups
-    .makeMove({ player: 'white', pos: { x: 3, y: 16 } })          // 16 -1  1h
-    .makeMove({ player: 'black', pos: { x: 3, y: 15 }})
+    const game = Game({ gameData: { handicap: 2 } }).initGame()     //     3  4 
+      .makeMove({ player: 'white', pos: { x: 4, y: 15 } })          // 14     1
+      .makeMove({ player: 'black', pos: { x: 4, y: 14 }})           // 15  1 -1  no groups
+      .makeMove({ player: 'white', pos: { x: 3, y: 16 } })          // 16 -1  1h
+      .makeMove({ player: 'black', pos: { x: 3, y: 15 }})
     
     const hoshiGroupKey = game.boardState['4-16'].group;
     const hoshiGroup = game.groups[hoshiGroupKey].stones;
@@ -194,10 +194,49 @@ describe('Game.makeMove({ player: str, pos: { x: int, y: int } })', () => {
       .makeMove({ player: 'white', pos: { x: 16, y: 10 }}).makeMove({ player: 'black', pos: { x: 5, y: 17 } })  // 6      1
       .makeMove({ player: 'white', pos: { x: 5, y: 16 }})
       .success.should.eql(false);
-
     done();
-  })
+  });
 });
+
+describe('makeMove group join and capture logic', () => {
+  const joinGame = Game().initGame()
+    .makeMove({ player: 'black', pos: { x: 4, y: 17 } })    //     3  4  5
+    .makeMove({ player: 'white', pos: { x: 3, y: 16 } })    // 15    -1
+    .makeMove({ player: 'black', pos: { x: 5, y: 16 } })    // 16 -1  1  1
+    .makeMove({ player: 'white', pos: { x: 4, y: 15 } })    // 17     1
+    .makeMove({ player: 'black', pos: { x: 4, y: 16 } });
+    
+  it('gain liberties from group smoke test', done => {
+    joinGame.success.should.eql(true); // to work after
+    done();
+  });
+
+  // test group with only remaining liberty at point to be played
+
+  // const captureGame = Game({ gameData: { handicap: 2 } }).initGame()
+  //   .makeMove({ player: 'white', pos: { x: 4, y: 15 } })    //     3  4  5
+  //   .makeMove({ player: 'black', pos: { x: 4, y: 4 } })     // 15    -1
+  //   .makeMove({ player: 'white', pos: { x: 3, y: 16 } })    // 16 -1  0 -1
+  //   .makeMove({ player: 'black', pos: { x: 4, y: 10 } })    // 17    -1
+  //   .makeMove({ player: 'white', pos: { x: 5, y: 16 } })    // 4,16 captured
+  //   .makeMove({ player: 'black', pos: { x: 10, y: 4 } })
+  //   .makeMove({ player: 'white', pos: { x: 4, y: 17 } })
+  
+  //   it('makeMove capture smoke test', done => {
+  //     captureGame.success.should.eql(true);
+  //     done();
+  //   });
+  
+  //   it('makeMove capture removes captured stone', done => {
+  //     captureGame.boardState['4-16'].stone.should.eql(0);
+  //     done();
+  //   });
+  
+  //   it('makeMove capture increases capturing players captures', done => {
+  //     captureGame.playerState.wCaptures.should.eql(1);
+  //   })
+})
+
 
 const initialMeta = {
   winner: null, 

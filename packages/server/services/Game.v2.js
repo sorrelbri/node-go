@@ -74,16 +74,26 @@ const checkLegal = ({ point, Game }) => {
     point.legal = legal;
     return point;
   }
-  const isEmptyAdjacent = Object.values(point.neighbors).filter(pt => pt.stone === 0)[0]
-  // .length;
+  
+  const isEmptyAdjacent = Object.values(point.neighbors).filter(pt => pt.stone === 0).length;
 
   // if empty point adjacent return true
   if (!isEmptyAdjacent) {
+    
+    // if group has liberties return true
+    const isTurnStone = neighbor => neighbor.stone === Game.turn;
+    const getGroupLiberties = point => Array.from(Game.groups[point.group].liberties);
+    const isInGroupWithLiberties = neighbor => getGroupLiberties(neighbor).filter(({ pos }) => pos.x !== point.pos.x && pos.y !== point.pos.y );
+    const isInLiveGroup = () => Object.values(point.neighbors).filter(isTurnStone).filter(isInGroupWithLiberties).length;
+
+    if (isInLiveGroup()) {
+      point.legal = true;
+      return point;
+    }
+
     point.legal = legal;
     return { ...point, adj: isEmptyAdjacent };
-    // TODO change to positive check with legal: true after remaining logic has been added
   }
-  // if group has liberties return true
   // if move would capture opposing group 
     // set capturing object and return true
   point.legal = !point.stone ? true : false;
