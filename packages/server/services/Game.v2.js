@@ -69,41 +69,47 @@ const pipeMap = (...funcs) => obj => {
 
 const checkLegal = ({ point, Game }) => {
   // if stone (includes ko) return false
-  let legal = false;
   if (point.stone) {
-    point.legal = legal;
+    point.legal = false;
     return point;
   }
   
-  const isEmptyAdjacent = Object.values(point.neighbors).filter(pt => pt.stone === 0).length;
+  const isEmpty = point => point.stone === 0 && point.legal === true;
+  const isEmptyAdjacent = Object.values(point.neighbors).filter(isEmpty);
 
   // if empty point adjacent return true
-  if (!isEmptyAdjacent) {
+  if (!isEmptyAdjacent.length) {
     
     // if group has liberties return true
     const isTurnStone = neighbor => neighbor.stone === Game.turn;
     const getGroupLiberties = point => Array.from(Game.groups[point.group].liberties);
-    const isInGroupWithLiberties = neighbor => getGroupLiberties(neighbor).filter(({ pos }) => pos.x !== point.pos.x && pos.y !== point.pos.y );
-    const isInLiveGroup = () => Object.values(point.neighbors).filter(isTurnStone).filter(isInGroupWithLiberties).length;
+    const isNotSamePoint = liberty => liberty.pos.x !== point.pos.x && liberty.pos.y !== point.pos.y;
+    const isInGroupWithLiberties = neighbor => getGroupLiberties(neighbor).filter(isNotSamePoint).length;
+    const isInLiveGroup = Object.values(point.neighbors).filter(isTurnStone).filter(isInGroupWithLiberties).length;
 
-    if (isInLiveGroup()) {
+    if (isInLiveGroup) {
       point.legal = true;
-      return point;
+      return { ...point, isInLiveGroup };
     }
 
-    point.legal = legal;
-    return { ...point, adj: isEmptyAdjacent };
+    point.legal = false;
+    return { ...point, adj: isEmptyAdjacent, isInLiveGroup };
   }
   // if move would capture opposing group 
     // set capturing object and return true
-  point.legal = !point.stone ? true : false;
+  point.legal = true;
   point.adj = isEmptyAdjacent;
   return point;
 }
 
 const getBoardState = (Game) => {
-  const getLegal = point => checkLegal({ point, Game }).legal ? 'l' : point.stone;
+  const getLegal = point => checkLegal({ point, Game })
   return pipeMap(getLegal)(Game.boardState);
+}
+
+const getLegalMoves = (Game) => {
+  const mapLegal = point => point.legal ? 'l' : point.stone;
+  return pipeMap(mapLegal)(Game.boardState);
 }
 
 const getNeighbors = boardSize => (point, i, boardState) => {
@@ -132,13 +138,13 @@ const initBoard = (game) => {
     });
     boardState[`${point.pos.x}-${point.pos.y}`] = point;
   }
+  const boardStateWithNeighbors = pipeMap(getNeighbors(boardSize))(boardState)
   if (handicap) {
     HANDI_PLACE[boardSize][handicap].forEach(pt => {
-      boardState[pt].makeMove(game);
+      boardStateWithNeighbors[pt].makeMove(game);
     });
     game.turn *= -1;
   }
-  const boardStateWithNeighbors = pipeMap(getNeighbors(boardSize))(boardState)
   return boardStateWithNeighbors;
 }
 
@@ -164,8 +170,9 @@ const Game = ({gameData = {}, gameRecord = []} = {}) => ({
     this.winner =     null;
     this.pass =       0;
     this.turn =       1;
-    this.boardState = initBoard(this)
-    return { ...this, legalMoves: getBoardState(this)};
+    this.boardState = initBoard(this);
+    this.boardState = getBoardState(this);
+    return { ...this, legalMoves: getLegalMoves(this)};
   },
 
   getMeta: function() {
@@ -184,7 +191,8 @@ const Game = ({gameData = {}, gameRecord = []} = {}) => ({
         success = true;
       }
     }
-    return {...this, legalMoves: getBoardState(this), success };
+    this.boardState = getBoardState(this);
+    return {...this, legalMoves: getLegalMoves(this), success };
   },
 
   initGroup: function(point) {
@@ -240,7 +248,14 @@ const Point = ({x, y, boardSize = 19}) => ({
     const neighbors = Object.values(this.neighbors);
     const liberties = game.groups[this.group].liberties;
     // if point is occupied remove it from liberties set of point group, else add it
-    neighbors.forEach( pt => pt ? liberties.delete(pt) : liberties.add(pt) );
+    neighbors.forEach( pt => {
+      if (pt.stone) {
+        liberties.delete(pt);
+        game.groups[pt.group].liberties.delete(this);
+      } else {
+        liberties.add(pt) 
+      }
+    });
   }
 });
 

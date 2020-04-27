@@ -188,12 +188,13 @@ describe('Game.makeMove({ player: str, pos: { x: int, y: int } })', () => {
   })
 
   it('makeMove returns success: false when move is made in point with no liberties', done => {
-    const point = Game({ gameData: { handicap: 2 } }).initGame()                                                              //    15 16 17
+    const point = Game({ gameData: { handicap: 2 } }).initGame()                                                //    15 16 17
       .makeMove({ player: 'white', pos: { x: 4, y: 4 } }).makeMove({ player: 'black', pos: { x: 6, y: 16 } })   // 4      1
       .makeMove({ player: 'white', pos: { x: 16, y: 16 }}).makeMove({ player: 'black', pos: { x: 5, y: 15 } })  // 5   1  x  1
       .makeMove({ player: 'white', pos: { x: 16, y: 10 }}).makeMove({ player: 'black', pos: { x: 5, y: 17 } })  // 6      1
       .makeMove({ player: 'white', pos: { x: 5, y: 16 }})
-      .success.should.eql(false);
+      console.log(point.boardState['5-16'])
+      point.success.should.eql(false);
     done();
   });
 });
@@ -207,11 +208,27 @@ describe('makeMove group join and capture logic', () => {
     .makeMove({ player: 'black', pos: { x: 4, y: 16 } });
     
   it('gain liberties from group smoke test', done => {
-    joinGame.success.should.eql(true); // to work after
+    joinGame.success.should.eql(true);
     done();
   });
 
-  // test group with only remaining liberty at point to be played
+  it('group with only remaining liberty at point to be played returns success: false', done => {
+    Game({ gameData: { handicap: 2 } }).initGame()
+      .makeMove({ player: 'white', pos: { x: 4, y: 15 } })     //     3  4  5  6
+      .makeMove({ player: 'black', pos: { x: 4, y: 4 } })      // 15    -1 -1
+      .makeMove({ player: 'white', pos: { x: 5, y: 15 } })     // 16 -1  1h 0 -1
+      .makeMove({ player: 'black', pos: { x: 16, y: 16 } })    // 17    -1 -1
+      .makeMove({ player: 'white', pos: { x: 3, y: 16 } })
+      .makeMove({ player: 'black', pos: { x: 4, y: 10 } })
+      .makeMove({ player: 'white', pos: { x: 6, y: 16 } })
+      .makeMove({ player: 'black', pos: { x: 10, y: 4 } })
+      .makeMove({ player: 'white', pos: { x: 4, y: 17 } })
+      .makeMove({ player: 'black', pos: { x: 10, y: 16 } })
+      .makeMove({ player: 'white', pos: { x: 5, y: 17 } })
+      .makeMove({ player: 'black', pos: { x: 5, y: 16 } })
+      .success.should.eql(false);
+    done();
+  })
 
   // const captureGame = Game({ gameData: { handicap: 2 } }).initGame()
   //   .makeMove({ player: 'white', pos: { x: 4, y: 15 } })    //     3  4  5
