@@ -212,7 +212,7 @@ describe('makeMove group join and capture logic', () => {
   });
 
   it('group with only remaining liberty at point to be played returns success: false', done => {
-    Game({ gameData: { handicap: 2 } }).initGame()
+    const point = Game({ gameData: { handicap: 2 } }).initGame()
       .makeMove({ player: 'white', pos: { x: 4, y: 15 } })     //     3  4  5  6
       .makeMove({ player: 'black', pos: { x: 4, y: 4 } })      // 15    -1 -1
       .makeMove({ player: 'white', pos: { x: 5, y: 15 } })     // 16 -1  1h 0 -1
@@ -224,6 +224,8 @@ describe('makeMove group join and capture logic', () => {
       .makeMove({ player: 'white', pos: { x: 4, y: 17 } })
       .makeMove({ player: 'black', pos: { x: 10, y: 16 } })
       .makeMove({ player: 'white', pos: { x: 5, y: 17 } })
+      console.log(point.boardState['5-16']);
+      point
       .makeMove({ player: 'black', pos: { x: 5, y: 16 } })
       .success.should.eql(false);
     done();
@@ -244,15 +246,15 @@ describe('makeMove group join and capture logic', () => {
     });
 
     it('makeMove assesses captures', done => {
-      (!!captureGame.boardState['4-17'].capturing).should.eql(true);
+      captureGame.boardState['4-17'].capturing[-1].length.should.eql(1);
       done();
     })
 
-    // it('makeMove capture removes captured stone', done => {
-    //   captureGame.makeMove({ player: 'white', pos: { x: 4, y: 17 } })
-    //     .boardState['4-16'].stone.should.eql(0);
-    //   done();
-    // });
+    it('makeMove capture removes captured stone', done => {
+      captureGame.makeMove({ player: 'white', pos: { x: 4, y: 17 } })
+        .boardState['4-16'].stone.should.eql(0);
+      done();
+    });
     
     // it('makeMove capture increases capturing players captures', done => {
     //   captureGame.makeMove({ player: 'white', pos: { x: 4, y: 17 } })

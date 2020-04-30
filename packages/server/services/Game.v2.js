@@ -99,18 +99,11 @@ const checkLegal = ({ point, Game }) => {
       return { ...point, isInLiveGroup };
     }
 
-    // if move would capture opposing group 
-      // set capturing object and return true
-    // const isNotTurnStone = neighbor => neighbor.stone === Game.turn * -1;
-    // const isInGroupWithLastLiberty = neighbor => getGroupLiberties(neighbor).filter(isNotSamePoint)
-    // // .length === 0;
-    // const isCapturing = Object.values(point.neighbors).filter(isNotTurnStone).filter(isInGroupWithLastLiberty)
-    // // .length;
-
-    // if (isCapturing) {
-    //   point.legal = true;
-    //   return { ...point, isCapturing };
-    // }
+    // if move would capture opposing group return true
+    if (point.capturing[Game.turn].length) {
+      point.legal = true;
+      return point;
+    }
 
     point.legal = false;
     return { ...point, adj: isEmptyAdjacent, isInLiveGroup };
@@ -225,7 +218,10 @@ const Point = ({x, y, boardSize = 19}) => ({
   stone:        0, // can be 1, -1, 0, or 'k' for ko
   legal:        true,
   territory:    0,
-  capturing:    [],
+  capturing:    {
+    '1': [],
+    '-1': []
+  },
   group:        null,
   neighbors: {
     top: x > 1          ? `${ x - 1 }-${ y }` : null,
@@ -237,6 +233,9 @@ const Point = ({x, y, boardSize = 19}) => ({
   makeMove: function(game) {
     this.stone = game.turn;
     this.legal = false;
+    if (this.capturing[this.stone].length) {
+      this.makeCaptures(game);
+    }
     this.joinGroup({ point: this, game });
     return this.checkCaptures(game);
   },
@@ -282,18 +281,36 @@ const Point = ({x, y, boardSize = 19}) => ({
     const liberties = game.groups[this.group].liberties;
     if (liberties.size === 1) {
       const lastLiberty = getSingleItemFromSet(liberties);
-      lastLiberty.capturing = this;
+      lastLiberty.capturing[this.stone * -1].push(this.group);
     }
 
     // if neighbors have one liberty
-    const neighbors = Object.values(this.neighbors);
-    neighbors.filter(neighbor => neighbor.stone).forEach( neighbor => {
-      const liberties = game.groups[neighbor.group].liberties;
-      if (liberties.size === 1) {
+    const neighbors = Object.values(this.neighbors).filter(neighbor => neighbor.stone === -1 * this.stone)
+    neighbors.forEach( neighbor => {
+      const liberties = game.groups[neighbor.group] && game.groups[neighbor.group].liberties;
+      if (liberties && liberties.size === 1) {
         const lastLiberty = getSingleItemFromSet(liberties);
-        lastLiberty.capturing = neighbor;
+        lastLiberty.capturing[neighbor.stone * -1].push(neighbor.group);
       }
     })
+  },
+
+  makeCaptures: function(game) {
+    // for each group
+    this.capturing[this.stone].forEach(captureGroup => {
+      const capturesSet = game.groups[captureGroup].stones;
+      for (let [capture] of capturesSet.entries()) {
+        capture.removeStone(game);
+      }
+    })
+  },
+
+  removeStone: function(game) {
+    // reset point
+    this.stone = 0;
+    this.group = null;
+    this.capturing[game.turn] = [];
+    // add captures
   }
 });
 
