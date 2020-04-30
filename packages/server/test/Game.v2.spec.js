@@ -193,7 +193,6 @@ describe('Game.makeMove({ player: str, pos: { x: int, y: int } })', () => {
       .makeMove({ player: 'white', pos: { x: 16, y: 16 }}).makeMove({ player: 'black', pos: { x: 5, y: 15 } })  // 5   1  x  1
       .makeMove({ player: 'white', pos: { x: 16, y: 10 }}).makeMove({ player: 'black', pos: { x: 5, y: 17 } })  // 6      1
       .makeMove({ player: 'white', pos: { x: 5, y: 16 }})
-      console.log(point.boardState['5-16'])
       point.success.should.eql(false);
     done();
   });
@@ -230,28 +229,36 @@ describe('makeMove group join and capture logic', () => {
     done();
   })
 
-  // const captureGame = Game({ gameData: { handicap: 2 } }).initGame()
-  //   .makeMove({ player: 'white', pos: { x: 4, y: 15 } })    //     3  4  5
-  //   .makeMove({ player: 'black', pos: { x: 4, y: 4 } })     // 15    -1
-  //   .makeMove({ player: 'white', pos: { x: 3, y: 16 } })    // 16 -1  0 -1
-  //   .makeMove({ player: 'black', pos: { x: 4, y: 10 } })    // 17    -1
-  //   .makeMove({ player: 'white', pos: { x: 5, y: 16 } })    // 4,16 captured
-  //   .makeMove({ player: 'black', pos: { x: 10, y: 4 } })
-  //   .makeMove({ player: 'white', pos: { x: 4, y: 17 } })
-  
-  //   it('makeMove capture smoke test', done => {
-  //     captureGame.success.should.eql(true);
-  //     done();
-  //   });
-  
-  //   it('makeMove capture removes captured stone', done => {
-  //     captureGame.boardState['4-16'].stone.should.eql(0);
-  //     done();
-  //   });
-  
-  //   it('makeMove capture increases capturing players captures', done => {
-  //     captureGame.playerState.wCaptures.should.eql(1);
-  //   })
+  const captureGame = Game({ gameData: { handicap: 2 } }).initGame()
+    .makeMove({ player: 'white', pos: { x: 4, y: 15 } })    //     3  4  5
+    .makeMove({ player: 'black', pos: { x: 4, y: 4 } })     // 15    -1
+    .makeMove({ player: 'white', pos: { x: 3, y: 16 } })    // 16 -1  0 -1
+    .makeMove({ player: 'black', pos: { x: 4, y: 10 } })    // 17    -1
+    .makeMove({ player: 'white', pos: { x: 5, y: 16 } })    // 4,16 captured
+    .makeMove({ player: 'black', pos: { x: 10, y: 4 } })
+    
+    it('makeMove capture smoke test', done => {
+      captureGame.makeMove({ player: 'white', pos: { x: 4, y: 17 } })
+        .success.should.eql(true);
+      done();
+    });
+
+    it('makeMove assesses captures', done => {
+      (!!captureGame.boardState['4-17'].capturing).should.eql(true);
+      done();
+    })
+
+    // it('makeMove capture removes captured stone', done => {
+    //   captureGame.makeMove({ player: 'white', pos: { x: 4, y: 17 } })
+    //     .boardState['4-16'].stone.should.eql(0);
+    //   done();
+    // });
+    
+    // it('makeMove capture increases capturing players captures', done => {
+    //   captureGame.makeMove({ player: 'white', pos: { x: 4, y: 17 } })
+    //     .playerState.wCaptures.should.eql(1);
+    //   done();
+    // })
 })
 
 

@@ -56,6 +56,13 @@ const HANDI_PLACE = {
   ]
 };
 
+const getSingleItemFromSet = set => {
+  let entry;
+  for (entry of set.entries()) {
+  }
+  return entry[0];
+}
+
 
 const pipeMap = (...funcs) => obj => {
   const arr = Object.entries(obj).reduce((acc, [key, value], i, arr) => {
@@ -92,11 +99,22 @@ const checkLegal = ({ point, Game }) => {
       return { ...point, isInLiveGroup };
     }
 
+    // if move would capture opposing group 
+      // set capturing object and return true
+    // const isNotTurnStone = neighbor => neighbor.stone === Game.turn * -1;
+    // const isInGroupWithLastLiberty = neighbor => getGroupLiberties(neighbor).filter(isNotSamePoint)
+    // // .length === 0;
+    // const isCapturing = Object.values(point.neighbors).filter(isNotTurnStone).filter(isInGroupWithLastLiberty)
+    // // .length;
+
+    // if (isCapturing) {
+    //   point.legal = true;
+    //   return { ...point, isCapturing };
+    // }
+
     point.legal = false;
     return { ...point, adj: isEmptyAdjacent, isInLiveGroup };
   }
-  // if move would capture opposing group 
-    // set capturing object and return true
   point.legal = true;
   point.adj = isEmptyAdjacent;
   return point;
@@ -219,7 +237,8 @@ const Point = ({x, y, boardSize = 19}) => ({
   makeMove: function(game) {
     this.stone = game.turn;
     this.legal = false;
-    return this.joinGroup({ point: this, game });
+    this.joinGroup({ point: this, game });
+    return this.checkCaptures(game);
   },
   
   joinGroup: function({ point, game }) {
@@ -256,6 +275,25 @@ const Point = ({x, y, boardSize = 19}) => ({
         liberties.add(pt) 
       }
     });
+  },
+
+  checkCaptures: function(game) {
+    // if this stone has one liberty
+    const liberties = game.groups[this.group].liberties;
+    if (liberties.size === 1) {
+      const lastLiberty = getSingleItemFromSet(liberties);
+      lastLiberty.capturing = this;
+    }
+
+    // if neighbors have one liberty
+    const neighbors = Object.values(this.neighbors);
+    neighbors.filter(neighbor => neighbor.stone).forEach( neighbor => {
+      const liberties = game.groups[neighbor.group].liberties;
+      if (liberties.size === 1) {
+        const lastLiberty = getSingleItemFromSet(liberties);
+        lastLiberty.capturing = neighbor;
+      }
+    })
   }
 });
 
