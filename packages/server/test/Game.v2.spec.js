@@ -194,7 +194,7 @@ describe('Game.makeMove({ player: str, pos: { x: int, y: int } })', () => {
   });
 });
 
-describe('makeMove group join and capture logic', () => {
+describe('makeMove group join and basic capture logic', () => {
   const joinGame = Game().initGame()
     .makeMove({ player: 'black', pos: { x: 4, y: 17 } })    //     3  4  5
     .makeMove({ player: 'white', pos: { x: 3, y: 16 } })    // 15    -1
@@ -250,30 +250,30 @@ describe('makeMove group join and capture logic', () => {
     .makeMove({ player: 'white', pos: { x: 5, y: 16 } })    // 4,16 captured
     .makeMove({ player: 'black', pos: { x: 10, y: 4 } })
     
-    it('makeMove capture smoke test', done => {
-      captureGame.makeMove({ player: 'white', pos: { x: 4, y: 17 } })
-        .success.should.eql(true);
-      done();
-    });
+  it('makeMove capture smoke test', done => {
+    captureGame.makeMove({ player: 'white', pos: { x: 4, y: 17 } })
+      .success.should.eql(true);
+    done();
+  });
 
-    it('makeMove assesses captures', done => {
-      captureGame.boardState['4-17'].capturing[-1].length.should.eql(1);
-      done();
-    })
+  it('makeMove assesses captures', done => {
+    captureGame.boardState['4-17'].capturing[-1].size.should.eql(1);
+    done();
+  })
 
-    it('makeMove capture removes captured stone', done => {
-      captureGame.makeMove({ player: 'white', pos: { x: 4, y: 17 } })
-        .boardState['4-16'].stone.should.eql(0);
-      done();
-    });
-    
-    it('makeMove capture increases capturing players captures', done => {
-      captureGame.makeMove({ player: 'white', pos: { x: 4, y: 17 } })
-        .playerState.wCaptures.should.eql(1);
-      done();
-    });
+  it('makeMove capture removes captured stone', done => {
+    captureGame.makeMove({ player: 'white', pos: { x: 4, y: 17 } })
+      .boardState['4-16'].stone.should.eql(0);
+    done();
+  });
+  
+  it('makeMove capture increases capturing players captures', done => {
+    captureGame.makeMove({ player: 'white', pos: { x: 4, y: 17 } })
+      .playerState.wCaptures.should.eql(1);
+    done();
+  });
 
-    const multiCaptureGame = () => Game().initGame()
+  const multiCaptureGame = () => Game().initGame()
     .makeMove({ player: 'black', pos: { x: 4, y: 17 } })
     .makeMove({ player: 'white', pos: { x: 3, y: 16 } })
     .makeMove({ player: 'black', pos: { x: 5, y: 16 } })
@@ -288,29 +288,38 @@ describe('makeMove group join and capture logic', () => {
     .makeMove({ player: 'black', pos: { x: 3, y: 6 } })
     .makeMove({ player: 'white', pos: { x: 5, y: 17} })
     .makeMove({ player: 'black', pos: { x: 6, y: 3 } });
-    
-    it('smoke test multi stone group capture', done => {
-      multiCaptureGame().makeMove({ player: 'white', pos: { x: 6, y: 16} })
+  
+  it('smoke test multi stone group capture', done => {
+    multiCaptureGame().makeMove({ player: 'white', pos: { x: 6, y: 16} })
       .success.should.eql(true);
-      done();
-    })
-    
-    it('multi stone group full group is in capturing', done => {
-      const game = multiCaptureGame()
-      const group = game.boardState['4-16'].group;
-      game.boardState['6-16'].capturing[-1][0].should.eql(group);
-      done();
-    })
-    
-    it('multi stone group capture all points are 0', done => {
-      const game = multiCaptureGame();
-      game.makeMove({ player: 'white', pos: { x: 6, y: 16} });
-      game.boardState['5-16'].stone.should.eql(0)
-      game.boardState['4-16'].stone.should.eql(0)
-      game.boardState['4-17'].stone.should.eql(0)
-      done();
-    })
-})
+    done();
+  });
+  
+  it('multi stone group full group is in capturing', done => {
+    const game = multiCaptureGame()
+    const group = game.boardState['4-16'].group;
+    game.boardState['6-16'].capturing[-1].has(group).should.eql(true);
+    done();
+  });
+  
+  it('multi stone group capture all points are 0', done => {
+    const game = multiCaptureGame();
+    game.makeMove({ player: 'white', pos: { x: 6, y: 16} });
+    game.boardState['5-16'].stone.should.eql(0)
+    game.boardState['4-16'].stone.should.eql(0)
+    game.boardState['4-17'].stone.should.eql(0)
+    done();
+  });
+  
+  it('multi stone group capture scores points properly', done => {
+    const game = multiCaptureGame();
+    game.makeMove({ player: 'white', pos: { x: 6, y: 16} });
+    game.playerState.wCaptures.should.eql(3);
+    done();
+  })
+});
+
+// describe('capture logic: snapback')
 
 
 const initialMeta = {

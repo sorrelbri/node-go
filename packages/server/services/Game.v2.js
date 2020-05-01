@@ -221,8 +221,8 @@ const Point = ({x, y, boardSize = 19}) => {
     legal:        true,
     territory:    0,
     capturing:    {
-      '1': [],
-      '-1': []
+      '1':  new Set(),
+      '-1': new Set()
     },
     group:        null,
     neighbors: {
@@ -235,7 +235,7 @@ const Point = ({x, y, boardSize = 19}) => {
     makeMove: function(Game) {
       this.stone = Game.turn;
       this.legal = false;
-      if (this.capturing[this.stone].length) {
+      if (this.capturing[this.stone].size) {
         Game = this.makeCaptures(Game);
       }
       Game = this.joinGroup({ point: this, Game });
@@ -290,7 +290,7 @@ const Point = ({x, y, boardSize = 19}) => {
       const liberties = game.groups[this.group].liberties;
       if (liberties.size === 1) {
         const lastLiberty = getSingleItemFromSet(liberties);
-        lastLiberty.capturing[this.stone * -1].push(this.group);
+        lastLiberty.capturing[this.stone * -1].add(this.group);
       }
 
       // if neighbors have one liberty
@@ -299,7 +299,7 @@ const Point = ({x, y, boardSize = 19}) => {
         const liberties = game.groups[neighbor.group] && game.groups[neighbor.group].liberties;
         if (liberties && liberties.size === 1) {
           const lastLiberty = getSingleItemFromSet(liberties);
-          lastLiberty.capturing[neighbor.stone * -1].push(neighbor.group);
+          lastLiberty.capturing[neighbor.stone * -1].add(neighbor.group);
         }
       });
       return game;
@@ -307,24 +307,28 @@ const Point = ({x, y, boardSize = 19}) => {
 
     makeCaptures: function(game) {
       // for each group
-      this.capturing[this.stone].forEach(captureGroup => {
+      for (let [captureGroup, _] of this.capturing[this.stone].entries()) {
+
         const capturesSet = game.groups[captureGroup].stones;
-        for (let [capture] of capturesSet.entries()) {
+        for (let [capture, _] of capturesSet.entries()) {
           game = capture.removeStone(game);
         }
-      });
+      }
       return game;
     },
 
     removeStone: function(game) {
+      if (this.stone = 0) {
+        return game;
+      }
       // reset point
       this.stone = 0;
       this.group = null;
-      this.capturing[game.turn] = [];
+      this.capturing[game.turn] = new Set();
       // add captures
       const player = game.turn > 0 ? 'b' : 'w';
       game.playerState[`${player}Captures`] += 1;
-      return {...game, boardState: {...this.boardState, [this.key]: this}};
+      return {...game, boardState: {...game.boardState, [this.key]: this}};
     }
   }
   for (let [key, value] of Object.entries(point.neighbors)) {
@@ -338,3 +342,21 @@ module.exports = {
   Game,
   Point
 }
+
+
+Game().initGame()
+    .makeMove({ player: 'black', pos: { x: 4, y: 17 } })
+    .makeMove({ player: 'white', pos: { x: 3, y: 16 } })
+    .makeMove({ player: 'black', pos: { x: 5, y: 16 } })
+    .makeMove({ player: 'white', pos: { x: 4, y: 15 } })
+    .makeMove({ player: 'black', pos: { x: 4, y: 16 } })
+    .makeMove({ player: 'black', pos: { x: 4, y: 10 } })    //     3  4  5  6
+    .makeMove({ player: 'white', pos: { x: 3, y: 17 } })    // 15    -1 -1
+    .makeMove({ player: 'black', pos: { x: 10, y: 4 } })    // 16 -1  1  1 -1
+    .makeMove({ player: 'white', pos: { x: 5, y: 15 } })    // 17 -1  1 -1
+    .makeMove({ player: 'black', pos: { x: 10, y: 8 } })    // 18    -1
+    .makeMove({ player: 'white', pos: { x: 4, y: 18} })
+    .makeMove({ player: 'black', pos: { x: 3, y: 6 } })
+    .makeMove({ player: 'white', pos: { x: 5, y: 17} })
+    .makeMove({ player: 'black', pos: { x: 6, y: 3 } })
+    .makeMove({ player: 'white', pos: { x: 6, y: 16} })
