@@ -63,7 +63,6 @@ const getSingleItemFromSet = set => {
   return entry[0];
 }
 
-
 const pipeMap = (...funcs) => obj => {
   const arr = Object.entries(obj).reduce((acc, [key, value], i, arr) => {
     funcs.forEach(func => value = func(value, i, arr));
@@ -80,9 +79,10 @@ const checkLegal = ({ point, Game }) => {
     point.legal = false;
     return point;
   }
-  
+  const neighbors = getNeighbors({Game, point});
+
   const isEmpty = point => point.stone === 0 && point.legal === true;
-  const isEmptyAdjacent = Object.values(point.neighbors).filter(isEmpty);
+  const isEmptyAdjacent = neighbors.filter(isEmpty);
 
   // if empty point adjacent return true
   if (!isEmptyAdjacent.length) {
@@ -92,7 +92,7 @@ const checkLegal = ({ point, Game }) => {
     const getGroupLiberties = point => Array.from(Game.groups[point.group].liberties);
     const isNotSamePoint = liberty => liberty.pos.x !== point.pos.x && liberty.pos.y !== point.pos.y;
     const isInGroupWithLiberties = neighbor => getGroupLiberties(neighbor).filter(isNotSamePoint).length;
-    const isInLiveGroup = Object.values(point.neighbors).filter(isTurnStone).filter(isInGroupWithLiberties).length;
+    const isInLiveGroup = neighbors.filter(isTurnStone).filter(isInGroupWithLiberties).length;
 
     if (isInLiveGroup) {
       point.legal = true;
@@ -123,19 +123,15 @@ const getLegalMoves = (Game) => {
   return pipeMap(mapLegal)(Game.boardState);
 }
 
-const getNeighbors = boardSize => (point, i, boardState) => {
-  const { top, btm, lft, rgt} = point.neighbors;
+const getNeighbors = ({ Game, point }) => {
+  let { top = null, btm = null, lft = null, rgt = null} = point.neighbors;
+  const { boardState, boardSize } = Game;
   // boardState[0] = [ '1-1', Point({x:1, y:1, boardSize}) ]
-  point.neighbors.top = top ? boardState[i - boardSize][1] : top;
-  point.neighbors.btm = btm ? boardState[i + boardSize][1] : btm;
-  point.neighbors.lft = lft ? boardState[i - 1][1] : lft;
-  point.neighbors.rgt = rgt ? boardState[i + 1][1] : rgt;
-  for (let [direction, neighbor] of Object.entries(point.neighbors)) {
-    if (!neighbor) {
-      delete point.neighbors[direction];
-    }
-  }
-  return point;
+  if (top) top = boardState[top];
+  if (btm) btm = boardState[btm];
+  if (lft) lft = boardState[lft];
+  if (rgt) rgt = boardState[rgt];
+  return [ top, btm, lft, rgt ].filter(value => value);
 }
 
 const initBoard = (game) => {
@@ -149,14 +145,14 @@ const initBoard = (game) => {
     });
     boardState[`${point.pos.x}-${point.pos.y}`] = point;
   }
-  const boardStateWithNeighbors = pipeMap(getNeighbors(boardSize))(boardState)
+
   if (handicap) {
     HANDI_PLACE[boardSize][handicap].forEach(pt => {
-      boardStateWithNeighbors[pt].makeMove(game);
+      boardState[pt].makeMove({...game, boardState});
     });
     game.turn *= -1;
   }
-  return boardStateWithNeighbors;
+  return boardState;
 }
 
 // returns Game object
@@ -183,136 +179,160 @@ const Game = ({gameData = {}, gameRecord = []} = {}) => ({
     this.turn =       1;
     this.boardState = initBoard(this);
     this.boardState = getBoardState(this);
-    return { ...this, legalMoves: getLegalMoves(this)};
+    this.legalMoves = getLegalMoves(this)
+    return this;
   },
 
   getMeta: function() {
+    // cannot be chained 
+    // does not affect game object
     return { winner: this.winner, turn: this.turn, pass: this.pass, playerState: this.playerState, gameRecord: this.gameRecord }
   },
 
   makeMove: function({ player, pos: {x, y}}) {
+    let game = this;
     let success = false;
-    const point = this.boardState[`${x}-${y}`];
-    const isTurn = ( this.turn === 1 && player === 'black' ) 
-                || ( this.turn === -1 && player === 'white' );
+    const point = game.boardState[`${x}-${y}`];
+    const isTurn = ( game.turn === 1 && player === 'black' ) 
+                || ( game.turn === -1 && player === 'white' );
     if (isTurn) {
       if (point.legal) {
-        point.makeMove(this);
-        this.turn *= -1;
+        game = point.makeMove(game);
+        game.turn *= -1;
         success = true;
       }
     }
-    this.boardState = getBoardState(this);
-    return {...this, legalMoves: getLegalMoves(this), success };
+    game.boardState = getBoardState(game);
+    return {...game, legalMoves: getLegalMoves(game), success };
   },
 
   initGroup: function(point) {
-    const newSymbol = Symbol(`${point.pos.x}-${point.pos.y}`);
-    this.groups[newSymbol] = { stones: new Set(), liberties: new Set()};
-    return newSymbol;
+    const group = Symbol(`${point.pos.x}-${point.pos.y}`);
+    this.groups[group] = { stones: new Set(), liberties: new Set()};
+    return { game: this, group };
   }
 });
 
-const Point = ({x, y, boardSize = 19}) => ({
-  pos:          {x, y},
-  stone:        0, // can be 1, -1, 0, or 'k' for ko
-  legal:        true,
-  territory:    0,
-  capturing:    {
-    '1': [],
-    '-1': []
-  },
-  group:        null,
-  neighbors: {
-    top: x > 1          ? `${ x - 1 }-${ y }` : null,
-    btm: x < boardSize  ? `${ x + 1 }-${ y }` : null,
-    rgt: y < boardSize  ? `${ x }-${ y + 1 }` : null,
-    lft: y > 1          ? `${ x }-${ y - 1 }` : null
-  },
+const Point = ({x, y, boardSize = 19}) => {
+  let point = {
+    pos:          {x, y},
+    key:          `${x}-${y}`,
+    stone:        0, // can be 1, -1, 0, or 'k' for ko
+    legal:        true,
+    territory:    0,
+    capturing:    {
+      '1': [],
+      '-1': []
+    },
+    group:        null,
+    neighbors: {
+      top: x > 1          ? `${ x - 1 }-${ y }` : null,
+      btm: x < boardSize  ? `${ x + 1 }-${ y }` : null,
+      rgt: y < boardSize  ? `${ x }-${ y + 1 }` : null,
+      lft: y > 1          ? `${ x }-${ y - 1 }` : null
+    },
 
-  makeMove: function(game) {
-    this.stone = game.turn;
-    this.legal = false;
-    if (this.capturing[this.stone].length) {
-      this.makeCaptures(game);
-    }
-    this.joinGroup({ point: this, game });
-    return this.checkCaptures(game);
-  },
-  
-  joinGroup: function({ point, game }) {
-    if (point.group !== this.group || !point.group) {
-      // if point has no group set current group to new Symbol in game object
-      if (!point.group) {
-        point.group = game.initGroup(point);
+    makeMove: function(Game) {
+      this.stone = Game.turn;
+      this.legal = false;
+      if (this.capturing[this.stone].length) {
+        Game = this.makeCaptures(Game);
       }
-      
-      // add current point to global group and override current group
-      game.groups[point.group].stones.add(this);
-      this.group = point.group;
-      this.setLiberties(game);
-      for (let neighbor of Object.values(this.neighbors)) {
-        if ( neighbor.stone === this.stone
-          // this check prevents infinite call chains
-          && neighbor.group !== this.group 
-        ) {
-          neighbor.joinGroup({ point: this, game });
+      Game = this.joinGroup({ point: this, Game });
+      return this.checkCaptures(Game);
+    },
+    
+    joinGroup: function({ point, Game }) {
+      if (point.group !== this.group || !point.group) {
+        // if point has no group set current group to new Symbol in game object
+        if (!point.group) {
+          const { game, group } = Game.initGroup(point);
+          this.group = group;
+          Game = game;
         }
+        
+        // add current point to global group and override current group
+        Game.groups[point.group].stones.add(this);
+        if (this.group !== point.group) {
+          this.group = point.group;
+        }
+        Game = this.setLiberties(Game);
+        getNeighbors({ point:this, Game }).forEach(neighbor => {
+          if ( neighbor.stone === this.stone
+            // this check prevents infinite call chains
+            && neighbor.group !== this.group 
+          ) {
+            Game = neighbor.joinGroup({ point: this, Game });
+          }
+        })
       }
-    }
-  },
+      return Game;
+    },
 
-  setLiberties: function(game) {
-    const neighbors = Object.values(this.neighbors);
-    const liberties = game.groups[this.group].liberties;
-    // if point is occupied remove it from liberties set of point group, else add it
-    neighbors.forEach( pt => {
-      if (pt.stone) {
-        liberties.delete(pt);
-        game.groups[pt.group].liberties.delete(this);
-      } else {
-        liberties.add(pt) 
-      }
-    });
-  },
+    setLiberties: function(Game) {
+      const neighbors = getNeighbors({ point: this, Game });
+      const liberties = Game.groups[this.group].liberties;
+      // if point is occupied remove it from liberties set of point group, else add it
+      neighbors.forEach(neighbor => {
+        if (neighbor.stone !== 0) {
+          liberties.delete(neighbor);
+          Game.groups[neighbor.group].liberties.delete(this);
+        } 
+        if (neighbor.stone === 0) {
+          liberties.add(neighbor) 
+        }
+      });
+      return Game;
+    },
 
-  checkCaptures: function(game) {
-    // if this stone has one liberty
-    const liberties = game.groups[this.group].liberties;
-    if (liberties.size === 1) {
-      const lastLiberty = getSingleItemFromSet(liberties);
-      lastLiberty.capturing[this.stone * -1].push(this.group);
-    }
-
-    // if neighbors have one liberty
-    const neighbors = Object.values(this.neighbors).filter(neighbor => neighbor.stone === -1 * this.stone)
-    neighbors.forEach( neighbor => {
-      const liberties = game.groups[neighbor.group] && game.groups[neighbor.group].liberties;
-      if (liberties && liberties.size === 1) {
+    checkCaptures: function(game) {
+      // if this stone has one liberty
+      const liberties = game.groups[this.group].liberties;
+      if (liberties.size === 1) {
         const lastLiberty = getSingleItemFromSet(liberties);
-        lastLiberty.capturing[neighbor.stone * -1].push(neighbor.group);
+        lastLiberty.capturing[this.stone * -1].push(this.group);
       }
-    })
-  },
 
-  makeCaptures: function(game) {
-    // for each group
-    this.capturing[this.stone].forEach(captureGroup => {
-      const capturesSet = game.groups[captureGroup].stones;
-      for (let [capture] of capturesSet.entries()) {
-        capture.removeStone(game);
-      }
-    })
-  },
+      // if neighbors have one liberty
+      const neighbors = getNeighbors({point: this, Game: game}).filter(neighbor => neighbor.stone === -1 * this.stone)
+      neighbors.forEach( neighbor => {
+        const liberties = game.groups[neighbor.group] && game.groups[neighbor.group].liberties;
+        if (liberties && liberties.size === 1) {
+          const lastLiberty = getSingleItemFromSet(liberties);
+          lastLiberty.capturing[neighbor.stone * -1].push(neighbor.group);
+        }
+      });
+      return game;
+    },
 
-  removeStone: function(game) {
-    // reset point
-    this.stone = 0;
-    this.group = null;
-    this.capturing[game.turn] = [];
-    // add captures
+    makeCaptures: function(game) {
+      // for each group
+      this.capturing[this.stone].forEach(captureGroup => {
+        const capturesSet = game.groups[captureGroup].stones;
+        for (let [capture] of capturesSet.entries()) {
+          game = capture.removeStone(game);
+        }
+      });
+      return game;
+    },
+
+    removeStone: function(game) {
+      // reset point
+      this.stone = 0;
+      this.group = null;
+      this.capturing[game.turn] = [];
+      // add captures
+      const player = game.turn > 0 ? 'b' : 'w';
+      game.playerState[`${player}Captures`] += 1;
+      return {...game, boardState: {...this.boardState, [this.key]: this}};
+    }
   }
-});
+  for (let [key, value] of Object.entries(point.neighbors)) {
+    if (value) continue;
+    delete point.neighbors[key];
+  }
+  return point;
+};
 
 module.exports = {
   Game,

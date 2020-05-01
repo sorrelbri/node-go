@@ -30,7 +30,7 @@ describe('Game', () => {
   });
 });
 
-describe('Game().initGame() returns boardState', () => {
+describe('Game().initGame() returns legalMoves', () => {
   it('initGame() returns default 19x19', done => {
     Game().initGame()
       .legalMoves.should.eql(emptyBoard);
@@ -43,24 +43,10 @@ describe('Game().initGame() returns boardState', () => {
     done();
   });
 
-  it('initGame() returns Game with all Points having neighbors', done => {
-    const boardState = Game().initGame().boardState;
-    const oneOneNeighbors = boardState['1-1'].neighbors;
-    const fiveSevenNeighbors = boardState['5-7'].neighbors;
-    const nineteenTenNeighbors = boardState['19-10'].neighbors;
-    
-    oneOneNeighbors.rgt.pos.should.eql({x: 1, y: 2});
-    oneOneNeighbors.btm.pos.should.eql({x: 2, y: 1});
-    
-    fiveSevenNeighbors.top.pos.should.eql({x: 4, y: 7});
-    fiveSevenNeighbors.btm.pos.should.eql({x: 6, y: 7});
-    fiveSevenNeighbors.lft.pos.should.eql({x: 5, y: 6});
-    fiveSevenNeighbors.rgt.pos.should.eql({x: 5, y: 8});
-
-    nineteenTenNeighbors.top.pos.should.eql({x: 18, y: 10});
-    nineteenTenNeighbors.lft.pos.should.eql({x: 19, y: 9});
-    nineteenTenNeighbors.rgt.pos.should.eql({x: 19, y: 11});
-    
+  it('handicap stone has proper liberties', done => {
+    const game = Game({gameData: { handicap: 2 }}).initGame();
+    const group = game.boardState['4-16'].group
+    game.groups[group].liberties.size.should.eql(4);
     done();
   });
 
@@ -171,19 +157,29 @@ describe('Game.makeMove({ player: str, pos: { x: int, y: int } })', () => {
     done();
   });
   
+  const noGroupGame = Game({ gameData: { handicap: 2 } }).initGame()    //     3  4 
+    .makeMove({ player: 'white', pos: { x: 4, y: 15 } })                // 14     1
+    .makeMove({ player: 'black', pos: { x: 4, y: 14 }})                 // 15  1 -1  no groups
+    .makeMove({ player: 'white', pos: { x: 3, y: 16 } })                // 16 -1  1h
+    .makeMove({ player: 'black', pos: { x: 3, y: 15 }});
+
   it('makeMove next to adjacent stone of different color does not join stones as a group', done => {
-    const game = Game({ gameData: { handicap: 2 } }).initGame()     //     3  4 
-      .makeMove({ player: 'white', pos: { x: 4, y: 15 } })          // 14     1
-      .makeMove({ player: 'black', pos: { x: 4, y: 14 }})           // 15  1 -1  no groups
-      .makeMove({ player: 'white', pos: { x: 3, y: 16 } })          // 16 -1  1h
-      .makeMove({ player: 'black', pos: { x: 3, y: 15 }})
-    
-    const hoshiGroupKey = game.boardState['4-16'].group;
-    const hoshiGroup = game.groups[hoshiGroupKey].stones;
-    hoshiGroup.has(game.boardState['4-16']).should.eql(true);
-    hoshiGroup.has(game.boardState['4-15']).should.eql(false);
-    hoshiGroup.has(game.boardState['3-14']).should.eql(false);
-    hoshiGroup.has(game.boardState['3-15']).should.eql(false);
+    const hoshiGroupKey = noGroupGame.boardState['4-16'].group;
+    const hoshiGroup = noGroupGame.groups[hoshiGroupKey].stones;
+    hoshiGroup.has(noGroupGame.boardState['4-16']).should.eql(true);
+    hoshiGroup.has(noGroupGame.boardState['4-15']).should.eql(false);
+    hoshiGroup.has(noGroupGame.boardState['3-14']).should.eql(false);
+    hoshiGroup.has(noGroupGame.boardState['3-15']).should.eql(false);
+    done();
+  })
+
+  it('makeMove next to adjacent stone of different color should yield proper liberties', done => {
+    const hoshiGroup = noGroupGame.boardState['4-16'].group;
+    const hoshiGroupLiberties = noGroupGame.groups[hoshiGroup].liberties;
+    hoshiGroupLiberties.size.should.eql(2);
+    const fourFifteen = noGroupGame.boardState['4-15'].group;
+    const fourFifteenLiberties = noGroupGame.groups[fourFifteen].liberties;
+    fourFifteenLiberties.size.should.eql(1);
     done();
   })
 
@@ -211,8 +207,25 @@ describe('makeMove group join and capture logic', () => {
     done();
   });
 
+  it('stones in group have same group property', done => {
+    joinGame.boardState['4-16'].group.should.eql(joinGame.boardState['5-16'].group);
+    joinGame.boardState['4-16'].group.should.eql(joinGame.boardState['4-17'].group);
+    joinGame.boardState['4-17'].group.should.eql(joinGame.boardState['4-16'].group);
+    joinGame.boardState['4-17'].group.should.eql(joinGame.boardState['5-16'].group);
+    joinGame.boardState['5-16'].group.should.eql(joinGame.boardState['4-17'].group);
+    joinGame.boardState['5-16'].group.should.eql(joinGame.boardState['4-16'].group);
+    done();
+  })
+
+  it('stones in group should have proper liberties', done => {
+    const group = joinGame.boardState['4-16'].group;
+    joinGame.groups[group]
+      .liberties.size.should.eql(5);
+    done();
+  })
+
   it('group with only remaining liberty at point to be played returns success: false', done => {
-    const point = Game({ gameData: { handicap: 2 } }).initGame()
+    Game({ gameData: { handicap: 2 } }).initGame()
       .makeMove({ player: 'white', pos: { x: 4, y: 15 } })     //     3  4  5  6
       .makeMove({ player: 'black', pos: { x: 4, y: 4 } })      // 15    -1 -1
       .makeMove({ player: 'white', pos: { x: 5, y: 15 } })     // 16 -1  1h 0 -1
@@ -224,8 +237,6 @@ describe('makeMove group join and capture logic', () => {
       .makeMove({ player: 'white', pos: { x: 4, y: 17 } })
       .makeMove({ player: 'black', pos: { x: 10, y: 16 } })
       .makeMove({ player: 'white', pos: { x: 5, y: 17 } })
-      console.log(point.boardState['5-16']);
-      point
       .makeMove({ player: 'black', pos: { x: 5, y: 16 } })
       .success.should.eql(false);
     done();
@@ -256,9 +267,47 @@ describe('makeMove group join and capture logic', () => {
       done();
     });
     
-    // it('makeMove capture increases capturing players captures', done => {
-    //   captureGame.makeMove({ player: 'white', pos: { x: 4, y: 17 } })
-    //     .playerState.wCaptures.should.eql(1);
+    it('makeMove capture increases capturing players captures', done => {
+      captureGame.makeMove({ player: 'white', pos: { x: 4, y: 17 } })
+        .playerState.wCaptures.should.eql(1);
+      done();
+    });
+
+    const multiCaptureGame = Game().initGame()
+    .makeMove({ player: 'black', pos: { x: 4, y: 17 } })
+    .makeMove({ player: 'white', pos: { x: 3, y: 16 } })
+    .makeMove({ player: 'black', pos: { x: 5, y: 16 } })
+    .makeMove({ player: 'white', pos: { x: 4, y: 15 } })
+    .makeMove({ player: 'black', pos: { x: 4, y: 16 } })
+    .makeMove({ player: 'black', pos: { x: 4, y: 10 } })    //     3  4  5  6
+    .makeMove({ player: 'white', pos: { x: 3, y: 17 } })    // 15    -1 -1
+    .makeMove({ player: 'black', pos: { x: 10, y: 4 } })    // 16 -1  1  1 -1
+    .makeMove({ player: 'white', pos: { x: 5, y: 15 } })    // 17 -1  1 -1
+    .makeMove({ player: 'black', pos: { x: 10, y: 8 } })    // 18    -1
+    .makeMove({ player: 'white', pos: { x: 4, y: 18} })
+    .makeMove({ player: 'black', pos: { x: 3, y: 6 } })
+    .makeMove({ player: 'white', pos: { x: 5, y: 17} })
+    .makeMove({ player: 'black', pos: { x: 6, y: 3 } });
+    
+    it('smoke test multi stone group capture', done => {
+      multiCaptureGame.makeMove({ player: 'white', pos: { x: 6, y: 16} })
+      .success.should.eql(true);
+      done();
+    })
+    
+    it('multi stone group full group is in capturing', done => {
+      const group = multiCaptureGame.boardState['5-16'].group;
+      console.log(multiCaptureGame.groups[group].liberties)
+      console.log(multiCaptureGame.boardState['4-16'].capturing)
+      multiCaptureGame.boardState['6-16'].capturing[-1][0].should.eql(group);
+      done();
+    })
+    
+    // it('multi stone group capture all points are 0', done => {
+    //   const boardState = multiCaptureGame.makeMove({ player: 'white', pos: { x: 6, y: 16} }).boardState;
+    //   boardState['5-16'].stone.should.eql(0)
+    //   // boardState['4-16'].stone.should.eql(0)
+    //   // boardState['4-17'].stone.should.eql(0)
     //   done();
     // })
 })
