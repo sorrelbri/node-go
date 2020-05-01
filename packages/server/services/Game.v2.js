@@ -197,7 +197,7 @@ const Game = ({gameData = {}, gameRecord = []} = {}) => ({
                 || ( game.turn === -1 && player === 'white' );
     if (isTurn) {
       if (point.legal) {
-        game = point.makeMove(game);
+        point.makeMove(game);
         game.turn *= -1;
         success = true;
       }
