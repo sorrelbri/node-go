@@ -164,6 +164,7 @@ const Game = ({gameData = {}, gameRecord = []} = {}) => ({
   boardSize:    gameData.boardSize || 19,
   groups:       {},
   boardState:   {},
+  ko:           [],
   gameRecord:   gameRecord,
   playerState:  gameData.playerState || {
     bCaptures: 0,
@@ -216,7 +217,8 @@ const Point = ({x, y, boardSize = 19}) => {
   let point = {
     pos:          {x, y},
     key:          `${x}-${y}`,
-    stone:        0, // can be 1, -1, 0, or 'k' for ko
+    stone:        0, // can be 1, -1, 0,
+    ko:           false,
     legal:        true,
     territory:    0,
     capturing:    {
@@ -311,7 +313,14 @@ const Point = ({x, y, boardSize = 19}) => {
         const capturesSet = game.groups[captureGroup].stones;
         for (let [capture, _] of capturesSet.entries()) {
           game = capture.removeStone(game);
+          if (capturesSet.size === 1) {
+            const liberties = getNeighbors({ point: this, Game: game }).filter(neighbor => neighbor.stone === 0);
+            if (liberties.length === 1) {
+              capture.ko = true;
+            }
+          }
         }
+
       }
       // points with stones cannot be played to capture
       this.capturing = { '1': new Set(), '-1': new Set() }
@@ -344,3 +353,12 @@ module.exports = {
   Point
 }
 
+Game().initGame()
+    .makeMove({ player: 'black', pos: { x: 4, y: 4 } })     //    3  4  5  6
+    .makeMove({ player: 'white', pos: { x: 4, y: 5 } })     // 4     1 -1
+    .makeMove({ player: 'black', pos: { x: 5, y: 3 } })     // 5  1 -1  1 -1
+    .makeMove({ player: 'white', pos: { x: 5, y: 6 } })     // 6     1 -1
+    .makeMove({ player: 'black', pos: { x: 6, y: 4 } })
+    .makeMove({ player: 'white', pos: { x: 6, y: 5 } })
+    .makeMove({ player: 'black', pos: { x: 5, y: 5 } })
+    .makeMove({ player: 'white', pos: { x: 5, y: 4 } })

@@ -336,11 +336,11 @@ describe('capture logic: snapback, ko and playing in eyes', () => {
   });
   
   const snapbackGame = () => Game().initGame()
-    .makeMove({ player: 'black', pos: { x: 4, y: 4 } })     //    3   4   5   6   7
-    .makeMove({ player: 'white', pos: { x: 5, y: 4 } })     // 4      1.  1. -1.
-    .makeMove({ player: 'black', pos: { x: 5, y: 6 } })     // 5  1. -1. -1.  1. -1.
-    .makeMove({ player: 'white', pos: { x: 5, y: 7 } })     // 6      1.  1. -1.
-    .makeMove({ player: 'black', pos: { x: 4, y: 5 } })     // (13) at {5,6}   .
+    .makeMove({ player: 'black', pos: { x: 4, y: 4 } })     //    3  4  5  6  7
+    .makeMove({ player: 'white', pos: { x: 5, y: 4 } })     // 4     1  1 -1
+    .makeMove({ player: 'black', pos: { x: 5, y: 6 } })     // 5  1 -1 -1  1 -1
+    .makeMove({ player: 'white', pos: { x: 5, y: 7 } })     // 6     1  1 -1
+    .makeMove({ player: 'black', pos: { x: 4, y: 5 } })     // (13) at {5,6}
     .makeMove({ player: 'white', pos: { x: 4, y: 6 } })
     .makeMove({ player: 'black', pos: { x: 5, y: 3 } })
     .makeMove({ player: 'white', pos: { x: 6, y: 6 } })
@@ -350,18 +350,31 @@ describe('capture logic: snapback, ko and playing in eyes', () => {
     .makeMove({ player: 'white', pos: { x: 5, y: 5 } })
     .makeMove({ player: 'black', pos: { x: 5, y: 6 } })
     
-    
   it('snapback functions properly', done => {
     snapbackGame()
-      .success.should.eql(true);
+    .success.should.eql(true);
     done();
   });
+    
+  const koGame = () => Game().initGame()
+    .makeMove({ player: 'black', pos: { x: 4, y: 4 } })     //    3  4  5  6
+    .makeMove({ player: 'white', pos: { x: 4, y: 5 } })     // 4     1 -1
+    .makeMove({ player: 'black', pos: { x: 5, y: 3 } })     // 5  1 -1  1 -1
+    .makeMove({ player: 'white', pos: { x: 5, y: 6 } })     // 6     1 -1
+    .makeMove({ player: 'black', pos: { x: 6, y: 4 } })
+    .makeMove({ player: 'white', pos: { x: 6, y: 5 } })
+    .makeMove({ player: 'black', pos: { x: 5, y: 5 } })
+    .makeMove({ player: 'white', pos: { x: 5, y: 4 } })
 
-  // it('ko recognized properly', done => {
-  //   snapbackGame()
-  //   .makeMove({ player: 'white', pos: { x: 5, y: 5 } })
-  //   done();
-  // })
+  it('ko recognized properly on point', done => {
+    koGame()
+      .boardState['5-5'].ko.should.eql(true);
+    done();
+  })
+
+  // ko marked on game object
+  // ko marked in legalMoves object
+  // ko cleared after move
 })
 
 
