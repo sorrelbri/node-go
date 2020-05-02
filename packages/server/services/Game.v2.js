@@ -96,20 +96,19 @@ const checkLegal = ({ point, Game }) => {
 
     if (isInLiveGroup) {
       point.legal = true;
-      return { ...point, isInLiveGroup };
+      return point;
     }
 
     // if move would capture opposing group return true
-    if (point.capturing[Game.turn].length) {
+    if (point.capturing[Game.turn].size) {
       point.legal = true;
       return point;
     }
 
     point.legal = false;
-    return { ...point, adj: isEmptyAdjacent, isInLiveGroup };
+    return point;
   }
   point.legal = true;
-  point.adj = isEmptyAdjacent;
   return point;
 }
 
@@ -314,7 +313,9 @@ const Point = ({x, y, boardSize = 19}) => {
           game = capture.removeStone(game);
         }
       }
-      return game;
+      // points with stones cannot be played to capture
+      this.capturing = { '1': new Set(), '-1': new Set() }
+      return {...game, boardState: { ...game.boardState, [this.key]: this } };
     },
 
     removeStone: function(game) {
@@ -343,20 +344,3 @@ module.exports = {
   Point
 }
 
-
-Game().initGame()
-    .makeMove({ player: 'black', pos: { x: 4, y: 17 } })
-    .makeMove({ player: 'white', pos: { x: 3, y: 16 } })
-    .makeMove({ player: 'black', pos: { x: 5, y: 16 } })
-    .makeMove({ player: 'white', pos: { x: 4, y: 15 } })
-    .makeMove({ player: 'black', pos: { x: 4, y: 16 } })
-    .makeMove({ player: 'black', pos: { x: 4, y: 10 } })    //     3  4  5  6
-    .makeMove({ player: 'white', pos: { x: 3, y: 17 } })    // 15    -1 -1
-    .makeMove({ player: 'black', pos: { x: 10, y: 4 } })    // 16 -1  1  1 -1
-    .makeMove({ player: 'white', pos: { x: 5, y: 15 } })    // 17 -1  1 -1
-    .makeMove({ player: 'black', pos: { x: 10, y: 8 } })    // 18    -1
-    .makeMove({ player: 'white', pos: { x: 4, y: 18} })
-    .makeMove({ player: 'black', pos: { x: 3, y: 6 } })
-    .makeMove({ player: 'white', pos: { x: 5, y: 17} })
-    .makeMove({ player: 'black', pos: { x: 6, y: 3 } })
-    .makeMove({ player: 'white', pos: { x: 6, y: 16} })

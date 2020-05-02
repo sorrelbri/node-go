@@ -242,7 +242,7 @@ describe('makeMove group join and basic capture logic', () => {
     done();
   })
 
-  const captureGame = Game({ gameData: { handicap: 2 } }).initGame()
+  const captureGame = () => Game({ gameData: { handicap: 2 } }).initGame()
     .makeMove({ player: 'white', pos: { x: 4, y: 15 } })    //     3  4  5
     .makeMove({ player: 'black', pos: { x: 4, y: 4 } })     // 15    -1
     .makeMove({ player: 'white', pos: { x: 3, y: 16 } })    // 16 -1  0 -1
@@ -251,24 +251,24 @@ describe('makeMove group join and basic capture logic', () => {
     .makeMove({ player: 'black', pos: { x: 10, y: 4 } })
     
   it('makeMove capture smoke test', done => {
-    captureGame.makeMove({ player: 'white', pos: { x: 4, y: 17 } })
+    captureGame().makeMove({ player: 'white', pos: { x: 4, y: 17 } })
       .success.should.eql(true);
     done();
   });
 
   it('makeMove assesses captures', done => {
-    captureGame.boardState['4-17'].capturing[-1].size.should.eql(1);
+    captureGame().boardState['4-17'].capturing[-1].size.should.eql(1);
     done();
   })
 
   it('makeMove capture removes captured stone', done => {
-    captureGame.makeMove({ player: 'white', pos: { x: 4, y: 17 } })
+    captureGame().makeMove({ player: 'white', pos: { x: 4, y: 17 } })
       .boardState['4-16'].stone.should.eql(0);
     done();
   });
   
   it('makeMove capture increases capturing players captures', done => {
-    captureGame.makeMove({ player: 'white', pos: { x: 4, y: 17 } })
+    captureGame().makeMove({ player: 'white', pos: { x: 4, y: 17 } })
       .playerState.wCaptures.should.eql(1);
     done();
   });
@@ -319,7 +319,50 @@ describe('makeMove group join and basic capture logic', () => {
   })
 });
 
-// describe('capture logic: snapback')
+describe('capture logic: snapback, ko and playing in eyes', () => {
+  it('playing in an eye formed by capture yields success: true', done => {
+    Game().initGame()
+      .makeMove({ player: 'black', pos: { x: 4, y: 4 } })     //    3  4  5
+      .makeMove({ player: 'white', pos: { x: 5, y: 4 } })     // 4     1
+      .makeMove({ player: 'black', pos: { x: 5, y: 5 } })     // 5  1 -1  1  
+      .makeMove({ player: 'white', pos: { x: 16, y: 16 } })   // 6     1
+      .makeMove({ player: 'black', pos: { x: 5, y: 3 } })     // (9) at {5, 4}
+      .makeMove({ player: 'white', pos: { x: 16, y: 4 } })
+      .makeMove({ player: 'black', pos: { x: 6, y: 4 } })
+      .makeMove({ player: 'white', pos: { x: 4, y: 16 } })
+      .makeMove({ player: 'black', pos: { x: 5, y: 4 } })
+      .success.should.eql(true);
+    done();
+  });
+  
+  const snapbackGame = () => Game().initGame()
+    .makeMove({ player: 'black', pos: { x: 4, y: 4 } })     //    3   4   5   6   7
+    .makeMove({ player: 'white', pos: { x: 5, y: 4 } })     // 4      1.  1. -1.
+    .makeMove({ player: 'black', pos: { x: 5, y: 6 } })     // 5  1. -1. -1.  1. -1.
+    .makeMove({ player: 'white', pos: { x: 5, y: 7 } })     // 6      1.  1. -1.
+    .makeMove({ player: 'black', pos: { x: 4, y: 5 } })     // (13) at {5,6}   .
+    .makeMove({ player: 'white', pos: { x: 4, y: 6 } })
+    .makeMove({ player: 'black', pos: { x: 5, y: 3 } })
+    .makeMove({ player: 'white', pos: { x: 6, y: 6 } })
+    .makeMove({ player: 'black', pos: { x: 6, y: 5 } })
+    .makeMove({ player: 'white', pos: { x: 16, y: 16 } })
+    .makeMove({ player: 'black', pos: { x: 6, y: 4 } })
+    .makeMove({ player: 'white', pos: { x: 5, y: 5 } })
+    .makeMove({ player: 'black', pos: { x: 5, y: 6 } })
+    
+    
+  it('snapback functions properly', done => {
+    snapbackGame()
+      .success.should.eql(true);
+    done();
+  });
+
+  // it('ko recognized properly', done => {
+  //   snapbackGame()
+  //   .makeMove({ player: 'white', pos: { x: 5, y: 5 } })
+  //   done();
+  // })
+})
 
 
 const initialMeta = {
