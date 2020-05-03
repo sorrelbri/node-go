@@ -191,6 +191,10 @@ const Game = ({gameData = {}, gameRecord = []} = {}) => ({
     return this;
   },
 
+  addToRecord: function(moveObject) {
+    this.gameRecord.push(moveObject);
+  },
+
   getMeta: function() {
     // cannot be chained 
     // does not affect game object
@@ -212,6 +216,7 @@ const Game = ({gameData = {}, gameRecord = []} = {}) => ({
                 || ( game.turn === -1 && player === 'white' );
     if (isTurn) {
       if (point.legal) {
+        game.addToRecord({ player, pos: { x, y } });
         if (this.kos.length) this.clearKo();
         point.makeMove(game);
         game.turn *= -1;
@@ -226,6 +231,16 @@ const Game = ({gameData = {}, gameRecord = []} = {}) => ({
     const group = Symbol(`${point.pos.x}-${point.pos.y}`);
     this.groups[group] = { stones: new Set(), liberties: new Set()};
     return { game: this, group };
+  },
+
+  returnToMove: function(idx) {
+    if (idx < 0) {
+      const { komi, handicap, boardSize } = this;
+      return Game({ 
+        gameData: { komi, handicap, boardSize }, 
+        gameRecord: [...this.gameRecord.slice(0, this.gameRecord.length + idx)]
+      })
+    }
   }
 });
 

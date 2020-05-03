@@ -348,11 +348,10 @@ describe('capture logic: snapback, ko and playing in eyes', () => {
     .makeMove({ player: 'white', pos: { x: 16, y: 16 } })
     .makeMove({ player: 'black', pos: { x: 6, y: 4 } })
     .makeMove({ player: 'white', pos: { x: 5, y: 5 } })
+    .makeMove({ player: 'black', pos: { x: 5, y: 6 } });
     
   it('snapback functions properly', done => {
-    console.log(snapbackGame().boardState['5-6'])
     snapbackGame()
-      .makeMove({ player: 'black', pos: { x: 5, y: 6 } })
       .success.should.eql(true);
     done();
   });
@@ -402,7 +401,37 @@ describe('capture logic: snapback, ko and playing in eyes', () => {
       .makeMove({ player: 'white', pos: { x: 4, y: 16 } })
       .legalMoves['5-5'].should.eql('l');
     done();
+  });
+});
+
+describe('Game history functionality', () => {
+  const firstMove = { player: 'black', pos: { x: 4, y: 4 }};
+  const secondMove = { player: 'white', pos: { x: 16, y: 16 }};
+
+  it('makeMove creates gameRecord item', done => {
+    Game().initGame()
+      .makeMove(firstMove).gameRecord[0].should.eql(firstMove);
+    done();
+  });
+  
+  it('makeMove holds history', done => {
+    const game = Game().initGame()
+      .makeMove(firstMove).makeMove(secondMove);
+    game.gameRecord[0].should.eql(firstMove);
+    game.gameRecord[1].should.eql(secondMove)
+    done();
+  });
+
+  it('Game.returnToMove returns new Game with gameRecord', done => {
+    Game().initGame()
+      .makeMove(firstMove)
+      .makeMove(secondMove)
+      .makeMove({ player: 'black', pos: { x: 16, y: 4 } })
+      .returnToMove(-1)
+      .gameRecord.should.eql([ firstMove, secondMove ])
+    done();
   })
+    // .boardState['16-4'].stone.should.eql(0)
 })
 
 
