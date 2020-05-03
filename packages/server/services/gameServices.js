@@ -3,22 +3,27 @@ const Game = require('./Game').Game;
 const gamesInProgress = { }
 
 const storeGame = (game) => {
-  gamesInProgress[game.id] = new Game(game);
+  gamesInProgress[game.id] = Game(game);
 }
 
-const initGame = (game) => {
-  gamesInProgress[game.id] = new Game(game)
-  return gamesInProgress[game.id].initGame();
+const initGame = ({id, gameRecord = [], ...gameData}) => {
+  gamesInProgress[id] = Game({ gameData, gameRecord })
+  gamesInProgress[id].initGame();
+  return getDataForUI(id)
 }
 
-const makeMove = (game, move) => {
-  if (!gamesInProgress[game.id]) initGame(game);
-  const newState = gamesInProgress[game.id].makeMove(move);
-  return {...newState}
+const makeMove = ({id, move}) => {
+  if (!gamesInProgress[id]) return { message: 'no game'};
+  gamesInProgress[id] = gamesInProgress[id].makeMove(move)
+  if (gamesInProgress[id].success === false) return { message: 'illegal move' };
+  return getDataForUI(id)
 }
 
-const getBoard = (gameId) => {
-  return gamesInProgress[gameId].getBoardState();
+const getDataForUI = (id) => {
+  return {
+    board: gamesInProgress[id].legalMoves,
+    ...gamesInProgress[id].getMeta()
+  };
 }
 
 const getAllGames = () => {
@@ -28,6 +33,6 @@ const getAllGames = () => {
 module.exports = {
   makeMove,
   getAllGames,
-  getBoard,
+  getDataForUI,
   initGame
 }

@@ -4,34 +4,37 @@ const gameServices = require('../services/gameServices');
 
 describe('game services', () => {
   it('init game returns game board', done => {
-    gameServices.initGame({id: 1, handicap: 4})
-    gameServices.getBoard(1).should.eql(fourHandicapBoard)
+    gameServices.initGame({ id: 1, handicap: 4 })
+      .board.should.eql(fourHandicapBoard)
     done();
   });
+
+  it('init game returns game metadata', done => {
+    const { board, ...game } = gameServices.initGame({ id: 1, handicap: 4 })
+    game.should.eql({...initialMeta, handicap: 4, turn: -1});
+    done();
+  })
   
   it('games services places move', done => {
-    gameServices.initGame({id: 1, handicap: 4})
-    const afterMoveOne = gameServices.makeMove({id: 1}, {player: 'white', pos: { x:6, y:3 }});
-    const afterMoveOneShould = { board:{ ...fourHandicapBoard, '6-3': -1}, meta: moveOneMeta };
-    afterMoveOne.should.eql(afterMoveOneShould);
+    gameServices.initGame({ id: 1, handicap: 4 })
+    const move = { player: 'white', pos: { x: 6, y: 3 } }
+    const afterMove = gameServices.makeMove({ id: 1, move });
+    const afterMoveShould = { board: { ...fourHandicapBoard, '6-3': -1}, ...initialMeta, handicap: 4, turn: 1, gameRecord: [ move ] };
+    afterMove.should.eql(afterMoveShould);
     done();
   });
   
-  it('illegal move throws error', done => {
-    try {
-      gameServices.initGame({id: 1, handicap: 4})
-      const afterIllegalMove = gameServices.makeMove({id: 1}, {player: 'white', pos: { x:4, y:4 }});
-    }
-    catch (err) { 
-      err.message.should.equal('illegal move')
-      done();
-    }
-  })
+  it('illegal move returns error message', done => {
+    gameServices.initGame({ id: 1, handicap: 4 });
+    gameServices.makeMove({ id: 1, move: { player: 'white', pos: { x:4, y:4 } } })
+      .message.should.equal('illegal move');
+    done();
+  });
 
   it('game services places move next to stone', done => {
     gameServices.initGame({ id: 1, handicap:4 });
-    const afterMoveOne = gameServices.makeMove({ id: 1 }, { player: 'white', pos: { x: 4, y: 3 } });
-    afterMoveOne.should.not.eql(fourHandicapBoard);
+    gameServices.makeMove({ id: 1, move: { player: 'white', pos: { x: 4, y: 3 } } })
+      .board.should.eql({ ...fourHandicapBoard, '4-3': -1 });
     done();
   })
 })
@@ -59,17 +62,18 @@ const fourHandicapBoard = {
   '19-1': 'l','19-2': 'l','19-3': 'l','19-4': 'l','19-5': 'l','19-6': 'l','19-7': 'l','19-8': 'l','19-9': 'l','19-10': 'l','19-11': 'l','19-12': 'l','19-13': 'l','19-14': 'l','19-15': 'l','19-16': 'l','19-17': 'l','19-18': 'l','19-19': 'l'
 };
 
-const moveOneMeta = {
-  gameRecord: [
-    {player: 'white', pos: { x:6, y:3 }}
-  ],
+const initialMeta = {
+  winner: null, 
+  turn: 0, 
   pass: 0,
+  komi: 6.5,
+  handicap: 0,
+  boardSize: 19,
   playerState: {
     bCaptures: 0,
-    bScore: 0,
     wCaptures: 0,
+    bScore: 0,
     wScore: 0
-  },
-  turn: 1,
-  winner: null
+  }, 
+  gameRecord: [] 
 }
