@@ -114,12 +114,20 @@ const checkLegal = ({ point, Game }) => {
 
 const getBoardState = (Game) => {
   const getLegal = point => checkLegal({ point, Game })
-  return pipeMap(getLegal)(Game.boardState);
+  const boardState = pipeMap(getLegal)(Game.boardState);
+  Game.kos.forEach(ko => {
+    boardState[ko].legal = false;
+  });
+  return boardState;
 }
 
 const getLegalMoves = (Game) => {
   const mapLegal = point => point.legal ? 'l' : point.stone;
-  return pipeMap(mapLegal)(Game.boardState);
+  const legalMoves = pipeMap(mapLegal)(Game.boardState);
+  Game.kos.forEach(ko => {
+    legalMoves[ko] = 'k';
+  });
+  return legalMoves;
 }
 
 const getNeighbors = ({ Game, point }) => {
@@ -164,7 +172,7 @@ const Game = ({gameData = {}, gameRecord = []} = {}) => ({
   boardSize:    gameData.boardSize || 19,
   groups:       {},
   boardState:   {},
-  ko:           [],
+  kos:          [],
   gameRecord:   gameRecord,
   playerState:  gameData.playerState || {
     bCaptures: 0,
@@ -314,9 +322,12 @@ const Point = ({x, y, boardSize = 19}) => {
         for (let [capture, _] of capturesSet.entries()) {
           game = capture.removeStone(game);
           if (capturesSet.size === 1) {
-            const liberties = getNeighbors({ point: this, Game: game }).filter(neighbor => neighbor.stone === 0);
-            if (liberties.length === 1) {
+            const neighbors = getNeighbors({ point: this, Game: game })
+            const liberties = neighbors.filter(neighbor => neighbor.stone === 0);
+            const groupStones = neighbors.filter(neighbor => neighbor.stone === this.stone);
+            if (liberties.length === 1 && groupStones.length === 0) {
               capture.ko = true;
+              game.kos.push(capture.key)
             }
           }
         }
@@ -354,11 +365,15 @@ module.exports = {
 }
 
 Game().initGame()
-    .makeMove({ player: 'black', pos: { x: 4, y: 4 } })     //    3  4  5  6
-    .makeMove({ player: 'white', pos: { x: 4, y: 5 } })     // 4     1 -1
-    .makeMove({ player: 'black', pos: { x: 5, y: 3 } })     // 5  1 -1  1 -1
-    .makeMove({ player: 'white', pos: { x: 5, y: 6 } })     // 6     1 -1
-    .makeMove({ player: 'black', pos: { x: 6, y: 4 } })
-    .makeMove({ player: 'white', pos: { x: 6, y: 5 } })
-    .makeMove({ player: 'black', pos: { x: 5, y: 5 } })
-    .makeMove({ player: 'white', pos: { x: 5, y: 4 } })
+.makeMove({ player: 'black', pos: { x: 4, y: 4 } })     //    3  4  5  6  7
+.makeMove({ player: 'white', pos: { x: 5, y: 4 } })     // 4     1  1 -1
+.makeMove({ player: 'black', pos: { x: 5, y: 6 } })     // 5  1 -1 -1  1 -1
+.makeMove({ player: 'white', pos: { x: 5, y: 7 } })     // 6     1  1 -1
+.makeMove({ player: 'black', pos: { x: 4, y: 5 } })     // (13) at {5,6}
+.makeMove({ player: 'white', pos: { x: 4, y: 6 } })
+.makeMove({ player: 'black', pos: { x: 5, y: 3 } })
+.makeMove({ player: 'white', pos: { x: 6, y: 6 } })
+.makeMove({ player: 'black', pos: { x: 6, y: 5 } })
+.makeMove({ player: 'white', pos: { x: 16, y: 16 } })
+.makeMove({ player: 'black', pos: { x: 6, y: 4 } })
+.makeMove({ player: 'white', pos: { x: 5, y: 5 } });
