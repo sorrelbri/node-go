@@ -196,6 +196,13 @@ const Game = ({gameData = {}, gameRecord = []} = {}) => ({
     // does not affect game object
     return { winner: this.winner, turn: this.turn, pass: this.pass, playerState: this.playerState, gameRecord: this.gameRecord }
   },
+  
+  clearKo: function() {
+    this.kos.forEach(ko => {
+      this.boardState[ko] = { ...this.boardState[ko], legal: true, ko: false };
+    })
+    this.kos = [];
+  },
 
   makeMove: function({ player, pos: {x, y}}) {
     let game = this;
@@ -205,6 +212,7 @@ const Game = ({gameData = {}, gameRecord = []} = {}) => ({
                 || ( game.turn === -1 && player === 'white' );
     if (isTurn) {
       if (point.legal) {
+        if (this.kos.length) this.clearKo();
         point.makeMove(game);
         game.turn *= -1;
         success = true;
@@ -363,17 +371,3 @@ module.exports = {
   Game,
   Point
 }
-
-Game().initGame()
-.makeMove({ player: 'black', pos: { x: 4, y: 4 } })     //    3  4  5  6  7
-.makeMove({ player: 'white', pos: { x: 5, y: 4 } })     // 4     1  1 -1
-.makeMove({ player: 'black', pos: { x: 5, y: 6 } })     // 5  1 -1 -1  1 -1
-.makeMove({ player: 'white', pos: { x: 5, y: 7 } })     // 6     1  1 -1
-.makeMove({ player: 'black', pos: { x: 4, y: 5 } })     // (13) at {5,6}
-.makeMove({ player: 'white', pos: { x: 4, y: 6 } })
-.makeMove({ player: 'black', pos: { x: 5, y: 3 } })
-.makeMove({ player: 'white', pos: { x: 6, y: 6 } })
-.makeMove({ player: 'black', pos: { x: 6, y: 5 } })
-.makeMove({ player: 'white', pos: { x: 16, y: 16 } })
-.makeMove({ player: 'black', pos: { x: 6, y: 4 } })
-.makeMove({ player: 'white', pos: { x: 5, y: 5 } });

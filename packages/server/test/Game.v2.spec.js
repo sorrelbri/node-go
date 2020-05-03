@@ -382,8 +382,27 @@ describe('capture logic: snapback, ko and playing in eyes', () => {
     koGame().legalMoves['5-5'].should.eql('k');
     done();
   }) 
-  // ko cleared on Point after move
-  // ko cleared on Game after move
+  
+  it('ko cleared on Point after move', done => {
+    koGame().makeMove({ player: 'black', pos: { x: 16, y: 16 } })
+      .makeMove({ player: 'white', pos: { x: 4, y: 16 } })
+      .boardState['5-5'].ko.should.eql(false);
+    done();
+  });
+  
+  it('ko cleared on Game after move', done => {
+    koGame().makeMove({ player: 'black', pos: { x: 16, y: 16 } })
+      .makeMove({ player: 'white', pos: { x: 4, y: 16 } })
+      .kos.should.eql([])
+    done();
+  });
+  
+  it('ko cleared on legalMoves after move', done => {
+    koGame().makeMove({ player: 'black', pos: { x: 16, y: 16 } })
+      .makeMove({ player: 'white', pos: { x: 4, y: 16 } })
+      .legalMoves['5-5'].should.eql('l');
+    done();
+  })
 })
 
 
