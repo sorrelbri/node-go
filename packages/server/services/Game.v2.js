@@ -163,86 +163,92 @@ const initBoard = (game) => {
 }
 
 // returns Game object
-const Game = ({gameData = {}, gameRecord = []} = {}) => ({
-  winner:       gameData.winner    ||null,
-  turn:         gameData.turn      || 0, // turn logic depends on handicap stones
-  pass:         gameData.pass      || 0, // -1 represents state in which resignation has been submitted, not confirmed
-  komi:         gameData.komi      || 6.5, // komi depends on handicap stones + player rank
-  handicap:     gameData.handicap  || 0,
-  boardSize:    gameData.boardSize || 19,
-  groups:       {},
-  boardState:   {},
-  kos:          [],
-  gameRecord:   gameRecord,
-  playerState:  gameData.playerState || {
-    bCaptures: 0,
-    wCaptures: 0,
-    bScore: 0,
-    wScore: 0
-  },
+const Game = ({gameData = {}, gameRecord = []} = {}) => {
+  if (gameRecord.length) {
+    // play through all the moves
+    return gameRecord.reduce((game, move) => game.makeMove(move), Game({gameData}).initGame())
+  }
+  return {
+    winner:       gameData.winner    ||null,
+    turn:         gameData.turn      || 0, // turn logic depends on handicap stones
+    pass:         gameData.pass      || 0, // -1 represents state in which resignation has been submitted, not confirmed
+    komi:         gameData.komi      || 6.5, // komi depends on handicap stones + player rank
+    handicap:     gameData.handicap  || 0,
+    boardSize:    gameData.boardSize || 19,
+    groups:       {},
+    boardState:   {},
+    kos:          [],
+    gameRecord:   gameRecord,
+    playerState:  gameData.playerState || {
+      bCaptures: 0,
+      wCaptures: 0,
+      bScore: 0,
+      wScore: 0
+    },
 
-  initGame: function() {
-    this.winner =     null;
-    this.pass =       0;
-    this.turn =       1;
-    this.boardState = initBoard(this);
-    this.boardState = getBoardState(this);
-    this.legalMoves = getLegalMoves(this)
-    return this;
-  },
+    initGame: function() {
+      this.winner =     null;
+      this.pass =       0;
+      this.turn =       1;
+      this.boardState = initBoard(this);
+      this.boardState = getBoardState(this);
+      this.legalMoves = getLegalMoves(this)
+      return this;
+    },
 
-  addToRecord: function(moveObject) {
-    this.gameRecord.push(moveObject);
-  },
+    addToRecord: function(moveObject) {
+      this.gameRecord.push(moveObject);
+    },
 
-  getMeta: function() {
-    // cannot be chained 
-    // does not affect game object
-    return { winner: this.winner, turn: this.turn, pass: this.pass, playerState: this.playerState, gameRecord: this.gameRecord }
-  },
-  
-  clearKo: function() {
-    this.kos.forEach(ko => {
-      this.boardState[ko] = { ...this.boardState[ko], legal: true, ko: false };
-    })
-    this.kos = [];
-  },
+    getMeta: function() {
+      // cannot be chained 
+      // does not affect game object
+      return { winner: this.winner, turn: this.turn, pass: this.pass, playerState: this.playerState, gameRecord: this.gameRecord }
+    },
+    
+    clearKo: function() {
+      this.kos.forEach(ko => {
+        this.boardState[ko] = { ...this.boardState[ko], legal: true, ko: false };
+      })
+      this.kos = [];
+    },
 
-  makeMove: function({ player, pos: {x, y}}) {
-    let game = this;
-    let success = false;
-    const point = game.boardState[`${x}-${y}`];
-    const isTurn = ( game.turn === 1 && player === 'black' ) 
-                || ( game.turn === -1 && player === 'white' );
-    if (isTurn) {
-      if (point.legal) {
-        game.addToRecord({ player, pos: { x, y } });
-        if (this.kos.length) this.clearKo();
-        point.makeMove(game);
-        game.turn *= -1;
-        success = true;
+    makeMove: function({ player, pos: {x, y}}) {
+      let game = this;
+      let success = false;
+      const point = game.boardState[`${x}-${y}`];
+      const isTurn = ( game.turn === 1 && player === 'black' ) 
+                  || ( game.turn === -1 && player === 'white' );
+      if (isTurn) {
+        if (point.legal) {
+          game.addToRecord({ player, pos: { x, y } });
+          if (this.kos.length) this.clearKo();
+          point.makeMove(game);
+          game.turn *= -1;
+          success = true;
+        }
+      }
+      game.boardState = getBoardState(game);
+      return {...game, legalMoves: getLegalMoves(game), success };
+    },
+
+    initGroup: function(point) {
+      const group = Symbol(`${point.pos.x}-${point.pos.y}`);
+      this.groups[group] = { stones: new Set(), liberties: new Set()};
+      return { game: this, group };
+    },
+
+    returnToMove: function(idx) {
+      if (idx < 0) {
+        const { komi, handicap, boardSize } = this;
+        return Game({ 
+          gameData: { komi, handicap, boardSize }, 
+          gameRecord: [...this.gameRecord.slice(0, this.gameRecord.length + idx)]
+        })
       }
     }
-    game.boardState = getBoardState(game);
-    return {...game, legalMoves: getLegalMoves(game), success };
-  },
-
-  initGroup: function(point) {
-    const group = Symbol(`${point.pos.x}-${point.pos.y}`);
-    this.groups[group] = { stones: new Set(), liberties: new Set()};
-    return { game: this, group };
-  },
-
-  returnToMove: function(idx) {
-    if (idx < 0) {
-      const { komi, handicap, boardSize } = this;
-      return Game({ 
-        gameData: { komi, handicap, boardSize }, 
-        gameRecord: [...this.gameRecord.slice(0, this.gameRecord.length + idx)]
-      })
-    }
   }
-});
+};
 
 const Point = ({x, y, boardSize = 19}) => {
   let point = {

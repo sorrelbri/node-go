@@ -422,16 +422,27 @@ describe('Game history functionality', () => {
     done();
   });
 
+  const rewoundGame = () => Game().initGame()
+  .makeMove(firstMove)
+  .makeMove(secondMove)
+  .makeMove({ player: 'black', pos: { x: 16, y: 4 } })
+  .returnToMove(-1);
+
   it('Game.returnToMove returns new Game with gameRecord', done => {
-    Game().initGame()
-      .makeMove(firstMove)
-      .makeMove(secondMove)
-      .makeMove({ player: 'black', pos: { x: 16, y: 4 } })
-      .returnToMove(-1)
+    rewoundGame()
       .gameRecord.should.eql([ firstMove, secondMove ])
     done();
   })
-    // .boardState['16-4'].stone.should.eql(0)
+  
+  it('Game.returnToMove returns new Game with new board state', done => {
+    rewoundGame()
+      .boardState['16-4'].stone.should.eql(0);
+    rewoundGame()
+      .boardState['4-4'].stone.should.eql(1);
+    rewoundGame()
+      .boardState['16-16'].stone.should.eql(-1);
+    done();
+  })
 })
 
 
