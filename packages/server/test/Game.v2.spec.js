@@ -405,8 +405,14 @@ describe('capture logic: snapback, ko and playing in eyes', () => {
 });
 
 describe('Game history functionality', () => {
-  const firstMove = { player: 'black', pos: { x: 4, y: 4 }};
-  const secondMove = { player: 'white', pos: { x: 16, y: 16 }};
+  const firstMove =   { player: 'black', pos: { x: 4, y: 4 }};
+  const secondMove =  { player: 'white', pos: { x: 16, y: 16 }};
+  const thirdMove =   { player: 'black', pos: { x: 16, y: 4 } };
+  const fourthMove =  { player: 'white', pos: { x: 4, y: 16 }};
+  const fifthMove =   { player: 'black', pos: { x: 10, y: 4 } };
+  const sixthMove =   { player: 'white', pos: { x: 4, y: 10 }};
+  const seventhMove = { player: 'black', pos: { x: 10, y: 16 } };
+  const eighthMove =  { player: 'white', pos: { x: 16, y: 10 }};
 
   it('makeMove creates gameRecord item', done => {
     Game().initGame()
@@ -423,16 +429,16 @@ describe('Game history functionality', () => {
   });
 
   const rewoundGame = () => Game().initGame()
-  .makeMove(firstMove)
-  .makeMove(secondMove)
-  .makeMove({ player: 'black', pos: { x: 16, y: 4 } })
-  .returnToMove(-1);
+    .makeMove(firstMove)
+    .makeMove(secondMove)
+    .makeMove(thirdMove)
+    .returnToMove(-1);
 
   it('Game.returnToMove returns new Game with gameRecord', done => {
     rewoundGame()
       .gameRecord.should.eql([ firstMove, secondMove ])
     done();
-  })
+  });
   
   it('Game.returnToMove returns new Game with new board state', done => {
     rewoundGame()
@@ -441,6 +447,27 @@ describe('Game history functionality', () => {
       .boardState['4-4'].stone.should.eql(1);
     rewoundGame()
       .boardState['16-16'].stone.should.eql(-1);
+    done();
+  });
+
+  const resetGame = () => [
+    firstMove, secondMove, thirdMove, fourthMove, fifthMove, sixthMove, seventhMove, eighthMove
+  ].reduce((game, move) => game.makeMove(move), Game().initGame());
+
+  it('Game.returnToMove(0) returns to init board state', done => {
+    const erasedGame = resetGame()
+      .returnToMove(0)
+    erasedGame.gameRecord.should.eql([])
+    erasedGame.boardState['4-4'].stone.should.eql(0)
+    done();
+  });
+
+  it('Game.returnToMove(5) returns to state after 5th move', done => {
+    const fifthMoveGame = resetGame()
+      .returnToMove(5);
+    fifthMoveGame.gameRecord.should.eql([firstMove, secondMove, thirdMove, fourthMove, fifthMove]);
+    fifthMoveGame.boardState['10-4'].stone.should.eql(1)
+    fifthMoveGame.boardState['4-10'].stone.should.eql(0)
     done();
   })
 })

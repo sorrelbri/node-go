@@ -238,14 +238,20 @@ const Game = ({gameData = {}, gameRecord = []} = {}) => {
       return { game: this, group };
     },
 
-    returnToMove: function(idx) {
-      if (idx < 0) {
-        const { komi, handicap, boardSize } = this;
-        return Game({ 
-          gameData: { komi, handicap, boardSize }, 
-          gameRecord: [...this.gameRecord.slice(0, this.gameRecord.length + idx)]
-        })
+    returnToMove: function(lastMove) {
+      const { komi, handicap, boardSize } = this;
+      if (lastMove === 0) {
+        return Game({
+          gameData: { komi, handicap, boardSize }
+        }).initGame();
       }
+      const length = this.gameRecord.length;
+      const index = lastMove < 0 ? length + lastMove : lastMove;
+      if (lastMove >= length && lastMove > 0) return this;
+      return Game({ 
+        gameData: { komi, handicap, boardSize }, 
+        gameRecord: [...this.gameRecord.slice(0, index)]
+      });
     }
   }
 };
