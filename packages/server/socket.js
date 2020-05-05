@@ -22,8 +22,8 @@ io.on('connection', async socket=> {
           // ! temp 
           await gameServices.initGame({id: data.game.id})
           // ! end-temp
-          const gameData = await gameServices.getDataForUI(data.game.id);
-          io.of(room).to(game).emit('game_connected', gameData)
+          const { board, ...meta } = await gameServices.getDataForUI(data.game.id);
+          io.of(room).to(game).emit('game_connected', { board, meta });
         });
       });
       socket.on('make_move', async data => {
@@ -31,15 +31,14 @@ io.on('connection', async socket=> {
         const gameNsp = `game-${data.game.id}`;
         
         try {
-          const result =  await gameServices.makeMove({ id: 1, move });
-          console.log(result)
-          let socketAction = 'update_board';
-          if (result.message) socketAction = 'error';
+          const { board, message, ...meta } = await gameServices.makeMove({ id: 1, move });
+          const socketAction = message ? 'error' : 'update_board';
           socket.join(gameNsp, () => {
-            io.of(room).to(gameNsp).emit(socketAction, result)
+            io.of(room).to(gameNsp).emit(socketAction, { board, meta, message })
           });
         }
         catch (e) {
+          console.log(e)
           socket.join(gameNsp, () => {
             io.of(room).to(gameNsp).emit('error', e)
           });

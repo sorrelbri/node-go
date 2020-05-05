@@ -3,6 +3,8 @@ const should = chai.should();
 const gameServices = require('../services/gameServices');
 
 describe('game services', () => {
+  afterEach(() => gameServices.dropGame(1))
+
   it('init game returns game board', done => {
     gameServices.initGame({ id: 1, handicap: 4 })
       .board.should.eql(fourHandicapBoard)

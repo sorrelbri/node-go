@@ -7,13 +7,16 @@ const storeGame = (game) => {
 }
 
 const initGame = ({id, gameRecord = [], ...gameData}) => {
+  if (gamesInProgress[id]) return getDataForUI(id);
   gamesInProgress[id] = Game({ gameData, gameRecord })
   gamesInProgress[id].initGame();
   return getDataForUI(id)
 }
 
 const makeMove = ({id, move}) => {
-  if (!gamesInProgress[id]) return { message: 'no game'};
+  // console.log(id, move)
+  // console.log(gamesInProgress[id])
+  if (!gamesInProgress[id]) storeGame({id});
   gamesInProgress[id] = gamesInProgress[id].makeMove(move)
   if (gamesInProgress[id].success === false) return { message: 'illegal move' };
   return getDataForUI(id)
@@ -26,6 +29,12 @@ const getDataForUI = (id) => {
   };
 }
 
+const dropGame = (id) => {
+  return { message: 
+    `${delete gamesInProgress[id]}`
+  }
+}
+
 const getAllGames = () => {
   return gamesInProgress;
 }
@@ -34,5 +43,6 @@ module.exports = {
   makeMove,
   getAllGames,
   getDataForUI,
-  initGame
+  initGame,
+  dropGame
 }

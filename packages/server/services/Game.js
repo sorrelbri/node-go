@@ -164,6 +164,15 @@ const initBoard = (game) => {
 
 // returns Game object
 const Game = ({gameData = {}, gameRecord = []} = {}) => {
+  const helper = {
+    clearKo: function() {
+      this.kos.forEach(ko => {
+        this.boardState[ko] = { ...this.boardState[ko], legal: true, ko: false };
+      })
+      this.kos = [];
+    },
+  }
+
   if (gameRecord.length) {
     // play through all the moves
     return gameRecord.reduce((game, move) => game.makeMove(move), Game({gameData}).initGame())
@@ -214,13 +223,6 @@ const Game = ({gameData = {}, gameRecord = []} = {}) => {
         komi: this.komi 
       }
     },
-    
-    clearKo: function() {
-      this.kos.forEach(ko => {
-        this.boardState[ko] = { ...this.boardState[ko], legal: true, ko: false };
-      })
-      this.kos = [];
-    },
 
     makeMove: function({ player, pos: {x, y}}) {
       let game = this;
@@ -231,7 +233,7 @@ const Game = ({gameData = {}, gameRecord = []} = {}) => {
       if (isTurn) {
         if (point.legal) {
           game.addToRecord({ player, pos: { x, y } });
-          if (this.kos.length) this.clearKo();
+          if (this.kos.length) helper.clearKo.call(this);
           point.makeMove(game);
           game.turn *= -1;
           success = true;

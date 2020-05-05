@@ -32,7 +32,7 @@ const launch = (nsp, dispatch) => {
   socket.on('update_board', (data) => {
     console.log(data)
     console.log('update_board received')
-    dispatch({ type: 'GAMES', message: 'UPDATE_BOARD', body: data.board })
+    dispatch({ type: 'GAMES', message: 'UPDATE_BOARD', body: data })
   })
 
   return socket;

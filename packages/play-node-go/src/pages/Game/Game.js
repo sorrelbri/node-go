@@ -39,7 +39,7 @@ const Game = (props) => {
       return dispatch(action);
     }
     roomSocketConnect();
-  }, [ state.active , dispatch, state.user ] )
+  }, [ state.active.game.open , dispatch, state.user ] )
 
   return (  
     <div 
