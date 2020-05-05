@@ -39,7 +39,7 @@ const Game = (props) => {
       return dispatch(action);
     }
     roomSocketConnect();
-  }, [ state.active.game.open , dispatch, state.user ] )
+  }, [ state.active.game, dispatch, state.user ] )
 
   return (  
     <div 
@@ -59,7 +59,8 @@ const Game = (props) => {
         <PlayerArea />
         <Board 
           dispatch={dispatch}
-          game={state.active.game} 
+          game={state.active.game}
+          meta={state.meta}
           record={state.active.record}
           user={state.user}
           board={state.board}

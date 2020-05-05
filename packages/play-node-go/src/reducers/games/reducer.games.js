@@ -21,7 +21,7 @@ export const gamesReducer = (state, action) => {
 
     case 'UPDATE_BOARD': 
       const { gameRecord, pass, turn, winner, playerState } = action.body.meta;
-      return {...state, board: action.body.board, active: { game: {...state.active.game, gameRecord, pass, turn, winner, playerState } } };
+      return {...state, board: action.body.board, meta: {gameRecord, pass, turn, winner, playerState } };
 
     case 'SET_ACTIVE': 
       return {...state, active: action.body};
