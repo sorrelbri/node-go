@@ -21,6 +21,7 @@ const Board = (props) => {
           // point={board[posX][posY]}
           dispatch={dispatch}
           user={user}
+          meta={meta}
           {...props}
         />
       ); i++;
