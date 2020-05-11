@@ -5,7 +5,7 @@ exports.seed = function(knex) {
     .then(function () {
       // Inserts seed entries
       return knex('time_setting').insert([
-        {id: 1, main_time: 'untimed', time_period: 1, period_length: 0, overtime: 'untimed', overtime_period: 0, overtime_length: 0},
+        {main_time: 'untimed', time_period: 1, period_length: 0, overtime: 'untimed', overtime_period: 0, overtime_length: 0},
       ]);
     });
 };

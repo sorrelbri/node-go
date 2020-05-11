@@ -10,9 +10,9 @@ exports.seed = async function(knex) {
   .then(async function () {
       const hashedPassword = await hashPassword(password);
       // Inserts seed entries
-      return knex('user').insert([
-        {id: 2, username: 'user-one', email: email, password: hashedPassword, admin: true},
-        {id: 3, username: 'user-two', email: `2${email}`, password: hashedPassword, admin: true},
-      ]);
+      return knex('user').returning('*').insert([
+        {username: 'user-one', email: email, password: hashedPassword, admin: true},
+        {username: 'user-two', email: `2${email}`, password: hashedPassword, admin: true},
+      ]).then(entries => console.log({success: 'user', entries}));
     });
 };
