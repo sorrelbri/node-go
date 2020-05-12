@@ -347,6 +347,9 @@ const Point = ({x, y, boardSize = 19}) => {
         const lastLiberty = getSingleItemFromSet(liberties);
         lastLiberty.capturing[this.stone * -1].add(this.group);
       }
+      if (liberties.size > 1) {
+        liberties.forEach(liberty => liberty.capturing[this.stone * -1 ].delete(this.group))
+      }
 
       // if neighbors have one liberty
       const neighbors = getNeighbors({point: this, Game: game}).filter(neighbor => neighbor.stone === -1 * this.stone)
@@ -395,6 +398,14 @@ const Point = ({x, y, boardSize = 19}) => {
       // add captures
       const player = game.turn > 0 ? 'b' : 'w';
       game.playerState[`${player}Captures`] += 1;
+
+      // add as liberty to neighbors
+      const neighbors = getNeighbors({ point: this, Game: game }).filter(neighbor => neighbor.stone !== 0 && neighbor.group);
+      neighbors.forEach(neighbor => {
+        game.groups[neighbor.group].liberties.add(this);
+        neighbor.checkCaptures(game)
+      })
+
       return {...game, boardState: {...game.boardState, [this.key]: this}};
     }
   }
@@ -409,3 +420,10 @@ module.exports = {
   Game,
   Point
 }
+
+// Game().initGame()
+//     .makeMove({ player: 'black', pos: { x: 1, y: 1 } })   //    1  2  3
+//     .makeMove({ player: 'white', pos: { x: 1, y: 2 } })   // 1  1 -1  1
+//     .makeMove({ player: 'black', pos: { x: 2, y: 2 } })   // 2 -1  1
+//     .makeMove({ player: 'white', pos: { x: 2, y: 1 } })
+//     .makeMove({ player: 'black', pos: { x: 1, y: 3 } })
