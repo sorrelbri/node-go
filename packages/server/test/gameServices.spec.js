@@ -2,7 +2,7 @@ const chai = require('chai');
 const should = chai.should();
 const gameServices = require('../services/gameServices');
 
-describe('game services', () => {
+describe.skip('game services', () => {
   afterEach(() => gameServices.dropGame(1))
 
   it('init game returns game board', done => {

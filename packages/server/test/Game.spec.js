@@ -273,6 +273,26 @@ describe('makeMove group join and basic capture logic', () => {
     done();
   });
 
+  const traceGame = () => Game().initGame()
+    .makeMove({ player: 'black', pos: { x: 1, y: 1 } })   //    1  2  3
+    .makeMove({ player: 'white', pos: { x: 1, y: 2 } })   // 1  1 -1  1
+    .makeMove({ player: 'black', pos: { x: 2, y: 2 } })   // 2 -1  1
+    .makeMove({ player: 'white', pos: { x: 2, y: 1 } })
+
+  it('point at captured stone becomes liberty', done => {
+    const game = traceGame();
+    const group = game.boardState['1-2'].group;
+    game.groups[group].liberties.has(game.boardState['1-1']).should.eql(true)
+    done();
+  })
+
+  it('capture does not leave trace filled liberty', done => {
+    traceGame()
+      .makeMove({ player: 'black', pos: { x: 1, y: 3 } })
+      .boardState['1-2'].stone.should.eql(-1);
+    done();
+  })
+
   const multiCaptureGame = () => Game().initGame()
     .makeMove({ player: 'black', pos: { x: 4, y: 17 } })
     .makeMove({ player: 'white', pos: { x: 3, y: 16 } })
