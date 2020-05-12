@@ -1,25 +1,40 @@
 const Game = require('./Game').Game;
+const moveQueries = require('../data/queries/move');
 
 const gamesInProgress = { }
 
 const storeGame = (game) => {
   gamesInProgress[game.id] = Game(game);
+  return gamesInProgress[game.id];
 }
 
 const initGame = ({id, gameRecord = [], ...gameData}) => {
   if (gamesInProgress[id]) return getDataForUI(id);
-  gamesInProgress[id] = Game({ gameData, gameRecord })
-  gamesInProgress[id].initGame();
+  if (gameRecord.length) {
+    console.log('here')
+    gamesInProgress[id] = Game({ gameData, gameRecord })
+  }
+  else {
+    gamesInProgress[id] = Game({gameData}).initGame();
+  }
   return getDataForUI(id)
 }
 
-const makeMove = ({id, move}) => {
-  // console.log(id, move)
-  // console.log(gamesInProgress[id])
-  if (!gamesInProgress[id]) storeGame({id});
+const makeMove = async ({id, move}) => {
+  if (!gamesInProgress[id]) storeGame({id}).initGame();
   gamesInProgress[id] = gamesInProgress[id].makeMove(move)
   if (gamesInProgress[id].success === false) return { message: 'illegal move' };
-  return getDataForUI(id)
+  const priorMove = gamesInProgress[id].gameRecord.length;
+  const moveInsert = { gameId: id, player: move.player, x: move.pos.x, y: move.pos.y, gameRecord: true, priorMove };
+  let moveDbResult;
+  try {
+    moveDbResult = await moveQueries.addMove(moveInsert);
+  }
+  catch {
+    gamesInProgress[id].returnToMove(-1);
+  } finally {
+    return getDataForUI(id);
+  }
 }
 
 const getDataForUI = (id) => {

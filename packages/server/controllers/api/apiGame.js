@@ -10,8 +10,9 @@ const show = async (req, res, next) => {
     
     // TODO Promise.all()
     const game = await gameQueries.findGameById(gameId);    
-    const record = await moveQueries.findGameRecord(gameId);
-    res.status(200).json({game, record})
+    // const record = await moveQueries.findGameRecord(gameId);
+    // console.log(record)
+    res.status(200).json({game})
   }
   catch (err) {
     res.status(500).json(err);

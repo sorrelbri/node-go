@@ -10,8 +10,9 @@ const getAll = async (req, res, next) => {
     res.status(200).json({rooms: [...publicRooms]})
   }
 
-  catch (err) {
-    res.status(500).json(err);
+  catch (e) {
+    console.log(e)
+    res.status(500).json(e);
   }
 }
 
@@ -28,9 +29,9 @@ const show = async (req, res, next) => {
     const body = {currentRoom, messages, roomGames};
     res.status(200).json(body);
   }
-  catch (err) {
-    console.log(err)
-    res.status(500).json(err);
+  catch (e) {
+    console.log(e)
+    res.status(500).json(e);
   }
 }
 

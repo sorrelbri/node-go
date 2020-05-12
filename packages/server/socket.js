@@ -2,7 +2,8 @@
 const socketIO = require('socket.io');
 const io = socketIO({ cookie: false });
 
-const gameQueries = require('./data/queries/game');
+// const gameQueries = require('./data/queries/game');
+const moveQueries = require('./data/queries/move');
 const gameServices = require('./services/gameServices');
 
 io.on('connection', async socket=> {
@@ -20,7 +21,9 @@ io.on('connection', async socket=> {
         const game = `game-${data.game.id}`;
         socket.join(game, async () => {
           // ! temp 
-          await gameServices.initGame({id: data.game.id})
+          const gameRecord = await moveQueries.findGameRecord(data.game.id);
+          console.log(gameRecord)
+          await gameServices.initGame({id: data.game.id, gameRecord})
           // ! end-temp
           const { board, ...meta } = await gameServices.getDataForUI(data.game.id);
           io.of(room).to(game).emit('game_connected', { board, meta });
