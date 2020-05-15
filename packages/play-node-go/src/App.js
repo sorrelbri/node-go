@@ -36,6 +36,8 @@ function App() {
       dispatch({type:'SOCKET', message: 'LAUNCH', body:{nsp:'', dispatch}});
     }
     socketConnect();
+
+    return () => dispatch({type: 'SOCKET', message: 'DISCONNECT', body: {}});
   }, [ state.connect ])
 
   return (
