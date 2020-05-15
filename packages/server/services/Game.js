@@ -265,6 +265,17 @@ const Game = ({gameData = {}, gameRecord = []} = {}) => {
       });
     },
 
+    submitPass: function(player) {
+      if (player !== 'black' && player !== 'white') {
+        return { ...this, success: false };
+      }
+      this.addToRecord({ player, pos: { x: null, y: null } });
+      if (this.kos.length) helper.clearKo.call(this);
+      this.turn = player === 'black' ? -1 : 1;
+      this.boardState = getBoardState(this);
+      return {...this, legalMoves: getLegalMoves(this), success: true };
+    },
+
     submitResign: function(player) {
       if (player === 'black') this.winner = -1;
       if (player === 'white') this.winner = 1;

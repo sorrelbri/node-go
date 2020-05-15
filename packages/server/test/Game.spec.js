@@ -497,6 +497,18 @@ describe('Game end logic', () => {
     Game().initGame().submitResign('black')
       .getMeta().should.eql({...initialMeta, winner: -1});
     done();
+  });
+
+  it('pass changes game turn', done => {
+    Game().initGame().submitPass('black')
+      .getMeta().turn.should.eql(-1);
+    done();
+  });
+
+  it('pass adds null move to gameRecord', done => {
+    Game().initGame().submitPass('black').getMeta()
+      .gameRecord.should.eql([ { player: 'black', pos: { x: null, y: null } } ])
+    done();
   })
 })
 
