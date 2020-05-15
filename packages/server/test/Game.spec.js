@@ -489,6 +489,14 @@ describe('Game history functionality', () => {
     fifthMoveGame.boardState['10-4'].stone.should.eql(1)
     fifthMoveGame.boardState['4-10'].stone.should.eql(0)
     done();
+  });
+});
+
+describe('Game end logic', () => {
+  it('resignation results in game end', done => {
+    Game().initGame().submitResign('black')
+      .getMeta().should.eql({...initialMeta, winner: -1});
+    done();
   })
 })
 

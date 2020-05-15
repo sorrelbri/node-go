@@ -263,6 +263,13 @@ const Game = ({gameData = {}, gameRecord = []} = {}) => {
         gameData: { komi, handicap, boardSize }, 
         gameRecord: [...this.gameRecord.slice(0, index)]
       });
+    },
+
+    submitResign: function(player) {
+      if (player === 'black') this.winner = -1;
+      if (player === 'white') this.winner = 1;
+      this.turn = 0;
+      return this;
     }
   }
 };
