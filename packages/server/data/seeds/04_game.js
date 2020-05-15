@@ -36,7 +36,7 @@ exports.seed = async function(knex) {
                       application: 'node-go', application_version: '0.1.0', 
                       player_black: 'Ishida Yoshio', player_black_rank: 'D7',
                       player_white: 'Rin Kaiho', player_white_rank: 'D9',
-                      room: room.id, open: false,
+                      room: room.id, open: true,
                       event: '', round: 2, win_type: 'B+', score: 1.5 
                     }
                   ], ['*']
