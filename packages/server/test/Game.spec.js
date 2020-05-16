@@ -509,6 +509,40 @@ describe('Game end logic', () => {
     Game().initGame().submitPass('black').getMeta()
       .gameRecord.should.eql([ { player: 'black', pos: { x: null, y: null } } ])
     done();
+  });
+
+  it('move after makes normal change in game state', done => {
+    Game().initGame()
+      .makeMove({ player: 'black', pos: { x: 4, y: 4 } })
+      .makeMove({ player: 'white', pos: { x: 4, y: 5 } })
+      .makeMove({ player: 'black', pos: { x: 5, y: 3 } })
+      .submitPass('white')
+      .makeMove({ player: 'black', pos: { x: 16, y: 16 } })
+      .legalMoves.should.eql({...emptyBoard, '4-4': 1, '4-5': -1, '5-3': 1, '16-16': 1})
+    done();
+  });
+
+  it('two nonconsecutive passes continue game', done => {
+    Game().initGame()
+      .makeMove({ player: 'black', pos: { x: 4, y: 4 } })
+      .makeMove({ player: 'white', pos: { x: 4, y: 5 } })
+      .makeMove({ player: 'black', pos: { x: 5, y: 3 } })
+      .submitPass('white')
+      .makeMove({ player: 'black', pos: { x: 16, y: 16 } })
+      .submitPass('white')
+      .getMeta().should.eql({...initialMeta, pass: 1, turn: 1, gameRecord: [ { player: 'black', pos: { x: 4, y: 4 } }, { player: 'white', pos: { x: 4, y: 5 } }, { player: 'black', pos: { x: 5, y: 3 } }, { player: 'white', pos: { x: null, y: null } }, { player: 'black', pos: { x: 16, y: 16 } }, { player: 'white', pos: { x: null, y: null } } ]})
+    done();
+  });
+
+  it('consecutive passes end game', done => {
+    Game().initGame()
+      .makeMove({ player: 'black', pos: { x: 4, y: 4 } })
+      .makeMove({ player: 'white', pos: { x: 4, y: 5 } })
+      .makeMove({ player: 'black', pos: { x: 5, y: 3 } })
+      .submitPass('white')
+      .submitPass('black')
+      .turn.should.eql(0);
+    done();
   })
 })
 

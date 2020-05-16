@@ -232,6 +232,7 @@ const Game = ({gameData = {}, gameRecord = []} = {}) => {
                   || ( game.turn === -1 && player === 'white' );
       if (isTurn) {
         if (point.legal) {
+          game.pass = 0;
           game.addToRecord({ player, pos: { x, y } });
           if (this.kos.length) helper.clearKo.call(this);
           point.makeMove(game);
@@ -269,6 +270,10 @@ const Game = ({gameData = {}, gameRecord = []} = {}) => {
       if (player !== 'black' && player !== 'white') {
         return { ...this, success: false };
       }
+      if (this.pass > 0) {
+        return this.endGame();
+      }
+      this.pass = 1;
       this.addToRecord({ player, pos: { x: null, y: null } });
       if (this.kos.length) helper.clearKo.call(this);
       this.turn = player === 'black' ? -1 : 1;
@@ -279,6 +284,12 @@ const Game = ({gameData = {}, gameRecord = []} = {}) => {
     submitResign: function(player) {
       if (player === 'black') this.winner = -1;
       if (player === 'white') this.winner = 1;
+      this.turn = 0;
+      return this;
+    },
+
+    endGame: function() {
+      // TODO manage territory counting
       this.turn = 0;
       return this;
     }
