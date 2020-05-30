@@ -20,12 +20,10 @@ io.on("connection", async (socket) => {
       socket.on("connect_game", (data) => {
         const game = `game-${data.game.id}`;
         socket.join(game, async () => {
-          // ! temp
           const gameRecord = await moveQueries.findGameRecord(data.game.id);
           console.log("gameRecord from db");
           console.log(gameRecord);
           await gameServices.initGame({ id: data.game.id, gameRecord });
-          // ! end-temp
           const { board, ...meta } = await gameServices.getDataForUI(
             data.game.id
           );
@@ -38,7 +36,7 @@ io.on("connection", async (socket) => {
 
         try {
           const { board, message, ...meta } = await gameServices.makeMove({
-            id: 1,
+            id: data.game.id,
             move,
           });
           const socketAction = message ? "error" : "update_board";

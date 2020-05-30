@@ -20,7 +20,18 @@ const GameService = (moveQueries) => {
     },
 
     async makeMove({ id, move }) {
-      if (!gamesInProgress[id]) storeGame({ id }).initGame();
+      // check cache
+      if (!gamesInProgress[id]) {
+        try {
+          let gameRecord;
+          if (moveQueries) {
+            gameRecord = await moveQueries.findGameRecord(id);
+          }
+          storeGame({ id, gameRecord }).initGame();
+        } catch {
+          return { message: "error restoring game" };
+        }
+      }
       gamesInProgress[id] = gamesInProgress[id].makeMove(move);
       if (gamesInProgress[id].success === false)
         return { message: "illegal move" };

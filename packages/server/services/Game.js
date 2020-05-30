@@ -297,6 +297,7 @@ const Game = ({ gameData = {}, gameRecord = [] } = {}) => {
     endGame: function () {
       // TODO manage territory counting
       // form groups for empty points
+      this.gameRecord;
       // for each empty point group determine territory
       // for each non-empty point group determine life
       // submit board state to users
