@@ -1,20 +1,20 @@
-import React from 'react';
-import './Board.scss';
-import Point from '../Point/Point';
+import React from "react";
+import "./Board.scss";
+import Point from "../Point/Point";
 
 const Board = (props) => {
   const { game, user, dispatch, board, meta } = props;
-  const sizeFlag = `Game__board--size-${ game.boardSize }`
+  const sizeFlag = `Game__board--size-${game.boardSize}`;
 
-  const renderPoints = boardSize => {
-    let i = 0, boardPoints = [];
+  const renderPoints = (boardSize) => {
+    let i = 0,
+      boardPoints = [];
     while (i < boardSize * boardSize) {
-      const posX = Math.floor(i/boardSize) + 1;
-      const posY = i % boardSize + 1;
-      console.log(board[`${posX}-${posY}`])
+      const posX = Math.floor(i / boardSize) + 1;
+      const posY = (i % boardSize) + 1;
       boardPoints.push(
-        <Point 
-          key={`${posX}-${posY}`} 
+        <Point
+          key={`${posX}-${posY}`}
           posX={posX}
           posY={posY}
           pointData={board[`${posX}-${posY}`]}
@@ -24,16 +24,17 @@ const Board = (props) => {
           meta={meta}
           {...props}
         />
-      ); i++;
+      );
+      i++;
     }
     return boardPoints;
-  }
+  };
 
-  return (  
+  return (
     <div className={`Game__board ${sizeFlag}`}>
-      { game.id ? renderPoints(game.boardSize) : <></> }
+      {game.id ? renderPoints(game.boardSize) : <></>}
     </div>
   );
-}
+};
 
 export default Board;

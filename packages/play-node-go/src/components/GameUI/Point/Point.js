@@ -1,58 +1,65 @@
-import React from 'react';
-import './Point.scss';
+import React from "react";
+import "./Point.scss";
 
 const Point = (props) => {
   const { posX, posY, user, game, meta, dispatch, pointData } = props;
-  const turn = meta && meta.turn ? meta.turn > 0 ? 'black' : 'white' : game.turn > 0 ? 'black' : 'white';
-  
+  const turn =
+    meta && meta.turn
+      ? meta.turn > 0
+        ? "black"
+        : "white"
+      : game.turn > 0
+      ? "black"
+      : "white";
+
   const stone = () => {
-    if (pointData === 1) return 'black'
-    if (pointData === -1) return 'white'
-    return 'none'
-  }
+    if (pointData === 1) return "black";
+    if (pointData === -1) return "white";
+    if (pointData === "k") return "ko";
+    return "none";
+  };
 
   const dot = () => {
-    if (pointData === 'l') return game.turn;
-  }
+    if (pointData === "l") {
+      return game.turn || meta.turn;
+    }
+  };
 
   const xFlag = () => {
-    if ( posX === 1 ) return `board__point--top`
-    if ( posX === game.boardSize ) return `board__point--bottom`
-    return '';
-  }
+    if (posX === 1) return `board__point--top`;
+    if (posX === game.boardSize) return `board__point--bottom`;
+    return "";
+  };
   const yFlag = () => {
-    if ( posY === 1 ) return `board__point--left`
-    if ( posY === game.boardSize ) return `board__point--right`
-    return '';
-  }
+    if (posY === 1) return `board__point--left`;
+    if (posY === game.boardSize) return `board__point--right`;
+    return "";
+  };
   const clickHandle = (e) => {
     const action = {
-      type: 'SOCKET',
-      message: 'MAKE_MOVE',
+      type: "SOCKET",
+      message: "MAKE_MOVE",
       body: {
         user,
         game,
         room: game.room,
         board: {},
-        move: { player: turn, pos: { x: posX, y: posY } }
-      }
-    }
+        move: { player: turn, pos: { x: posX, y: posY } },
+      },
+    };
     dispatch(action);
-  }
+  };
 
   return (
-    <div 
+    <div
       className={`board__point ${xFlag()} ${yFlag()}`}
-      onClick={e => clickHandle(e)}
+      onClick={(e) => clickHandle(e)}
     >
-      <div className="board__point__stone" 
-        data-stone={stone()}
-      >
+      <div className="board__point__stone" data-stone={stone()}>
         <div className="board__point__dot" data-dot={dot()}></div>
       </div>
-
     </div>
   );
-}
+};
 
 export default Point;

@@ -58,13 +58,32 @@ div.board__point div.board__point__stone div.board__point__dot {
   vertical-align: middle;
 }
 
-div.board__point__stone[data-stone="white"] {
-  background: radial-gradient(farthest-side at 55% 40%, white 0%, rgb(200,200,200) 65%, rgb(100,100,100) 90%, rgb(68, 50, 0) 100%);
-  box-shadow: -.25vmin .5vmin .5vmin rgba(145, 92, 23, 0.5);
+div.board__point__stone{
+  &[data-stone="white"] {
+    background: radial-gradient(farthest-side at 55% 40%, white 0%, rgb(200,200,200) 65%, rgb(100,100,100) 90%, rgb(68, 50, 0) 100%);
+    box-shadow: -.25vmin .5vmin .5vmin rgba(145, 92, 23, 0.5);
+  }
+
+  &[data-stone="black"] {
+    background-color: black;
+    background: radial-gradient(farthest-side at 55% 40%, rgb(220,220,220) 0%, rgb(60,60,60) 45%, rgb(15,15,15) 90%, rgb(5, 5, 0) 100%);
+    box-shadow: -.25vmin .5vmin .5vmin rgba(145, 92, 23, 0.75);
+  }
+
+  &[data-stone="ko"] {
+    background-color: transparent;
+    border: .5vmin solid rgba(200,20,50,0.8);
+    border-radius: 0%;
+    height: 60%;
+    width: 60%;
+  }
 }
 
-div.board__point__stone[data-stone="black"] {
-  background-color: black;
-  background: radial-gradient(farthest-side at 55% 40%, rgb(220,220,220) 0%, rgb(60,60,60) 45%, rgb(15,15,15) 90%, rgb(5, 5, 0) 100%);
-  box-shadow: -.25vmin .5vmin .5vmin rgba(145, 92, 23, 0.75);
+div.board__point:hover {
+  div.board__point__dot[data-dot="1"] {
+    background: black;
+  }
+  div.board__point__dot[data-dot="-1"] {
+    background: white;
+  }
 }
