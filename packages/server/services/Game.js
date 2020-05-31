@@ -82,7 +82,7 @@ const checkLegal = ({ point, Game }) => {
     const getGroupLiberties = (point) =>
       Array.from(Game.groups[point.group].liberties);
     const isNotSamePoint = (liberty) =>
-      liberty.pos.x !== point.pos.x && liberty.pos.y !== point.pos.y;
+      !(liberty.pos.x === point.pos.x && liberty.pos.y === point.pos.y);
     const isInGroupWithLiberties = (neighbor) =>
       getGroupLiberties(neighbor).filter(isNotSamePoint).length;
     const isInLiveGroup = neighbors
@@ -475,10 +475,3 @@ module.exports = {
   Game,
   Point,
 };
-
-// Game().initGame()
-//     .makeMove({ player: 'black', pos: { x: 1, y: 1 } })   //    1  2  3
-//     .makeMove({ player: 'white', pos: { x: 1, y: 2 } })   // 1  1 -1  1
-//     .makeMove({ player: 'black', pos: { x: 2, y: 2 } })   // 2 -1  1
-//     .makeMove({ player: 'white', pos: { x: 2, y: 1 } })
-//     .makeMove({ player: 'black', pos: { x: 1, y: 3 } })
