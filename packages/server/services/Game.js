@@ -297,7 +297,11 @@ const Game = ({ gameData = {}, gameRecord = [] } = {}) => {
     endGame: function () {
       // TODO manage territory counting
       // form groups for empty points
-      this.gameRecord;
+      const joinEmptyPoints = (point) => {
+        if (point.stone) return point;
+        return point.joinGroup({ point, Game: this });
+      };
+      const boardState = pipeMap(joinEmptyPoints)(this.boardState);
       // for each empty point group determine territory
       // for each non-empty point group determine life
       // submit board state to users
