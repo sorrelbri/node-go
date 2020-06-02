@@ -186,6 +186,7 @@ const Game = ({ gameData = {}, gameRecord = [] } = {}) => {
     komi: gameData.komi || 6.5, // komi depends on handicap stones + player rank
     handicap: gameData.handicap || 0,
     boardSize: gameData.boardSize || 19,
+    score: 0,
     groups: {}, // key is Symbol(position): {points: Set(), liberties: Set()}
     boardState: {},
     kos: [],
@@ -319,8 +320,10 @@ const Game = ({ gameData = {}, gameRecord = [] } = {}) => {
         if (!point.stone || point.territory) return point;
         const liberties = Array.from(this.groups[point.group].liberties);
         point.territory =
-          liberties.reduce((acc, { territory }) => acc + territory, 0) ||
-          point.stone;
+          liberties.reduce(
+            (acc, { territory }) => (territory === "d" ? acc : acc + territory),
+            0
+          ) || point.stone;
         return point;
       };
       let boardState = pipeMap(joinEmptyPoints)(this.boardState);
@@ -340,6 +343,27 @@ const Game = ({ gameData = {}, gameRecord = [] } = {}) => {
 
     endGame: function () {
       // if boardState is approved calculate winner
+      const [blackTerritory, whiteTerritory] = Object.values(
+        this.boardState
+      ).reduce(
+        ([blackTerritory, whiteTerritory], { territory, stone }) => {
+          if (territory === "d") return [blackTerritory, whiteTerritory];
+          if (territory > 0) {
+            if (stone === -1) return [blackTerritory + 2, whiteTerritory];
+            return [blackTerritory + 1, whiteTerritory];
+          }
+          if (territory < 0) {
+            if (stone === 1) return [blackTerritory, whiteTerritory + 2];
+            return [blackTerritory, whiteTerritory + 1];
+          }
+        },
+        [0, 0]
+      );
+      this.playerState.bScore = blackTerritory + this.playerState.bCaptures;
+      this.playerState.wScore = whiteTerritory + this.playerState.wCaptures;
+      this.score =
+        this.playerState.bScore - (this.playerState.wScore + this.komi);
+      this.winner = this.score > 0 ? 1 : -1;
       // submit end game board state and data for study
       // (study module should run client side and only )
       return this;
