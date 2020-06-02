@@ -277,7 +277,7 @@ const Game = ({ gameData = {}, gameRecord = [] } = {}) => {
         return { ...this, success: false };
       }
       if (this.pass > 0) {
-        return this.endGame();
+        return this.calculateTerritory();
       }
       this.pass = 1;
       this.addToRecord({ player, pos: { x: null, y: null } });
@@ -294,7 +294,7 @@ const Game = ({ gameData = {}, gameRecord = [] } = {}) => {
       return this;
     },
 
-    endGame: function () {
+    calculateTerritory: function () {
       // TODO manage territory counting
       // form groups for empty points
       const joinEmptyPoints = (point) => {
@@ -328,12 +328,20 @@ const Game = ({ gameData = {}, gameRecord = [] } = {}) => {
       boardState = pipeMap(determineLife)(boardState);
       this.boardState = boardState;
       // submit board state to users
+      this.turn = 0;
+      return this;
+    },
+
+    toggleTerritory: function () {
+      // if toggleGroups(key) toggle that group
+      // submit board state
+      return this;
+    },
+
+    endGame: function () {
       // if boardState is approved calculate winner
       // submit end game board state and data for study
       // (study module should run client side and only )
-      // if toggleGroups(key) toggle that group
-      // submit board state to winner
-      this.turn = 0;
       return this;
     },
   };
