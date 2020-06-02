@@ -1022,11 +1022,32 @@ describe("Game end logic", () => {
     .submitPass("white")
     .submitPass("black");
 
-  it("consecutive passes return board state with empty points in groups", (done) => {
+  it("end game returns board state with empty points in groups", (done) => {
     honinboGame.boardState["1-1"].group.should.not.eql(null);
     const group = honinboGame.boardState["19-5"].group;
+    // console.log(honinboGame.groups[group]);
     honinboGame.boardState["17-4"].group.should.eql(group);
     done();
+  });
+  const isWhite = (x) => x < 0;
+  const isBlack = (x) => x > 0;
+  const territories = [
+    ["4-2", isWhite],
+    ["4-3", isWhite],
+    ["5-2", isWhite],
+    ["6-3", isWhite],
+    ["17-3", isBlack],
+    ["9-17", isWhite],
+    ["18-18", isBlack],
+    ["19-18", isBlack],
+  ];
+  territories.forEach(([point, territoryPredicate]) => {
+    it(`end game return board state with ${point} marked with appropriate territory`, (done) => {
+      territoryPredicate(honinboGame.boardState[point].territory).should.eql(
+        true
+      );
+      done();
+    });
   });
 });
 

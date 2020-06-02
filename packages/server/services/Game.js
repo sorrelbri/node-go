@@ -186,7 +186,7 @@ const Game = ({ gameData = {}, gameRecord = [] } = {}) => {
     komi: gameData.komi || 6.5, // komi depends on handicap stones + player rank
     handicap: gameData.handicap || 0,
     boardSize: gameData.boardSize || 19,
-    groups: {},
+    groups: {}, // key is Symbol(position): {points: Set(), liberties: Set()}
     boardState: {},
     kos: [],
     gameRecord: gameRecord,
@@ -299,7 +299,7 @@ const Game = ({ gameData = {}, gameRecord = [] } = {}) => {
       // form groups for empty points
       const joinEmptyPoints = (point) => {
         if (point.stone) return point;
-        point.joinGroup({ point, Game: this });
+        point.joinEmptyPoints({ point, Game: this });
         return point;
       };
       // for each point determine territory
@@ -314,11 +314,19 @@ const Game = ({ gameData = {}, gameRecord = [] } = {}) => {
           stones.reduce((acc, { stone }) => acc + stone, 0) || "d";
         return point;
       };
-
+      // for each non-empty point group determine life
+      const determineLife = (point) => {
+        if (!point.stone || point.territory) return point;
+        const liberties = Array.from(this.groups[point.group].liberties);
+        point.territory =
+          liberties.reduce((acc, { territory }) => acc + territory, 0) ||
+          point.stone;
+        return point;
+      };
       let boardState = pipeMap(joinEmptyPoints)(this.boardState);
       boardState = pipeMap(determineTerritory)(boardState);
+      boardState = pipeMap(determineLife)(boardState);
       this.boardState = boardState;
-      // for each non-empty point group determine life
       // submit board state to users
       // if boardState is approved calculate winner
       // submit end game board state and data for study
@@ -387,6 +395,30 @@ const Point = ({ x, y, boardSize = 19 }) => {
         });
       }
       return Game;
+    },
+
+    joinEmptyPoints: function ({ point, Game }) {
+      if (point.group !== this.group || !point.group) {
+        if (!point.group) {
+          const { game, group } = Game.initGroup(point);
+          this.group = group;
+          Game = game;
+        }
+        Game.groups[point.group].stones.add(this);
+        if (this.group !== point.group) {
+          this.group = point.group;
+        }
+        getNeighbors({ point: this, Game }).forEach((neighbor) => {
+          if (
+            neighbor.stone === this.stone &&
+            // this check prevents infinite call chains
+            neighbor.group !== this.group
+          ) {
+            Game = neighbor.joinEmptyPoints({ point: this, Game });
+          }
+        });
+        return Game;
+      }
     },
 
     setLiberties: function (Game) {
@@ -494,260 +526,3 @@ module.exports = {
   Game,
   Point,
 };
-
-const honinboGameRecord = [
-  { player: "black", pos: { x: 4, y: 16 } },
-  { player: "white", pos: { x: 3, y: 4 } },
-  { player: "black", pos: { x: 16, y: 4 } },
-  { player: "white", pos: { x: 17, y: 16 } },
-  { player: "black", pos: { x: 15, y: 17 } },
-  { player: "white", pos: { x: 5, y: 3 } },
-  { player: "black", pos: { x: 17, y: 14 } },
-  { player: "white", pos: { x: 16, y: 15 } },
-  { player: "black", pos: { x: 16, y: 14 } },
-  { player: "white", pos: { x: 14, y: 15 } },
-  { player: "black", pos: { x: 15, y: 14 } },
-  { player: "white", pos: { x: 14, y: 17 } },
-  { player: "black", pos: { x: 14, y: 18 } },
-  { player: "white", pos: { x: 13, y: 17 } },
-  { player: "black", pos: { x: 16, y: 17 } },
-  { player: "white", pos: { x: 15, y: 15 } },
-  { player: "black", pos: { x: 13, y: 18 } },
-  { player: "white", pos: { x: 11, y: 17 } },
-  { player: "black", pos: { x: 17, y: 17 } },
-  { player: "white", pos: { x: 18, y: 16 } },
-  { player: "black", pos: { x: 12, y: 17 } },
-  { player: "white", pos: { x: 12, y: 16 } },
-  { player: "black", pos: { x: 12, y: 18 } },
-  { player: "white", pos: { x: 16, y: 10 } },
-  { player: "black", pos: { x: 17, y: 7 } },
-  { player: "white", pos: { x: 13, y: 13 } },
-  { player: "black", pos: { x: 15, y: 11 } },
-  { player: "white", pos: { x: 11, y: 16 } },
-  { player: "black", pos: { x: 15, y: 10 } },
-  { player: "white", pos: { x: 16, y: 8 } },
-  { player: "black", pos: { x: 17, y: 8 } },
-  { player: "white", pos: { x: 15, y: 9 } },
-  { player: "black", pos: { x: 17, y: 9 } },
-  { player: "white", pos: { x: 16, y: 9 } },
-  { player: "black", pos: { x: 13, y: 10 } },
-  { player: "white", pos: { x: 16, y: 7 } },
-  { player: "black", pos: { x: 16, y: 6 } },
-  { player: "white", pos: { x: 15, y: 6 } },
-  { player: "black", pos: { x: 16, y: 5 } },
-  { player: "white", pos: { x: 13, y: 7 } },
-  { player: "black", pos: { x: 11, y: 10 } },
-  { player: "white", pos: { x: 13, y: 4 } },
-  { player: "black", pos: { x: 3, y: 9 } },
-  { player: "white", pos: { x: 10, y: 8 } },
-  { player: "black", pos: { x: 9, y: 10 } },
-  { player: "white", pos: { x: 7, y: 16 } },
-  { player: "black", pos: { x: 4, y: 14 } },
-  { player: "white", pos: { x: 8, y: 9 } },
-  { player: "black", pos: { x: 8, y: 14 } },
-  { player: "white", pos: { x: 8, y: 10 } },
-  { player: "black", pos: { x: 9, y: 11 } },
-  { player: "white", pos: { x: 8, y: 11 } },
-  { player: "black", pos: { x: 10, y: 14 } },
-  { player: "white", pos: { x: 9, y: 15 } },
-  { player: "black", pos: { x: 12, y: 14 } },
-  { player: "white", pos: { x: 11, y: 13 } },
-  { player: "black", pos: { x: 12, y: 13 } },
-  { player: "white", pos: { x: 12, y: 12 } },
-  { player: "black", pos: { x: 13, y: 14 } },
-  { player: "white", pos: { x: 14, y: 14 } },
-  { player: "black", pos: { x: 11, y: 14 } },
-  { player: "white", pos: { x: 14, y: 13 } },
-  { player: "black", pos: { x: 14, y: 9 } },
-  { player: "white", pos: { x: 12, y: 9 } },
-  { player: "black", pos: { x: 12, y: 10 } },
-  { player: "white", pos: { x: 16, y: 12 } },
-  { player: "black", pos: { x: 16, y: 11 } },
-  { player: "white", pos: { x: 17, y: 12 } },
-  { player: "black", pos: { x: 18, y: 11 } },
-  { player: "white", pos: { x: 18, y: 12 } },
-  { player: "black", pos: { x: 15, y: 12 } },
-  { player: "white", pos: { x: 15, y: 13 } },
-  { player: "black", pos: { x: 17, y: 11 } },
-  { player: "white", pos: { x: 15, y: 3 } },
-  { player: "black", pos: { x: 16, y: 3 } },
-  { player: "white", pos: { x: 16, y: 2 } },
-  { player: "black", pos: { x: 17, y: 2 } },
-  { player: "white", pos: { x: 3, y: 7 } },
-  { player: "black", pos: { x: 5, y: 9 } },
-  { player: "white", pos: { x: 8, y: 4 } },
-  { player: "black", pos: { x: 5, y: 11 } },
-  { player: "white", pos: { x: 4, y: 17 } },
-  { player: "black", pos: { x: 3, y: 17 } },
-  { player: "white", pos: { x: 5, y: 17 } },
-  { player: "black", pos: { x: 3, y: 18 } },
-  { player: "white", pos: { x: 5, y: 16 } },
-  { player: "black", pos: { x: 4, y: 15 } },
-  { player: "white", pos: { x: 15, y: 2 } },
-  { player: "black", pos: { x: 4, y: 3 } },
-  { player: "white", pos: { x: 4, y: 4 } },
-  { player: "black", pos: { x: 10, y: 4 } },
-  { player: "white", pos: { x: 8, y: 3 } },
-  { player: "black", pos: { x: 12, y: 7 } },
-  { player: "white", pos: { x: 13, y: 6 } },
-  { player: "black", pos: { x: 5, y: 2 } },
-  { player: "white", pos: { x: 4, y: 2 } },
-  { player: "black", pos: { x: 10, y: 7 } },
-  { player: "white", pos: { x: 9, y: 7 } },
-  { player: "black", pos: { x: 10, y: 6 } },
-  { player: "white", pos: { x: 12, y: 8 } },
-  { player: "black", pos: { x: 9, y: 8 } },
-  { player: "white", pos: { x: 10, y: 9 } },
-  { player: "black", pos: { x: 8, y: 5 } },
-  { player: "white", pos: { x: 9, y: 9 } },
-  { player: "black", pos: { x: 6, y: 3 } },
-  { player: "white", pos: { x: 5, y: 4 } },
-  { player: "black", pos: { x: 7, y: 5 } },
-  { player: "white", pos: { x: 6, y: 4 } },
-  { player: "black", pos: { x: 12, y: 4 } },
-  { player: "white", pos: { x: 11, y: 3 } },
-  { player: "black", pos: { x: 12, y: 3 } },
-  { player: "white", pos: { x: 10, y: 3 } },
-  { player: "black", pos: { x: 14, y: 4 } },
-  { player: "white", pos: { x: 15, y: 4 } },
-  { player: "black", pos: { x: 13, y: 5 } },
-  { player: "white", pos: { x: 15, y: 5 } },
-  { player: "black", pos: { x: 9, y: 4 } },
-  { player: "white", pos: { x: 9, y: 3 } },
-  { player: "black", pos: { x: 7, y: 7 } },
-  { player: "white", pos: { x: 12, y: 6 } },
-  { player: "black", pos: { x: 11, y: 4 } },
-  { player: "white", pos: { x: 8, y: 8 } },
-  { player: "black", pos: { x: 6, y: 8 } },
-  { player: "white", pos: { x: 2, y: 8 } },
-  { player: "black", pos: { x: 2, y: 9 } },
-  { player: "white", pos: { x: 9, y: 12 } },
-  { player: "black", pos: { x: 10, y: 12 } },
-  { player: "white", pos: { x: 10, y: 10 } },
-  { player: "black", pos: { x: 10, y: 11 } },
-  { player: "white", pos: { x: 9, y: 13 } },
-  { player: "black", pos: { x: 9, y: 14 } },
-  { player: "white", pos: { x: 10, y: 13 } },
-  { player: "black", pos: { x: 11, y: 11 } },
-  { player: "white", pos: { x: 7, y: 13 } },
-  { player: "black", pos: { x: 7, y: 14 } },
-  { player: "white", pos: { x: 6, y: 13 } },
-  { player: "black", pos: { x: 6, y: 14 } },
-  { player: "white", pos: { x: 5, y: 13 } },
-  { player: "black", pos: { x: 8, y: 13 } },
-  { player: "white", pos: { x: 8, y: 12 } },
-  { player: "black", pos: { x: 6, y: 11 } },
-  { player: "white", pos: { x: 7, y: 11 } },
-  { player: "black", pos: { x: 6, y: 15 } },
-  { player: "white", pos: { x: 14, y: 8 } },
-  { player: "black", pos: { x: 19, y: 12 } },
-  { player: "white", pos: { x: 19, y: 13 } },
-  { player: "black", pos: { x: 18, y: 13 } },
-  { player: "white", pos: { x: 19, y: 11 } },
-  { player: "black", pos: { x: 19, y: 14 } },
-  { player: "white", pos: { x: 16, y: 13 } },
-  { player: "black", pos: { x: 19, y: 12 } },
-  { player: "white", pos: { x: 13, y: 15 } },
-  { player: "black", pos: { x: 11, y: 18 } },
-  { player: "white", pos: { x: 10, y: 18 } },
-  { player: "black", pos: { x: 19, y: 10 } },
-  { player: "white", pos: { x: 8, y: 18 } },
-  { player: "black", pos: { x: 5, y: 19 } },
-  { player: "white", pos: { x: 13, y: 9 } },
-  { player: "black", pos: { x: 14, y: 10 } },
-  { player: "white", pos: { x: 18, y: 18 } },
-  { player: "black", pos: { x: 18, y: 17 } },
-  { player: "white", pos: { x: 19, y: 17 } },
-  { player: "black", pos: { x: 17, y: 18 } },
-  { player: "white", pos: { x: 8, y: 15 } },
-  { player: "black", pos: { x: 4, y: 13 } },
-  { player: "white", pos: { x: 17, y: 1 } },
-  { player: "black", pos: { x: 18, y: 2 } },
-  { player: "white", pos: { x: 1, y: 9 } },
-  { player: "black", pos: { x: 1, y: 10 } },
-  { player: "white", pos: { x: 1, y: 8 } },
-  { player: "black", pos: { x: 2, y: 10 } },
-  { player: "white", pos: { x: 9, y: 6 } },
-  { player: "black", pos: { x: 9, y: 5 } },
-  { player: "white", pos: { x: 6, y: 6 } },
-  { player: "black", pos: { x: 8, y: 7 } },
-  { player: "white", pos: { x: 5, y: 7 } },
-  { player: "black", pos: { x: 6, y: 18 } },
-  { player: "white", pos: { x: 7, y: 18 } },
-  { player: "black", pos: { x: 10, y: 19 } },
-  { player: "white", pos: { x: 9, y: 19 } },
-  { player: "black", pos: { x: 9, y: 17 } },
-  { player: "white", pos: { x: 11, y: 19 } },
-  { player: "black", pos: { x: 19, y: 18 } },
-  { player: "white", pos: { x: 4, y: 19 } },
-  { player: "black", pos: { x: 4, y: 18 } },
-  { player: "white", pos: { x: 5, y: 18 } },
-  { player: "black", pos: { x: 3, y: 19 } },
-  { player: "white", pos: { x: 6, y: 17 } },
-  { player: "black", pos: { x: 19, y: 16 } },
-  { player: "white", pos: { x: 11, y: 2 } },
-  { player: "black", pos: { x: 12, y: 2 } },
-  { player: "white", pos: { x: 14, y: 5 } },
-  { player: "black", pos: { x: 13, y: 3 } },
-  { player: "white", pos: { x: 6, y: 10 } },
-  { player: "black", pos: { x: 3, y: 8 } },
-  { player: "white", pos: { x: 2, y: 7 } },
-  { player: "black", pos: { x: 5, y: 10 } },
-  { player: "white", pos: { x: 18, y: 15 } },
-  { player: "black", pos: { x: 19, y: 15 } },
-  { player: "white", pos: { x: 6, y: 19 } },
-  { player: "black", pos: { x: 12, y: 19 } },
-  { player: "white", pos: { x: 18, y: 1 } },
-  { player: "black", pos: { x: 10, y: 19 } },
-  { player: "white", pos: { x: 9, y: 18 } },
-  { player: "black", pos: { x: 10, y: 15 } },
-  { player: "white", pos: { x: 10, y: 16 } },
-  { player: "black", pos: { x: 19, y: 2 } },
-  { player: "white", pos: { x: 18, y: 14 } },
-  { player: "black", pos: { x: 17, y: 13 } },
-  { player: "white", pos: { x: 6, y: 9 } },
-  { player: "black", pos: { x: 7, y: 9 } },
-  { player: "white", pos: { x: 7, y: 10 } },
-  { player: "black", pos: { x: 5, y: 8 } },
-  { player: "white", pos: { x: 7, y: 8 } },
-  { player: "black", pos: { x: 6, y: 7 } },
-  { player: "white", pos: { x: 4, y: 7 } },
-  { player: "black", pos: { x: 6, y: 5 } },
-  { player: "white", pos: { x: 5, y: 5 } },
-  { player: "black", pos: { x: 7, y: 4 } },
-  { player: "white", pos: { x: 7, y: 3 } },
-  { player: "black", pos: { x: 11, y: 7 } },
-  { player: "white", pos: { x: 4, y: 8 } },
-  { player: "black", pos: { x: 4, y: 9 } },
-  { player: "white", pos: { x: 5, y: 12 } },
-  { player: "black", pos: { x: 4, y: 12 } },
-  { player: "white", pos: { x: 17, y: 10 } },
-  { player: "black", pos: { x: 18, y: 10 } },
-  { player: "white", pos: { x: 15, y: 16 } },
-  { player: "black", pos: { x: 12, y: 5 } },
-  { player: "white", pos: { x: 11, y: 6 } },
-  { player: "black", pos: { x: 14, y: 2 } },
-  { player: "white", pos: { x: 14, y: 3 } },
-  { player: "black", pos: { x: 11, y: 1 } },
-  { player: "white", pos: { x: 10, y: 1 } },
-  { player: "black", pos: { x: 12, y: 1 } },
-  { player: "white", pos: { x: 17, y: 15 } },
-  { player: "black", pos: { x: 19, y: 13 } },
-  { player: "white", pos: { x: 17, y: 3 } },
-  { player: "black", pos: { x: 18, y: 3 } },
-  { player: "white", pos: { x: 11, y: 8 } },
-  { player: "black", pos: { x: 10, y: 5 } },
-  { player: "white", pos: { x: 14, y: 1 } },
-  { player: "black", pos: { x: 13, y: 1 } },
-  { player: "white", pos: { x: 13, y: 12 } },
-  { player: "black", pos: { x: 15, y: 1 } },
-  { player: "white", pos: { x: 16, y: 1 } },
-  { player: "black", pos: { x: 14, y: 1 } },
-  { player: "white", pos: { x: 4, y: 19 } },
-  { player: "black", pos: { x: 13, y: 4 } },
-  { player: "white", pos: { x: 5, y: 19 } },
-  { player: "black", pos: { x: 11, y: 19 } },
-];
-const honinboGame = Game({ gameRecord: honinboGameRecord })
-  .submitPass("white")
-  .submitPass("black");
