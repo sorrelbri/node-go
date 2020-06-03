@@ -1,10 +1,41 @@
 # Node Go
 A browser application to play Go in real time.
 
-## Development Demo
 [The project in it's current state](https://play-node-go.herokuapp.com/)  
 [Client only prototype](https://sorrelbri.github.io/browser-go-proto/)
 
+![Screenshot of an in-progress game of Go.](public/game-in-progress.png)
+
+[About Go](#the-game-of-go)  
+[Technical Challenges](#technical-challenges)  
+[Setup For Development](#setup)  
+[Known Bugs](#known-bugs)  
+[Roadmap](#roadmap)  
+[Features](#features)  
+[Tech](#built-with)  
+
+---
+## The Game of Go
+Go is a 2 player abstract strategy game of perfect information.
+
+Players take turns placing playing pieces called stones on the intersections of a gridded board. This board is usually a square 19 points across. Stones remain on the points at which they are placed unless they are captured by the opposing player. Capture occurs when a stone or group of stones no longer has any adjascent empty points.
+
+Play ends when both players agree that they have exhausted all advantageous moves. Scoring is determined by counting and comparing the area controlled by either player.
+
+For a more detailed explanation of the rules, please see [my previous illustrated explanation of the game of go](https://github.com/sorrelbri/browser-go-proto#the-game-of-go) or the [American Go Association's Concise Rules of Go.](https://www.usgo.org/aga-concise-rules-go)
+
+---
+## Technical Challenges
+### Modeling Game State
+A go board typically consists of 361 points which can exist in a number of states.
+
+### Partitioning Game Rooms
+Finding a game starts with joining a game room.
+![Image of Home Screen with 'main' game room](public/home-screen.png)
+Watch an in progress game, join a game, or study a historic game.
+![Image of Room Screen with multiple games in various states](public/room-screen.png)
+
+---
 ## Setup
 ### Local Repo
 ```sh
@@ -77,23 +108,34 @@ $ cd packages/play-node-go
 $ npm start
 ```
 
+---
 ## Known Bugs
-- server side move validation not complete, full game logic not implemented
+- game end logic not implemented on front end yet
 - no authorization for game moves
 - websocket connections may remain open, pooling prevents runaway leaks, but tests may hang
 
-## Roadmap 4/20
-1. Game logic module
-2. Game in progress caching
-3. Auth for games
-4. Game request creation
+---
+## Roadmap 
+### 6/20
+1. Frontend implementation of game end logic
+2. Auth for games
+3. Game request creation
+### 7/20
+1. Generate game records
+2. Implement chat
+3. Implement study mode
 
+---
 ## Features
-- [ ] Realtime communications
+- [x] Realtime play
+- [x] Account authentication
+- [ ] Chat
+- [ ] Study mode
 - [ ] Multiple game settings
 - [ ] Customizable board size
+- [ ] Download games in .sgf format
 
-
+---
 ## Built with
 - [Express](https://expressjs.com)
 - [React](https://reactjs.org)
