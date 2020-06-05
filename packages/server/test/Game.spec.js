@@ -1032,6 +1032,7 @@ describe("Game end logic", () => {
     honinboGame.boardState["17-4"].group.should.eql(group);
     done();
   });
+
   const isWhite = (x) => x < 0;
   const isBlack = (x) => x > 0;
   const territories = [
@@ -1053,8 +1054,18 @@ describe("Game end logic", () => {
     });
   });
 
-  it.skip("end game counts territory properly", (done) => {
+  it("end game toggleTerritory switches through territory values", (done) => {
+    const game = honinboGame;
+    const territory = game.toggleTerritory("5-14").toggleTerritory("5-14")
+      .territory;
+    territory["5-14"].should.eql("d");
+    territory["5-15"].should.eql("d");
+    done();
+  });
+
+  it("end game counts territory properly", (done) => {
     const game = honinboGame.endGame();
+    // console.log(game.territory);
     game.winner.should.eql(1);
     game.score.should.eql(1.5);
     done();

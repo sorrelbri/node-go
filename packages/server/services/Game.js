@@ -125,6 +125,16 @@ const getLegalMoves = (Game) => {
   return legalMoves;
 };
 
+const getTerritory = (Game) => {
+  const mapTerritory = (point) => {
+    if (point.territory === "d") return "d";
+    if (point.territory > 0) return 1;
+    if (point.territory < 0) return -1;
+  };
+  const territory = pipeMap(mapTerritory)(Game.boardState);
+  return territory;
+};
+
 const getNeighbors = ({ Game, point }) => {
   let { top = null, btm = null, lft = null, rgt = null } = point.neighbors;
   const { boardState, boardSize } = Game;
@@ -335,10 +345,21 @@ const Game = ({ gameData = {}, gameRecord = [] } = {}) => {
       return this;
     },
 
-    toggleTerritory: function () {
-      // if toggleGroups(key) toggle that group
-      // submit board state
-      return this;
+    toggleTerritory: function (key) {
+      if (this.turn) return { ...this, success: false };
+      const groupKey = this.boardState[key].group;
+      const group = this.groups[groupKey];
+      const newStones = Array.from(group.stones).forEach((point) => {
+        // console.log(point);
+        if (point.stone) {
+          return (point.territory = -1 * point.territory);
+        }
+        if (point.territory === "d") return (point.territory = 1);
+        if (point.territory > 0) return (point.territory = -1);
+        if (point.territory < 0) return (point.territory = "d");
+      });
+      this.groups[groupKey];
+      return { ...this, territory: getTerritory(this) };
     },
 
     endGame: function () {
@@ -366,7 +387,7 @@ const Game = ({ gameData = {}, gameRecord = [] } = {}) => {
       this.winner = this.score > 0 ? 1 : -1;
       // submit end game board state and data for study
       // (study module should run client side and only )
-      return this;
+      return { ...this, territory: getTerritory(this) };
     },
   };
 };
