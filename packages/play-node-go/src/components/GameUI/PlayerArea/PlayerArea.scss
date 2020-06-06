@@ -47,6 +47,7 @@ div.player-container {
       padding: .5em;
     }
     &[data-turn] {
+      // highlight for turn
       box-shadow: 0 0 3vh 3vh rgb(255, 175, 2);
         
       & + .player-container__name-space .player-container__caps-space:hover :first-child {

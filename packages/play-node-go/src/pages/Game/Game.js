@@ -82,6 +82,7 @@ const Game = (props) => {
               ? playerBlackMeta
               : playerWhiteMeta
           }
+          turn={state?.meta?.turn}
         />
         <Board
           dispatch={dispatch}
@@ -99,6 +100,7 @@ const Game = (props) => {
               ? playerWhiteMeta
               : playerBlackMeta
           }
+          turn={state?.meta?.turn}
         />
       </div>
 
