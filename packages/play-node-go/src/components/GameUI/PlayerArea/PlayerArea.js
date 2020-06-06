@@ -1,45 +1,48 @@
-import React from 'react';
-import './PlayerArea.scss';
+import React from "react";
+import "./PlayerArea.scss";
 
-const PlayerArea = (props) => {
+const PlayerArea = ({ playerMeta }) => {
   // const { user } = props
   const user = {
-    stones: 'black',
-    username: 'Name',
-    captures: 0
-  }
+    stones: "black",
+    username: "Name",
+    captures: 0,
+  };
 
   return (
-    <div
-      className={`player-container player-container--${user.stones}`}
-    >
-      <div 
-        className={`player-container__bowl player-container__bowl--${user.stones}`}
+    <div className={`player-container player-container--${playerMeta.stones}`}>
+      <div
+        className={`player-container__bowl player-container__bowl--${playerMeta.stones}`}
       >
         <p>Pass?</p>
       </div>
       <div
-        className={`player-container__name-space player-container__name-space--${user.stones}`}
+        className={`player-container__name-space player-container__name-space--${playerMeta.stones}`}
       >
-        <h4>{user ? user.username : 'Waiting for player' }</h4>
+        <h4>
+          {playerMeta
+            ? `${playerMeta.player} ${playerMeta.rank}`
+            : "Waiting for player"}
+        </h4>
 
         <div
-          className={`player-container__caps-space player-container__caps-space__${user.stones}`}
+          className={`player-container__caps-space player-container__caps-space__${playerMeta.stones}`}
         >
           <p
-            className={`player-container__resign-message player-container__resign-message--${user.stones}`}
-          >Resign?</p>
+            className={`player-container__resign-message player-container__resign-message--${playerMeta.stones}`}
+          >
+            Resign?
+          </p>
 
-          <p 
-            className={`player-container__caps-counter player-container__caps-counter--${user.stones}`}
-          >{user ? user.captures : 'Captures go here'}</p>
-
+          <p
+            className={`player-container__caps-counter player-container__caps-counter--${playerMeta.stones}`}
+          >
+            {playerMeta ? playerMeta.captures : "Captures go here"}
+          </p>
         </div>
-
       </div>
-
     </div>
   );
-}
+};
 
 export default PlayerArea;
