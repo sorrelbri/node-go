@@ -2,7 +2,7 @@ import React from "react";
 import "./Point.scss";
 
 const Point = (props) => {
-  const { posX, posY, user, game, meta, dispatch, pointData } = props;
+  const { posX, posY, user, game, meta, dispatch, pointData, hoshi } = props;
   const turn =
     meta && meta.turn
       ? meta.turn > 0
@@ -55,7 +55,10 @@ const Point = (props) => {
       className={`board__point ${xFlag()} ${yFlag()}`}
       onClick={(e) => clickHandle(e)}
     >
-      <div className="board__point__stone" data-stone={stone()}>
+      <div
+        className={`board__point__stone ${hoshi ? "hoshi" : ""}`}
+        data-stone={stone()}
+      >
         <div className="board__point__dot" data-dot={dot()}></div>
       </div>
     </div>

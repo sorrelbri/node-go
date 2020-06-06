@@ -5,6 +5,9 @@ div.board__point {
   margin: auto;
   padding: 0;
   vertical-align: middle;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 div.board__point--top {
@@ -43,11 +46,14 @@ div.board__point__stone {
   width: 85%;
   height: 85%;
   border-radius: 50%;
-  margin: auto;
   vertical-align: middle;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  &.hoshi {
+    background: radial-gradient(circle farthest-corner at center, #000 0%, #000 14%, rgba(0,0,0,0) 15%);
+    z-index: 3;
+  }
 }
 
 div.board__point div.board__point__stone div.board__point__dot {

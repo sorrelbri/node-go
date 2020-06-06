@@ -5,6 +5,34 @@ import Point from "../Point/Point";
 const Board = (props) => {
   const { game, user, dispatch, board, meta } = props;
   const sizeFlag = `Game__board--size-${game.boardSize}`;
+  const hoshiPoints = {
+    9: { "3-3": true, "7-7": true, "3-7": true, "7-3": true },
+    13: {
+      "7-7": true,
+      "10-7": true,
+      "7-4": true,
+      "7-10": true,
+      "4-7": true,
+      "4-4": true,
+      "10-10": true,
+      "4-10": true,
+      "10-4": true,
+    },
+    19: {
+      "10-10": true,
+      "16-10": true,
+      "10-4": true,
+      "10-16": true,
+      "4-10": true,
+      "4-4": true,
+      "16-16": true,
+      "4-16": true,
+      "16-4": true,
+    },
+  };
+
+  const isHoshi = (posX, posY) =>
+    hoshiPoints[game.boardSize][`${posX}-${posY}`];
 
   const renderPoints = (boardSize) => {
     let i = 0,
@@ -18,10 +46,10 @@ const Board = (props) => {
           posX={posX}
           posY={posY}
           pointData={board[`${posX}-${posY}`]}
-          // point={board[posX][posY]}
           dispatch={dispatch}
           user={user}
           meta={meta}
+          hoshi={isHoshi(posX, posY)}
           {...props}
         />
       );
