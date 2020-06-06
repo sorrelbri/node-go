@@ -1019,7 +1019,7 @@ describe("Game end logic", () => {
     { player: "black", pos: { x: 11, y: 19 } },
   ];
   const honinboGame = Game({
-    gameData: { komi: 4.5 },
+    gameData: { komi: 1.5 },
     gameRecord: honinboGameRecord,
   })
     .submitPass("white")
@@ -1064,10 +1064,20 @@ describe("Game end logic", () => {
   });
 
   it("end game counts territory properly", (done) => {
-    const game = honinboGame.endGame();
-    // console.log(game.territory);
-    game.winner.should.eql(1);
+    const game = honinboGame
+      .toggleTerritory("6-12")
+      .toggleTerritory("6-16")
+      .toggleTerritory("7-6")
+      .toggleTerritory("7-6")
+      .toggleTerritory("11-5")
+      .toggleTerritory("11-5")
+      .toggleTerritory("11-9")
+      .toggleTerritory("12-11")
+      .toggleTerritory("12-11")
+      .toggleTerritory("16-16")
+      .endGame();
     game.score.should.eql(1.5);
+    game.winner.should.eql(1);
     done();
   });
 });

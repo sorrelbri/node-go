@@ -382,12 +382,9 @@ const Game = ({ gameData = {}, gameRecord = [] } = {}) => {
       );
       this.playerState.bScore = blackTerritory + this.playerState.bCaptures;
       this.playerState.wScore = whiteTerritory + this.playerState.wCaptures;
-      this.score =
+      const score =
         this.playerState.bScore - (this.playerState.wScore + this.komi);
-      this.winner = this.score > 0 ? 1 : -1;
-      // submit end game board state and data for study
-      // (study module should run client side and only )
-      return { ...this, territory: getTerritory(this) };
+      return { ...this, score, winner: score > 0 ? 1 : -1 };
     },
   };
 };
