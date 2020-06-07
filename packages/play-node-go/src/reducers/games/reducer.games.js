@@ -30,7 +30,7 @@ export const gamesReducer = (state, action) => {
     }
 
     case "GAME_RESIGN": {
-      const { gameRecord, pass, turn, winner, playerState } = action.body.meta;
+      const { gameRecord, pass, turn, winner, playerState } = action.body;
       return {
         ...state,
         meta: { gameRecord, pass, turn, winner, playerState },
