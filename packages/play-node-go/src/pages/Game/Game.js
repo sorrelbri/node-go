@@ -11,6 +11,8 @@ const Game = (props) => {
   const gameId = parseInt(useParams().id) || 0;
   const [playerBlackMeta, setPlayerBlackMeta] = useState({});
   const [playerWhiteMeta, setPlayerWhiteMeta] = useState({});
+  const playerState = state?.meta?.playerState;
+  const game = state.active?.game;
 
   useEffect(() => {
     const fetchGameAPI = async () => {
@@ -42,14 +44,9 @@ const Game = (props) => {
   }, [state.active.game, dispatch, state.user]);
 
   useEffect(() => {
-    if (!state.meta) return;
-    const {
-      playerBlack,
-      playerBlackRank,
-      playerWhite,
-      playerWhiteRank,
-    } = state.active.game;
-    const { bCaptures, wCaptures } = state.meta.playerState;
+    if (!game || !playerState) return;
+    const { playerBlack, playerBlackRank, playerWhite, playerWhiteRank } = game;
+    const { bCaptures, wCaptures } = playerState;
     setPlayerBlackMeta({
       player: playerBlack,
       rank: playerBlackRank,
@@ -62,7 +59,7 @@ const Game = (props) => {
       captures: wCaptures,
       stones: "white",
     });
-  }, [state?.meta?.playerState, state.active?.game]);
+  }, [playerState, game]);
 
   return (
     <div className="Game" data-testid="Game">
