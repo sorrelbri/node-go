@@ -61,17 +61,39 @@ const Game = (props) => {
     });
   }, [playerState, game]);
 
+  const handleResignClick = (player) => {
+    const action = {
+      type: "SOCKET",
+      message: "RESIGN",
+      body: { game, player },
+    };
+    dispatch(action);
+  };
+
   return (
     <div className="Game" data-testid="Game">
       <div className="Game__meta-container">
         <span className="Game__socket-flag">{state.socket ? "✓" : " ⃠"}</span>
         <Logo />
+        {state?.meta?.winner ? (
+          <p>
+            {`winner: ${
+              state.meta.winner === 1
+                ? playerBlackMeta?.player
+                : playerWhiteMeta?.player
+            }
+            `}
+          </p>
+        ) : (
+          <></>
+        )}
         <p>Timer</p>
         <p>? Game Tree</p>
       </div>
 
       <div className="Game__board-container">
         <PlayerArea
+          handleResignClick={handleResignClick}
           playerMeta={
             state.user &&
             playerBlackMeta.playerBlack &&
@@ -90,6 +112,7 @@ const Game = (props) => {
           board={state.board}
         />
         <PlayerArea
+          handleResignClick={handleResignClick}
           playerMeta={
             state.user &&
             playerBlackMeta.playerWhite &&

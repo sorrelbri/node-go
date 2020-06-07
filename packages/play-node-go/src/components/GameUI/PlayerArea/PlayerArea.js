@@ -1,7 +1,7 @@
 import React from "react";
 import "./PlayerArea.scss";
 
-const PlayerArea = ({ playerMeta, turn }) => {
+const PlayerArea = ({ handleResignClick, playerMeta, turn }) => {
   const { stones, player, rank, captures } = playerMeta;
   const isTurn =
     (stones === "black" && turn === 1) || (stones === "white" && turn === -1);
@@ -28,6 +28,7 @@ const PlayerArea = ({ playerMeta, turn }) => {
         >
           <p
             className={`player-container__resign-message player-container__resign-message--${stones}`}
+            {...(isTurn ? { onClick: () => handleResignClick(stones) } : null)}
           >
             Resign?
           </p>

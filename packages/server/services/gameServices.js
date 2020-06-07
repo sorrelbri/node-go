@@ -70,6 +70,10 @@ const GameService = (moveQueries) => {
     getAllGames: () => {
       return gamesInProgress;
     },
+
+    resign: ({ id, player }) => {
+      return gamesInProgress[id].submitResign(player).getMeta();
+    },
   };
 };
 

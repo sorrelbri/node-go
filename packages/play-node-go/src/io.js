@@ -42,6 +42,10 @@ const launch = (nsp, dispatch) => {
     dispatch({ type: "GAMES", message: "UPDATE_BOARD", body: data });
   });
 
+  socket.on("game_resign", (data) => {
+    dispatch({ type: "GAMES", message: "GAME_RESIGN", body: data });
+  });
+
   return socket;
 };
 

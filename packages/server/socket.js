@@ -21,8 +21,6 @@ io.on("connection", async (socket) => {
         const game = `game-${data.game.id}`;
         socket.join(game, async () => {
           const gameRecord = await moveQueries.findGameRecord(data.game.id);
-          console.log("gameRecord from db");
-          console.log(gameRecord);
           await gameServices.initGame({ id: data.game.id, gameRecord });
           const { board, ...meta } = await gameServices.getDataForUI(
             data.game.id
@@ -50,6 +48,21 @@ io.on("connection", async (socket) => {
           socket.join(gameNsp, () => {
             io.of(room).to(gameNsp).emit("error", e);
           });
+        }
+      });
+      socket.on("resign", async ({ game, player }) => {
+        const { id, room } = game;
+        const gameNsp = `game-${id}`;
+        try {
+          const meta = await gameServices.resign({
+            id,
+            player,
+          });
+          socket.join(gameNsp, () => {
+            io.of(room).to(gameNsp).emit("game_resign", meta);
+          });
+        } catch (e) {
+          console.log(e);
         }
       });
     });

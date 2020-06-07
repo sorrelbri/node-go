@@ -34,6 +34,10 @@ export const socketReducer = (state, action) => {
       return makeMove(state, action);
     }
 
+    case "RESIGN": {
+      return resign(state, action);
+    }
+
     default:
       return state;
   }
@@ -58,8 +62,13 @@ function connectGame(state, action) {
 }
 
 function makeMove(state, action) {
-  // const { user, game, room, board, move } = action.body;
   const socket = state.socket;
   socket.emit("make_move", { ...action.body });
+  return state;
+}
+
+function resign(state, action) {
+  const socket = state.socket;
+  socket.emit("resign", { ...action.body });
   return state;
 }
