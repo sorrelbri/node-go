@@ -37,13 +37,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-// HTTP redirect to HTTPS
-app.use("/", (req, res, next) => {
-  if (req.protocol === "http") {
-    return res.redirect(`https://${req.hostname}`);
-  }
-  return next();
-});
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/auth", authRouter);
