@@ -14,7 +14,7 @@ describe("game services", () => {
 
   it("init game returns game metadata", (done) => {
     const { board, ...game } = gameServices.initGame({ id: 1, handicap: 4 });
-    game.should.eql({ ...initialMeta, handicap: 4, turn: -1 });
+    game.should.eql({ ...initialMeta, handicap: 4, turn: -1, territory: {} });
     done();
   });
 
@@ -28,6 +28,7 @@ describe("game services", () => {
       handicap: 4,
       turn: 1,
       gameRecord: [move],
+      territory: {},
     };
     afterMove.should.eql(afterMoveShould);
   });
