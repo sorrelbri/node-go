@@ -199,6 +199,7 @@ const Game = ({ gameData = {}, gameRecord = [] } = {}) => {
     score: 0,
     groups: {}, // key is Symbol(position): {points: Set(), liberties: Set()}
     boardState: {},
+    territory: {},
     kos: [],
     gameRecord: gameRecord,
     playerState: gameData.playerState || {
@@ -241,6 +242,7 @@ const Game = ({ gameData = {}, gameRecord = [] } = {}) => {
       if (this.pass > 1) {
         return { ...this, success: false };
       }
+      if (x === 0) return this.submitPass(player);
       let game = this;
       let success = false;
       const point = game.boardState[`${x}-${y}`];
@@ -342,7 +344,7 @@ const Game = ({ gameData = {}, gameRecord = [] } = {}) => {
       this.boardState = boardState;
       // submit board state to users
       this.turn = 0;
-      return this;
+      return { ...this, territory: getTerritory(this) };
     },
 
     toggleTerritory: function (key) {

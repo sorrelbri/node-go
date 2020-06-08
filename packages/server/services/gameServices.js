@@ -59,6 +59,7 @@ const GameService = (moveQueries) => {
     getDataForUI: (id) => {
       return {
         board: gamesInProgress[id].legalMoves,
+        territory: gamesInProgress[id].territory,
         ...gamesInProgress[id].getMeta(),
       };
     },
@@ -73,6 +74,31 @@ const GameService = (moveQueries) => {
 
     resign: ({ id, player }) => {
       return gamesInProgress[id].submitResign(player).getMeta();
+    },
+
+    async pass({ id, player }) {
+      gamesInProgress[id] = gamesInProgress[id].submitPass(player);
+      if (gamesInProgress[id].success === false)
+        return { message: "illegal move" };
+      try {
+        if (moveQueries) {
+          const priorMove = gamesInProgress[id].gameRecord.length;
+          const movePass = {
+            gameId: id,
+            player,
+            x: 0,
+            y: 0,
+            gameRecord: true,
+            priorMove,
+          };
+          let moveDbResult;
+          moveDbResult = await moveQueries.addMove(movePass);
+        }
+      } catch {
+        gamesInProgress[id].returnToMove(-1);
+      } finally {
+        return this.getDataForUI(id);
+      }
     },
   };
 };

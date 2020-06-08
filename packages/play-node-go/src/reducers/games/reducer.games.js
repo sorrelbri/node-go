@@ -25,6 +25,7 @@ export const gamesReducer = (state, action) => {
       return {
         ...state,
         board: action.body.board,
+        territory: action.body.territory,
         meta: { gameRecord, pass, turn, winner, playerState },
       };
     }

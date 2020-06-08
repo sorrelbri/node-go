@@ -28,6 +28,8 @@ io.on("connection", async (socket) => {
           io.of(room).to(game).emit("game_connected", { board, meta });
         });
       });
+
+      // MAKE MOVE
       socket.on("make_move", async (data) => {
         const { user, move, board, game, room } = data;
         const gameNsp = `game-${data.game.id}`;
@@ -50,6 +52,8 @@ io.on("connection", async (socket) => {
           });
         }
       });
+
+      // RESIGN
       socket.on("resign", async ({ game, player }) => {
         const { id, room } = game;
         const gameNsp = `game-${id}`;
@@ -60,6 +64,29 @@ io.on("connection", async (socket) => {
           });
           socket.join(gameNsp, () => {
             io.of(room).to(gameNsp).emit("game_resign", meta);
+          });
+        } catch (e) {
+          console.log(e);
+        }
+      });
+      // PASS
+      socket.on("pass", async ({ game, player }) => {
+        const { id, room } = game;
+        const gameNsp = `game${id}`;
+        try {
+          const {
+            board,
+            message,
+            territory,
+            ...meta
+          } = await gameServices.pass({
+            id,
+            player,
+          });
+          socket.join(gameNsp, () => {
+            io.of(room)
+              .to(gameNsp)
+              .emit("update_board", { board, message, territory, meta });
           });
         } catch (e) {
           console.log(e);

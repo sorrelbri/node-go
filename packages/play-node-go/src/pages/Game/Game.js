@@ -70,6 +70,15 @@ const Game = (props) => {
     dispatch(action);
   };
 
+  const handlePassClick = (player) => {
+    const action = {
+      type: "SOCKET",
+      message: "PASS",
+      body: { game, player },
+    };
+    dispatch(action);
+  };
+
   return (
     <div className="Game" data-testid="Game">
       <div className="Game__meta-container">
@@ -94,6 +103,7 @@ const Game = (props) => {
       <div className="Game__board-container">
         <PlayerArea
           handleResignClick={handleResignClick}
+          handlePassClick={handlePassClick}
           playerMeta={
             state.user &&
             playerBlackMeta.playerBlack &&
@@ -113,6 +123,7 @@ const Game = (props) => {
         />
         <PlayerArea
           handleResignClick={handleResignClick}
+          handlePassClick={handlePassClick}
           playerMeta={
             state.user &&
             playerBlackMeta.playerWhite &&

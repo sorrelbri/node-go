@@ -1,7 +1,12 @@
 import React from "react";
 import "./PlayerArea.scss";
 
-const PlayerArea = ({ handleResignClick, playerMeta, turn }) => {
+const PlayerArea = ({
+  handleResignClick,
+  handlePassClick,
+  playerMeta,
+  turn,
+}) => {
   const { stones, player, rank, captures } = playerMeta;
   const isTurn =
     (stones === "black" && turn === 1) || (stones === "white" && turn === -1);
@@ -10,7 +15,9 @@ const PlayerArea = ({ handleResignClick, playerMeta, turn }) => {
     <div className={`player-container player-container--${stones}`}>
       <div
         className={`player-container__bowl player-container__bowl--${stones}`}
-        {...(isTurn ? { "data-turn": true } : null)}
+        {...(isTurn
+          ? { "data-turn": true, onClick: () => handlePassClick(stones) }
+          : null)}
       >
         <p>Pass?</p>
       </div>
