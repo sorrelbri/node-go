@@ -27,7 +27,16 @@ For a more detailed explanation of the rules, please see [my previous illustrate
 ---
 ## Technical Challenges
 ### Modeling Game State
-A go board typically consists of 361 points which can exist in a number of states.
+A go board typically consists of 361 points which can exist in a number of states. Points can influence the state of points that are orthogonal neighbors. This relationship can be thought of as an undirected graph, with each point being a vertex typically of degree 4. Special cases include 'edge' points, whose degree is 3 or, in the case of corner points, 2.
+
+Many of the methods that manage the state of the game and of the board, make use of this graph representation. Groups are contiguous points with the same color stone which are important in determining the life or death of stones on the board. When a player makes a move, (provided that move is legal,) the point at which the move is made will utilize a breadth-first graph traversal calling a `joinGroup` method on each point with the same color stone.
+
+Adjacent points without stones are very important to the state of a point as well. These are known as liberties, and so long as a group of stones has at least one point with at least one liberty, that group remains alive and on the board. Therefore, the `joinGroup` method also utilizes a depth first traversal to mark all of the liberties of a group. Both the stones and the liberties of the group are memoized on the Game object.
+
+![Image of Game logic](public/game-logic.png)
+
+### Caching multiple in-progress games
+![Image of Game module in context](public/game-module.png)  
 
 ### Partitioning Game Rooms
 Finding a game starts with joining a game room.
