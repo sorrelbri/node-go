@@ -69,6 +69,7 @@ io.on("connection", async (socket) => {
           console.log(e);
         }
       });
+
       // PASS
       socket.on("pass", async ({ game, player }) => {
         const { id, room } = game;
@@ -87,6 +88,23 @@ io.on("connection", async (socket) => {
             io.of(room)
               .to(gameNsp)
               .emit("update_board", { board, message, territory, meta });
+          });
+        } catch (e) {
+          console.log(e);
+        }
+      });
+
+      // TOGGLE TERRITORY
+      socket.on("toggle_territory", async ({ user, point, board, game }) => {
+        const { id, room } = game;
+        const gameNsp = `game${id}`;
+        try {
+          const { board, ...meta } = await gameServices.toggleTerritory({
+            id,
+            point,
+          });
+          socket.join(gameNsp, () => {
+            io.of(room).to(gameNsp).emit("update_board", { board, meta });
           });
         } catch (e) {
           console.log(e);

@@ -100,6 +100,11 @@ const GameService = (moveQueries) => {
         return this.getDataForUI(id);
       }
     },
+
+    toggleTerritory({ id, point }) {
+      gamesInProgress[id] = gamesInProgress[id].toggleTerritory(point);
+      return this.getDataForUI(id);
+    },
   };
 };
 

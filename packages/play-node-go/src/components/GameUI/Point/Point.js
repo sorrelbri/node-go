@@ -40,6 +40,14 @@ const Point = (props) => {
     return "";
   };
   const clickHandle = (e) => {
+    if (meta?.turn === 0 && !meta?.winner) {
+      const action = {
+        type: "SOCKET",
+        message: "TOGGLE_TERRITORY",
+        body: { user, point: `${posX}-${posY}`, game, room: game.room },
+      };
+      return dispatch(action);
+    }
     const action = {
       type: "SOCKET",
       message: "MAKE_MOVE",

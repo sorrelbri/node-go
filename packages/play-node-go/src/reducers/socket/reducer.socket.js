@@ -42,6 +42,10 @@ export const socketReducer = (state, action) => {
       return pass(state, action);
     }
 
+    case "TOGGLE_TERRITORY": {
+      return toggleTerritory(state, action);
+    }
+
     default:
       return state;
   }
@@ -80,5 +84,11 @@ function resign(state, action) {
 function pass(state, action) {
   const socket = state.socket;
   socket.emit("pass", { ...action.body });
+  return state;
+}
+
+function toggleTerritory(state, action) {
+  const socket = state.socket;
+  socket.emit("toggle_territory", { ...action.body });
   return state;
 }
