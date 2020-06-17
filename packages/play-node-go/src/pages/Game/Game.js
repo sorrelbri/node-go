@@ -117,7 +117,6 @@ const Game = (props) => {
           dispatch={dispatch}
           game={state.active.game}
           meta={state.meta}
-          record={state.active.record}
           user={state.user}
           board={state.board}
         />

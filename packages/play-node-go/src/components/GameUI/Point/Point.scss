@@ -85,11 +85,23 @@ div.board__point__stone{
   }
 }
 
-div.board__point:hover {
-  div.board__point__dot[data-dot="1"] {
+div.board__point {
+  div.board__point__dot[data-dot="dame"] {
+    background: purple;
+  }
+  div.board__point__dot[data-dot="black"] {
     background: black;
   }
-  div.board__point__dot[data-dot="-1"] {
+  div.board__point__dot[data-dot="white"] {
     background: white;
+  }
+
+  &:hover {
+    div.board__point__dot[data-dot="1"] {
+      background: black;
+    }
+    div.board__point__dot[data-dot="-1"] {
+      background: white;
+    }
   }
 }

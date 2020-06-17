@@ -2,7 +2,17 @@ import React from "react";
 import "./Point.scss";
 
 const Point = (props) => {
-  const { posX, posY, user, game, meta, dispatch, pointData, hoshi } = props;
+  const {
+    posX,
+    posY,
+    user,
+    game,
+    meta,
+    dispatch,
+    pointData,
+    dotData,
+    hoshi,
+  } = props;
   const turn =
     meta && meta.turn
       ? meta.turn > 0
@@ -17,12 +27,6 @@ const Point = (props) => {
     if (pointData === -1) return "white";
     if (pointData === "k") return "ko";
     return "none";
-  };
-
-  const dot = () => {
-    if (pointData === "l") {
-      return game.turn || meta.turn;
-    }
   };
 
   const xFlag = () => {
@@ -50,6 +54,22 @@ const Point = (props) => {
     dispatch(action);
   };
 
+  const getDot = () => {
+    if (meta?.turn === 0) {
+      switch (dotData) {
+        case -1:
+          return "white";
+        case 1:
+          return "black";
+        case "d":
+          return "dame";
+        default:
+          return 0;
+      }
+    }
+    return dotData;
+  };
+
   return (
     <div
       className={`board__point ${xFlag()} ${yFlag()}`}
@@ -59,7 +79,7 @@ const Point = (props) => {
         className={`board__point__stone ${hoshi ? "hoshi" : ""}`}
         data-stone={stone()}
       >
-        <div className="board__point__dot" data-dot={dot()}></div>
+        <div className="board__point__dot" data-dot={getDot()}></div>
       </div>
     </div>
   );

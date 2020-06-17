@@ -21,12 +21,18 @@ export const gamesReducer = (state, action) => {
     }
 
     case "UPDATE_BOARD": {
-      const { gameRecord, pass, turn, winner, playerState } = action.body.meta;
+      const {
+        gameRecord,
+        pass,
+        turn,
+        winner,
+        playerState,
+        territory,
+      } = action.body.meta;
       return {
         ...state,
         board: action.body.board,
-        territory: action.body.territory,
-        meta: { gameRecord, pass, turn, winner, playerState },
+        meta: { gameRecord, pass, turn, winner, playerState, territory },
       };
     }
 
