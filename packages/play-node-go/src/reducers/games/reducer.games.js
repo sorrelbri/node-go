@@ -24,8 +24,7 @@ export const gamesReducer = (state, action) => {
     }
 
     case "GAME_END": {
-      console.log(action.body);
-      return state;
+      return gameEnd(state, action);
     }
 
     default: {
@@ -102,4 +101,10 @@ function gameResign(state, action) {
     ...state,
     meta: { gameRecord, pass, turn, winner, playerState },
   };
+}
+
+function gameEnd(state, action) {
+  console.log(action);
+  const { winner, score } = action.body.meta;
+  return { ...state, meta: { ...state.meta, winner, score } };
 }

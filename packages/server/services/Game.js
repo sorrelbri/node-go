@@ -235,6 +235,7 @@ const Game = ({ gameData = {}, gameRecord = [] } = {}) => {
         boardSize: this.boardSize,
         handicap: this.handicap,
         komi: this.komi,
+        score: this.score,
       };
     },
 

@@ -126,10 +126,6 @@ io.on("connection", async (socket) => {
           });
         } catch (e) {
           console.log(e);
-        } finally {
-          socket.join(gameNsp, () => {
-            io.of(room).to(gameNsp).emit("end_game", { board, meta });
-          });
         }
       });
     });

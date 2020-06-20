@@ -46,7 +46,7 @@ const launch = (nsp, dispatch) => {
     dispatch({ type: "GAMES", message: "GAME_RESIGN", body: data });
   });
 
-  socket.on("game_end", (data) => {
+  socket.on("end_game", (data) => {
     dispatch({ type: "GAMES", message: "GAME_END", body: data });
   });
 
