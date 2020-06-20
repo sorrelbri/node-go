@@ -1,6 +1,6 @@
 const Game = require("./Game").Game;
 
-const GameService = (moveQueries) => {
+const GameService = ({ moveQueries, gameQueries }) => {
   const storeGame = (game) => {
     gamesInProgress[game.id] = Game(game);
     return gamesInProgress[game.id];
@@ -103,6 +103,18 @@ const GameService = (moveQueries) => {
 
     toggleTerritory({ id, point }) {
       gamesInProgress[id] = gamesInProgress[id].toggleTerritory(point);
+      return this.getDataForUI(id);
+    },
+
+    async endGame({ id }) {
+      gamesInProgress[id] = gamesInProgress[id].endGame();
+      try {
+        if (gameQueries) {
+          // TODO add end game query
+        }
+      } catch (e) {
+        console.log(e);
+      }
       return this.getDataForUI(id);
     },
   };

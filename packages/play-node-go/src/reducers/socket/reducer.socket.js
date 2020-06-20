@@ -46,6 +46,10 @@ export const socketReducer = (state, action) => {
       return toggleTerritory(state, action);
     }
 
+    case "END_GAME": {
+      return endGame(state, action);
+    }
+
     default:
       return state;
   }
@@ -90,5 +94,12 @@ function pass(state, action) {
 function toggleTerritory(state, action) {
   const socket = state.socket;
   socket.emit("toggle_territory", { ...action.body });
+  return state;
+}
+
+function endGame(state, action) {
+  console.log("end game");
+  const socket = state.socket;
+  socket.emit("end_game", { ...action.body });
   return state;
 }

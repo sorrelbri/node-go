@@ -10,16 +10,27 @@ const PlayerArea = ({
   const { stones, player, rank, captures } = playerMeta;
   const isTurn =
     (stones === "black" && turn === 1) || (stones === "white" && turn === -1);
+  const bowlAttributes = () => {
+    if (isTurn || turn === 0)
+      return {
+        "data-turn": true,
+        onClick: () => handlePassClick(stones),
+      };
+    return null;
+  };
+  const bowlText = () => {
+    if (isTurn) return "Pass?";
+    if (turn === 0) return "End Game?";
+    // return;
+  };
 
   return (
     <div className={`player-container player-container--${stones}`}>
       <div
         className={`player-container__bowl player-container__bowl--${stones}`}
-        {...(isTurn
-          ? { "data-turn": true, onClick: () => handlePassClick(stones) }
-          : null)}
+        {...bowlAttributes()}
       >
-        <p>Pass?</p>
+        <p>{bowlText()}</p>
       </div>
       <div
         className={`player-container__name-space player-container__name-space--${stones}`}

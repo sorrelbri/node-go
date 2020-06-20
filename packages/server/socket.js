@@ -4,7 +4,11 @@ const io = socketIO({ cookie: false });
 
 // const gameQueries = require('./data/queries/game');
 const moveQueries = require("./data/queries/move");
-const gameServices = require("./services/gameServices")(moveQueries);
+const gameQueries = require("./data/queries/game");
+const gameServices = require("./services/gameServices")({
+  moveQueries,
+  gameQueries,
+});
 
 io.on("connection", async (socket) => {
   socket.emit("connected", { message: "socket connected" });
@@ -108,6 +112,24 @@ io.on("connection", async (socket) => {
           });
         } catch (e) {
           console.log(e);
+        }
+      });
+
+      // END GAME
+      socket.on("end_game", async ({ user, game }) => {
+        const { id, room } = game;
+        const gameNsp = `game${id}`;
+        try {
+          const { board, ...meta } = await gameServices.endGame({ id });
+          socket.join(gameNsp, () => {
+            io.of(room).to(gameNsp).emit("end_game", { board, meta });
+          });
+        } catch (e) {
+          console.log(e);
+        } finally {
+          socket.join(gameNsp, () => {
+            io.of(room).to(gameNsp).emit("end_game", { board, meta });
+          });
         }
       });
     });

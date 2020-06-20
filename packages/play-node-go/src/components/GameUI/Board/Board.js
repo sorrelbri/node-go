@@ -42,9 +42,9 @@ const Board = (props) => {
       const posY = (i % boardSize) + 1;
       const pointData = board[`${posX}-${posY}`];
       const dotData =
-        meta?.turn && pointData
-          ? game.turn || meta.turn
-          : meta?.territory[`${posX}-${posY}`];
+        meta && meta.turn === 0
+          ? meta?.territory[`${posX}-${posY}`]
+          : game.turn || meta?.turn;
       boardPoints.push(
         <Point
           key={`${posX}-${posY}`}

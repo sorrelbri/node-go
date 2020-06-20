@@ -71,6 +71,14 @@ const Game = (props) => {
   };
 
   const handlePassClick = (player) => {
+    if (state?.meta && state?.meta?.turn === 0) {
+      const action = {
+        type: "SOCKET",
+        message: "END_GAME",
+        body: { game, player },
+      };
+      return dispatch(action);
+    }
     const action = {
       type: "SOCKET",
       message: "PASS",
