@@ -22,7 +22,6 @@ const PlayerArea = ({
   const bowlText = () => {
     if (isTurn) return "Pass?";
     if (turn === 0) return "End Game?";
-    // return;
   };
 
   return (

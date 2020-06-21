@@ -1,8 +1,7 @@
 import React from "react";
 import "./Kifu.scss";
 
-const Kifu = ({ ...props }) => {
-  console.log(props);
+const Kifu = () => {
   return (
     <div className="Kifu">
       <div className="Kifu__board"></div>

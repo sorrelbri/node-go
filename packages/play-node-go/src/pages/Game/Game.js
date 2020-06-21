@@ -140,7 +140,7 @@ const Game = (props) => {
               ? playerWhiteMeta
               : playerBlackMeta
           }
-          Kifu={<Kifu {...props} />}
+          Kifu={<Kifu />}
           turn={state?.meta?.turn}
         />
       </div>
