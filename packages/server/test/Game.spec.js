@@ -20,8 +20,6 @@ describe("Game", () => {
 
   it("Get meta returns proper data for games with no record", (done) => {
     Game().getMeta().should.eql(initialMeta);
-    // Game().initGame().getMeta()
-    //   .should.eql({ ...initialMeta, turn: 1 });
     done();
   });
 });
@@ -1096,6 +1094,7 @@ const initialMeta = {
     wScore: 0,
   },
   gameRecord: [],
+  score: 0,
 };
 
 const emptyBoard9 = {

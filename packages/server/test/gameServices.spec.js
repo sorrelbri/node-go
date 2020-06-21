@@ -1,6 +1,6 @@
 const chai = require("chai");
 const should = chai.should();
-const gameServices = require("../services/gameServices")();
+const gameServices = require("../services/gameServices")({});
 
 describe("game services", () => {
   afterEach(() => gameServices.dropGame(1));
@@ -430,4 +430,5 @@ const initialMeta = {
     wScore: 0,
   },
   gameRecord: [],
+  score: 0,
 };
