@@ -71,6 +71,7 @@ const Game = (props) => {
   };
 
   const handlePassClick = (player) => {
+    if (state?.meta && state?.meta?.winner) return;
     if (state?.meta && state?.meta?.turn === 0) {
       const action = {
         type: "SOCKET",

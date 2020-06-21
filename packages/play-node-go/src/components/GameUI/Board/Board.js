@@ -42,7 +42,7 @@ const Board = (props) => {
       const posY = (i % boardSize) + 1;
       const pointData = board[`${posX}-${posY}`];
       const dotData =
-        meta && meta.turn === 0
+        meta && meta.turn === 0 && !meta.winner
           ? meta?.territory[`${posX}-${posY}`]
           : game.turn || meta?.turn;
       boardPoints.push(

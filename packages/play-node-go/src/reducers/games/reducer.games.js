@@ -104,7 +104,6 @@ function gameResign(state, action) {
 }
 
 function gameEnd(state, action) {
-  console.log(action);
   const { winner, score } = action.body.meta;
   return { ...state, meta: { ...state.meta, winner, score } };
 }
