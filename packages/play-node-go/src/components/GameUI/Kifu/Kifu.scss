@@ -1,0 +1,13 @@
+div.Kifu {
+  order: 0;
+  height: 10vh;
+  width: 8vh;
+  background-color: #FFF;
+  transform: rotate(-20deg);
+  div.Kifu__board {
+    border: 0.25vh solid #444;
+    width: 5vh;
+    height: 5vh;
+    margin: 1vh 2vh 2vh auto;
+  }
+}
