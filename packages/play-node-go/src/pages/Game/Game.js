@@ -5,6 +5,7 @@ import "./Game.scss";
 import Logo from "../../components/Display/Logo/Logo";
 import Board from "../../components/GameUI/Board/Board";
 import PlayerArea from "../../components/GameUI/PlayerArea/PlayerArea";
+import Kifu from "../../components/GameUI/Kifu/Kifu";
 
 const Game = (props) => {
   const { state, dispatch } = props;
@@ -139,6 +140,7 @@ const Game = (props) => {
               ? playerWhiteMeta
               : playerBlackMeta
           }
+          Kifu={<Kifu {...props} />}
           turn={state?.meta?.turn}
         />
       </div>

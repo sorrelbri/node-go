@@ -6,6 +6,7 @@ const PlayerArea = ({
   handlePassClick,
   playerMeta,
   turn,
+  Kifu,
 }) => {
   const { stones, player, rank, captures } = playerMeta;
   const isTurn =
@@ -32,6 +33,7 @@ const PlayerArea = ({
       >
         <p>{bowlText()}</p>
       </div>
+      {Kifu}
       <div
         className={`player-container__name-space player-container__name-space--${stones}`}
       >
