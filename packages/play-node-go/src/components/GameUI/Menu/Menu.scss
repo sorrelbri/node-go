@@ -1,0 +1,16 @@
+div.Game__Menu-container {
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  position: absolute;
+  width: 100vw;
+  z-index: 2;
+  
+  .Game__Menu-container__Menu {
+    background: #eef;
+    width: 80vw;
+    min-height: 20vh;
+  }
+}
