@@ -1,14 +1,10 @@
 import React from "react";
 import "./Kifu.scss";
 
-const Kifu = () => {
-  const handleClick = (e) => {
-    console.log("clicked");
-  };
-
+const Kifu = ({ clickKifu }) => {
   return (
     <div className="Kifu">
-      <p className="Kifu__show-menu" onClick={handleClick}>
+      <p className="Kifu__show-menu" onClick={clickKifu}>
         Show Menu?
       </p>
       <div className="Kifu__board"></div>
