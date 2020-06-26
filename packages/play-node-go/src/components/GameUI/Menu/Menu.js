@@ -18,6 +18,22 @@ const Menu = ({ showMenu, clickClose, ...props }) => {
     );
   };
 
+  const clickPrint = () => {
+    const iframe = document.createElement("iframe");
+    const body = document.getElementsByTagName("body")[0];
+    const record = document.getElementById("record");
+    body.appendChild(iframe);
+    // move game record to iframe and print iframe
+    iframe.contentDocument.body.appendChild(canvasRef.current);
+    iframe.contentDocument.body.appendChild(overflowRef.current);
+    iframe.contentWindow.print();
+    // move game record back to menu and remove iframe
+    record.appendChild(canvasRef.current);
+    record.appendChild(overflowRef.current);
+    body.removeChild(iframe);
+  };
+
+  // draw canvases
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
@@ -166,7 +182,8 @@ const Menu = ({ showMenu, clickClose, ...props }) => {
     >
       <div className="Game__Menu-container__Menu">
         <button onClick={clickClose}>X</button>
-        <div className="Game__Menu__game-record-container">
+        <button onClick={clickPrint}>Print Record</button>
+        <div id="record" className="Game__Menu__game-record-container">
           {drawGameRecord()}
         </div>
       </div>
