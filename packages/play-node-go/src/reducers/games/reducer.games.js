@@ -80,14 +80,9 @@ function joinRequest(state, action) {
 }
 
 function updateBoard(state, action) {
-  const {
-    gameRecord,
-    pass,
-    turn,
-    winner,
-    playerState,
-    territory,
-  } = action.body.meta;
+  console.log(action.body);
+  const { gameRecord, pass, turn, winner, playerState } = action.body.meta;
+  const territory = action.body.territory;
   return {
     ...state,
     board: action.body.board,
