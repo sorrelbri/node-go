@@ -1,0 +1,29 @@
+div.Game__Menu-container {
+  &--hidden {
+    display: none;  
+  }
+
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  position: absolute;
+  width: 100vw;
+  z-index: 2;
+  
+  .Game__Menu-container__Menu {
+    background: #eef;
+    max-height: 90vh;
+    max-width: 80vw;
+    padding: 2vh;
+    overflow: scroll;
+  }
+
+  div.Game__Menu__game-record-container {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+  }
+}

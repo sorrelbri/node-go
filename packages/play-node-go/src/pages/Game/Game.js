@@ -6,12 +6,14 @@ import Logo from "../../components/Display/Logo/Logo";
 import Board from "../../components/GameUI/Board/Board";
 import PlayerArea from "../../components/GameUI/PlayerArea/PlayerArea";
 import Kifu from "../../components/GameUI/Kifu/Kifu";
+import Menu from "../../components/GameUI/Menu/Menu";
 
 const Game = (props) => {
   const { state, dispatch } = props;
   const gameId = parseInt(useParams().id) || 0;
   const [playerBlackMeta, setPlayerBlackMeta] = useState({});
   const [playerWhiteMeta, setPlayerWhiteMeta] = useState({});
+  const [showMenu, setShowMenu] = useState(false);
   const playerState = state?.meta?.playerState;
   const game = state.active?.game;
 
@@ -91,6 +93,11 @@ const Game = (props) => {
 
   return (
     <div className="Game" data-testid="Game">
+      <Menu
+        showMenu={showMenu}
+        clickClose={() => setShowMenu(false)}
+        {...props}
+      />
       <div className="Game__meta-container">
         <span className="Game__socket-flag">{state.socket ? "✓" : " ⃠"}</span>
         <Logo />
@@ -140,7 +147,7 @@ const Game = (props) => {
               ? playerWhiteMeta
               : playerBlackMeta
           }
-          Kifu={<Kifu />}
+          Kifu={<Kifu clickKifu={() => setShowMenu(true)} />}
           turn={state?.meta?.turn}
         />
       </div>

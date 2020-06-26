@@ -1,9 +1,27 @@
+@import '../../../../public/stylesheets/partials/mixins';
+
 div.Kifu {
   order: 0;
   height: 10vh;
   width: 8vh;
   background-color: #FFF;
   transform: rotate(-20deg);
+
+  p.Kifu__show-menu {
+    display: none;
+    margin: 3vh auto;
+    position: absolute;
+    transform: rotate(20deg);
+    width: fit-content;
+  }
+  &:hover {
+    p.Kifu__show-menu {
+      @include gameViewLabel;
+      cursor: pointer;
+      display: inline-block;
+    }
+  }
+
   div.Kifu__board {
     border: 0.25vh solid #444;
     width: 5vh;
