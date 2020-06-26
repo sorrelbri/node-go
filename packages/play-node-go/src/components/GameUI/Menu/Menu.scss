@@ -5,6 +5,7 @@ div.Game__Menu-container {
 
   background: rgba(0,0,0,0.5);
   display: flex;
+  flex-flow: column nowrap;
   justify-content: center;
   align-items: center;
   height: 100vh;
@@ -14,8 +15,10 @@ div.Game__Menu-container {
   
   .Game__Menu-container__Menu {
     background: #eef;
-    width: 80vw;
-    min-height: 20vh;
+    max-height: 90vh;
+    max-width: 80vw;
+    padding: 2vh;
+    overflow: scroll;
   }
 
   div.Game__Menu__game-record-container {
