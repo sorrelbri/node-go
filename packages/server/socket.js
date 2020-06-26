@@ -103,12 +103,18 @@ io.on("connection", async (socket) => {
         const { id, room } = game;
         const gameNsp = `game${id}`;
         try {
-          const { board, ...meta } = await gameServices.toggleTerritory({
+          const {
+            board,
+            territory,
+            ...meta
+          } = await gameServices.toggleTerritory({
             id,
             point,
           });
           socket.join(gameNsp, () => {
-            io.of(room).to(gameNsp).emit("update_board", { board, meta });
+            io.of(room)
+              .to(gameNsp)
+              .emit("update_board", { board, territory, meta });
           });
         } catch (e) {
           console.log(e);
