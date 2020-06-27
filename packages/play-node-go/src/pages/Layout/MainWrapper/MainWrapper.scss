@@ -1,4 +1,5 @@
 @import '../../../../public/stylesheets/partials/mixins';
+@import '../../../../public/stylesheets/partials/variables';
 
 div.main-wrapper {
   display: flex;
@@ -33,4 +34,15 @@ div.main-wrapper {
       height: 100%;
     }
   }
+}
+
+button {
+  color:map-get($colors, 'sidebar_link');
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 110%;
+  font-weight: bold;
+  margin-bottom: .5em;
+  padding: 0;
+  text-decoration: none;
 }
