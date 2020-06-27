@@ -71,8 +71,9 @@ const guest = async (req, res, next) => {
     const email = null;
     // id generator returns `
     const id = null;
-    const user = { username, email, id };
+    const user = { username, email, id, password };
     signToken(res, user);
+    delete user.password;
     res.send(user);
   } catch (e) {
     console.log(e);
