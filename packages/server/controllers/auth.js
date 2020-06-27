@@ -3,6 +3,7 @@ const { validationResult } = require("express-validator");
 const userQueries = require("../data/queries/user");
 const { hashPassword, compareHash } = require("../services/bcrypt");
 const signToken = require("../services/signToken");
+const guestServices = require("../services/guestServices");
 
 const checkValidationErrors = (req, res) => {
   const errors = validationResult(req);
@@ -65,7 +66,7 @@ const login = async (req, res, next) => {
 const guest = async (req, res, next) => {
   try {
     // username generator returns `Guest-${num}`
-    const username = "guest";
+    const { username, password } = guestServices.generateGuest();
     // generateGuestUser();
     const email = null;
     // id generator returns `
@@ -74,6 +75,7 @@ const guest = async (req, res, next) => {
     signToken(res, user);
     res.send(user);
   } catch (e) {
+    console.log(e);
     res.status(500).send({ errors: e });
   }
 };
