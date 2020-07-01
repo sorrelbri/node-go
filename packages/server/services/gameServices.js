@@ -73,6 +73,7 @@ const GameService = ({ moveQueries, gameQueries }) => {
     },
 
     resign: ({ id, player }) => {
+      // add resign gamesQueries
       return gamesInProgress[id].submitResign(player).getMeta();
     },
 
@@ -108,9 +109,19 @@ const GameService = ({ moveQueries, gameQueries }) => {
 
     async endGame({ id }) {
       gamesInProgress[id] = gamesInProgress[id].endGame();
+      const { winner, score, playerState } = gamesInProgress[id];
+      const { bCaptures, wCaptures } = playerState;
+      const winType = winner > 0 ? "B+" : "W+";
       try {
         if (gameQueries) {
-          // TODO add end game query
+          const result = await gameQueries.endGame({
+            id,
+            winType,
+            score,
+            bCaptures,
+            wCaptures,
+          });
+          console.log(result);
         }
       } catch (e) {
         console.log(e);
