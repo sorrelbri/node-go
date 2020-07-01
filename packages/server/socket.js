@@ -24,8 +24,22 @@ io.on("connection", async (socket) => {
       socket.on("connect_game", (data) => {
         const game = `game-${data.game.id}`;
         socket.join(game, async () => {
+          const gameData = await gameQueries.findGameById(data.game.id);
+          const convertWinType = (winType) => {
+            if (winType.includes("B")) return 1;
+            if (winType.includes("W")) return -1;
+            if (winType.includes("0")) return "D";
+            return "?";
+          };
+          gameData.winner = gameData.win_type
+            ? convertWinType(gameData.win_type)
+            : 0;
           const gameRecord = await moveQueries.findGameRecord(data.game.id);
-          await gameServices.initGame({ id: data.game.id, gameRecord });
+          await gameServices.initGame({
+            id: data.game.id,
+            gameRecord,
+            gameData,
+          });
           const { board, ...meta } = await gameServices.getDataForUI(
             data.game.id
           );

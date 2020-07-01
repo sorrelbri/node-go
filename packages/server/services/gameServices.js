@@ -11,7 +11,6 @@ const GameService = ({ moveQueries, gameQueries }) => {
     initGame({ id, gameRecord = [], ...gameData }) {
       if (gamesInProgress[id]) return this.getDataForUI(id);
       if (gameRecord.length) {
-        console.log("here");
         gamesInProgress[id] = Game({ gameData, gameRecord });
       } else {
         gamesInProgress[id] = Game({ gameData }).initGame();
