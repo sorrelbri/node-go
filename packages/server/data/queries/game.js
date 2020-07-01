@@ -70,17 +70,23 @@ const findGameByRoom = async (roomId) => {
 
 const insertGame = async (game) => {};
 
-const endGame = async ({ id }) => {
-  const game = await knex(game).where({ id: id }).update(
-    {
-      win_type: winType,
-      score: score,
-      captures_black: capturesBlack,
-      captures_white: capturesWhite,
-    }
-    // ["id"]
-  );
-  return game;
+const endGame = async ({ id, winType, score, bCaptures, wCaptures }) => {
+  try {
+    const game = await knex
+      .from("game")
+      .returning(gameDetailSelect)
+      .where({ id: id })
+      .update({
+        win_type: winType,
+        score: score,
+        captures_black: bCaptures,
+        captures_white: wCaptures,
+        open: false,
+      });
+    return game;
+  } catch (e) {
+    return e;
+  }
 };
 
 module.exports = {

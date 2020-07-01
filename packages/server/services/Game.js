@@ -181,13 +181,18 @@ const Game = ({ gameData = {}, gameRecord = [] } = {}) => {
       this.kos = [];
     },
   };
-
   if (gameRecord.length) {
     // play through all the moves
-    return gameRecord.reduce(
+    const game = gameRecord.reduce(
       (game, move) => game.makeMove(move),
       Game({ gameData }).initGame()
     );
+    // ? why is this being wrapped?
+    if (gameData && gameData.gameData && gameData.gameData.winner) {
+      const { winner, score } = gameData.gameData;
+      return game.manualEnd({ winner, score });
+    }
+    return game;
   }
   return {
     winner: gameData.winner || null,
@@ -388,6 +393,14 @@ const Game = ({ gameData = {}, gameRecord = [] } = {}) => {
       const score =
         this.playerState.bScore - (this.playerState.wScore + this.komi);
       return { ...this, score, winner: score > 0 ? 1 : -1 };
+    },
+
+    // for playing historic games
+    manualEnd: function ({ winner, score }) {
+      this.turn = 0;
+      this.winner = winner;
+      this.score = score;
+      return this;
     },
   };
 };
