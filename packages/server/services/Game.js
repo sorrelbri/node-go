@@ -188,7 +188,7 @@ const Game = ({ gameData = {}, gameRecord = [] } = {}) => {
       Game({ gameData }).initGame()
     );
     // ? why is this being wrapped?
-    if (gameData?.gameData?.winner) {
+    if (gameData && gameData.gameData && gameData.gameData.winner) {
       const { winner, score } = gameData.gameData;
       return game.manualEnd({ winner, score });
     }
