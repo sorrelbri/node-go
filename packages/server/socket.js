@@ -1,4 +1,4 @@
-// TODO const someSocketLogic = require('./middleware/socketssockets/...');
+// TODO const someSocketLogic = require('./middleware/sockets/...');
 const socketIO = require("socket.io");
 const io = socketIO({ cookie: false });
 
@@ -24,6 +24,7 @@ io.on("connection", async (socket) => {
       socket.on("connect_game", (data) => {
         const game = `game-${data.game.id}`;
         socket.join(game, async () => {
+          // TODO move this logic into game service
           const gameData = await gameQueries.findGameById(data.game.id);
           const convertWinType = (winType) => {
             if (winType.includes("B")) return 1;
@@ -51,7 +52,6 @@ io.on("connection", async (socket) => {
       socket.on("make_move", async (data) => {
         const { user, move, board, game, room } = data;
         const gameNsp = `game-${data.game.id}`;
-
         try {
           const { board, message, ...meta } = await gameServices.makeMove({
             id: data.game.id,

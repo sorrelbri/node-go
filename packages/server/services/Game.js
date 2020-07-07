@@ -244,11 +244,31 @@ const Game = ({ gameData = {}, gameRecord = [] } = {}) => {
       };
     },
 
+    checkMove: function ({ player, pos: { x, y } }) {
+      // if game is over
+      // TODO either change logic here or add additional method for handling moves off of record
+      if (this.pass > 1) {
+        return { ...this, success: false };
+      }
+      const point = this.boardState[`${x}-${y}`];
+      const isTurn =
+        (this.turn === 1 && player === "black") ||
+        (this.turn === -1 && player === "white");
+      if (isTurn) {
+        if (point.legal) {
+          return { ...this, success: true, move: { player, pos: { x, y } } };
+        }
+      }
+      return { ...this, success: false };
+    },
+
     makeMove: function ({ player, pos: { x, y } }) {
       if (this.pass > 1) {
         return { ...this, success: false };
       }
+
       if (x === 0) return this.submitPass(player);
+
       let game = this;
       let success = false;
       const point = game.boardState[`${x}-${y}`];

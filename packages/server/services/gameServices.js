@@ -7,6 +7,29 @@ const GameService = ({ moveQueries, gameQueries }) => {
   };
   const gamesInProgress = {};
 
+  const storeMove = (gameId) => async ({ player, pos: { x, y } }) => {
+    let move = { player, pos: { x, y } };
+    try {
+      if (moveQueries) {
+        const { id } = await moveQueries.addMove({
+          gameId,
+          player,
+          x,
+          y,
+          gameRecord: true,
+          priorMove: null,
+        });
+        move.id = id;
+        move.success = true;
+      }
+    } catch (e) {
+      console.log(e);
+      move.success = false;
+    } finally {
+      return move;
+    }
+  };
+
   return {
     initGame({ id, gameRecord = [], ...gameData }) {
       if (gamesInProgress[id]) return this.getDataForUI(id);
@@ -31,6 +54,7 @@ const GameService = ({ moveQueries, gameQueries }) => {
           return { message: "error restoring game" };
         }
       }
+      gamesInProgress[id] = await gamesInProgress[id].checkMove(move);
       gamesInProgress[id] = gamesInProgress[id].makeMove(move);
       if (gamesInProgress[id].success === false)
         return { message: "illegal move" };
