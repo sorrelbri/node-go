@@ -266,26 +266,35 @@ const Game = ({ gameData = {}, gameRecord = [] } = {}) => {
       if (this.pass > 1) {
         return { ...this, success: false };
       }
+      if (x === 0) return game.submitPass(player);
 
-      if (x === 0) return this.submitPass(player);
-
-      let game = this;
       let success = false;
-      const point = game.boardState[`${x}-${y}`];
-      const isTurn =
-        (game.turn === 1 && player === "black") ||
-        (game.turn === -1 && player === "white");
-      if (isTurn) {
-        if (point.legal) {
-          game.pass = 0;
-          game.addToRecord({ player, pos: { x, y } });
-          if (this.kos.length) helper.clearKo.call(this);
-          point.makeMove(game);
-          game.turn *= -1;
-          success = true;
-        }
+      let game = this;
+
+      // if checkMove has not been run, determine legality
+      if (!game.move) {
+        game = game.checkMove({ player, pos: { x, y } });
+      }
+      if (
+        // if move is legal
+        // ? unclear if checking move values is beneficial to prevent race conditions
+        game.move &&
+        game.move.player === player &&
+        game.move.pos.x === x &&
+        game.move.pos.y
+      ) {
+        const point = game.boardState[`${x}-${y}`];
+        game.pass = 0;
+        // allows for recording of prior move on game record
+        game.addToRecord(game.move);
+        if (game.kos.length) helper.clearKo.call(game);
+        point.makeMove(game);
+        game.turn *= -1;
+        success = true;
       }
       game.boardState = getBoardState(game);
+      // remove move attribute to prevent duplicate moves
+      delete game.move;
       return { ...game, legalMoves: getLegalMoves(game), success };
     },
 
