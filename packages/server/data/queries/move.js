@@ -3,12 +3,22 @@ const knex = require("../db");
 const findGameRecord = async (gameId) => {
   return await knex("move")
     .where({ game: gameId, game_record: true })
-    .select("player", "point_x", "point_y", "number", "prior_move", "placement")
+    .select(
+      "player",
+      "point_x",
+      "point_y",
+      "number",
+      "prior_move",
+      "placement",
+      "id"
+    )
     .orderBy("number")
     .then((record) =>
-      record.map(({ player, point_x, point_y }) => ({
+      record.map(({ player, point_x, point_y, id, prior_move }) => ({
         player,
         pos: { x: point_x, y: point_y },
+        id,
+        prior: prior_move,
       }))
     );
   // .then(res => res)
@@ -32,11 +42,10 @@ const addMove = async ({ gameId, player, x, y, gameRecord, priorMove }) => {
         game_record: gameRecord,
         prior_move: priorMove,
       })
-      .then((res) => res);
+      .then((res) => res[0]);
   } catch (e) {
     result = e;
   } finally {
-    console.log(result);
     return result;
   }
 };

@@ -48,6 +48,9 @@ const Point = (props) => {
       };
       return dispatch(action);
     }
+    const priorMove = meta.gameRecord.length
+      ? meta.gameRecord[meta.gameRecord.length - 1].id
+      : null;
     const action = {
       type: "SOCKET",
       message: "MAKE_MOVE",
@@ -56,7 +59,7 @@ const Point = (props) => {
         game,
         room: game.room,
         board: {},
-        move: { player: turn, pos: { x: posX, y: posY } },
+        move: { player: turn, pos: { x: posX, y: posY }, priorMove },
       },
     };
     dispatch(action);

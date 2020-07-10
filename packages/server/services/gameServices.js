@@ -7,22 +7,28 @@ const GameService = ({ moveQueries, gameQueries }) => {
   };
   const gamesInProgress = {};
 
-  const storeMove = (gameId) => async ({ player, pos: { x, y } }) => {
-    let move = { player, pos: { x, y } };
+  const storeMove = (gameId) => async ({
+    player,
+    pos: { x, y },
+    priorMove,
+  }) => {
+    let move = { player, pos: { x, y }, priorMove };
     try {
       if (moveQueries) {
-        const { id } = await moveQueries.addMove({
+        const moveDbResult = await moveQueries.addMove({
           gameId,
           player,
           x,
           y,
           gameRecord: true,
-          priorMove: null,
+          priorMove,
         });
-        move.id = id;
+        move.id = moveDbResult.id;
+        move.prior = moveDbResult.prior_move;
         move.success = true;
       }
     } catch (e) {
+      console.log("Exception ------------");
       console.log(e);
       move.success = false;
     } finally {
@@ -55,23 +61,14 @@ const GameService = ({ moveQueries, gameQueries }) => {
         }
       }
       gamesInProgress[id] = await gamesInProgress[id].checkMove(move);
-      gamesInProgress[id] = gamesInProgress[id].makeMove(move);
       if (gamesInProgress[id].success === false)
         return { message: "illegal move" };
       try {
         if (moveQueries) {
-          const priorMove = gamesInProgress[id].gameRecord.length;
-          const moveInsert = {
-            gameId: id,
-            player: move.player,
-            x: move.pos.x,
-            y: move.pos.y,
-            gameRecord: true,
-            priorMove,
-          };
-          let moveDbResult;
-          moveDbResult = await moveQueries.addMove(moveInsert);
+          // todo change prior move
+          move = await storeMove(id)(move);
         }
+        gamesInProgress[id] = gamesInProgress[id].makeMove(move);
       } catch {
         gamesInProgress[id].returnToMove(-1);
       } finally {
