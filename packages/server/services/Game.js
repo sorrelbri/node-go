@@ -262,7 +262,7 @@ const Game = ({ gameData = {}, gameRecord = [] } = {}) => {
       return { ...this, success: false };
     },
 
-    makeMove: function ({ player, pos: { x, y }, id }) {
+    makeMove: function ({ player, pos: { x, y }, id, prior }) {
       if (this.pass > 1) {
         return { ...this, success: false };
       }
@@ -286,7 +286,7 @@ const Game = ({ gameData = {}, gameRecord = [] } = {}) => {
         const point = game.boardState[`${x}-${y}`];
         game.pass = 0;
         // allows for recording of prior move on game record
-        game.addToRecord({ player, pos: { x, y }, id });
+        game.addToRecord({ player, pos: { x, y }, id, prior });
         if (game.kos.length) helper.clearKo.call(game);
         point.makeMove(game);
         game.turn *= -1;
