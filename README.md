@@ -36,7 +36,7 @@ Adjacent points without stones are very important to the state of a point as wel
 ![Image of Game logic](public/game-logic.png)
 
 ### Game Records
-For the moment, game records are modeled as a list where each move has the type `{player: <string: player color>, pos: {x: <integer>, y: <integer>}}`.
+Game records are modeled as a list where each move has the type `{player: <string: player color>, pos: {x: <integer>, y: <integer>}, number: <integer>}`.
 
 The database `move` table contains additional information `number`, `game_record`, and `prior_move` in addition to a foreign key for a `game` row. `number` represents the move number in a game record (for now this corresponds to list position), `game_record` is a boolean representing whether the move was 'official' or is an alternate move used in study, and `prior_move` is a reference to another `move` row allowing for the construction of a tree model for the game (see [Expanding this representation](#expanding-this-representation), below.)
 
@@ -47,7 +47,7 @@ There is a backend service that processes this list of moves into a current boar
 This is a customary representation of game records printed in Go literature. A frontend service processes the list of moves and plots each move onto a `<canvas>` element drawn to resemble the grid lines on a board, with moves that are placed at prior points plotted on an additional `<canvas>` element below. 
 
 #### Expanding this representation
-This representation will be expanded when support for alternate game paths is added. Alternate game paths will allow users to study completed games by playing out the consequences of moves not in the completed game. This feature will require a tree structure for the game record where moves on the main line are referred with a `main` property on each move node and alternate moves with any number of alternate references.
+The list representation is expanded for alternate game paths with the addition of sub-lists in places where paths diverge. Alternate game paths allow users to study completed games by playing out the consequences of moves not in the completed game. Each move with a diverging path contains lists for each path, with the official path being the first.
 
 ### Caching multiple in-progress games
 ![Image of Game module in context](public/game-module.png)  

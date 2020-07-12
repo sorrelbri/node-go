@@ -184,7 +184,8 @@ const Game = ({ gameData = {}, gameRecord = [] } = {}) => {
   if (gameRecord.length) {
     // play through all the moves
     const game = gameRecord.reduce(
-      (game, move) => game.makeMove(move),
+      (game, move) =>
+        move.length ? game.makeMove(move[0]) : game.makeMove(move),
       Game({ gameData }).initGame()
     );
     // ? why is this being wrapped?

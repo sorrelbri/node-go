@@ -608,14 +608,34 @@ describe("capture logic: snapback, ko and playing in eyes", () => {
 });
 
 describe("Game history functionality", () => {
-  const firstMove = { player: "black", pos: { x: 4, y: 4 } };
-  const secondMove = { player: "white", pos: { x: 16, y: 16 } };
-  const thirdMove = { player: "black", pos: { x: 16, y: 4 } };
-  const fourthMove = { player: "white", pos: { x: 4, y: 16 } };
-  const fifthMove = { player: "black", pos: { x: 10, y: 4 } };
-  const sixthMove = { player: "white", pos: { x: 4, y: 10 } };
-  const seventhMove = { player: "black", pos: { x: 10, y: 16 } };
-  const eighthMove = { player: "white", pos: { x: 16, y: 10 } };
+  const firstMove = {
+    player: "black",
+    pos: { x: 4, y: 4 },
+    id: 1,
+    prior: null,
+  };
+  const secondMove = {
+    player: "white",
+    pos: { x: 16, y: 16 },
+    id: 2,
+    prior: 1,
+  };
+  const thirdMove = { player: "black", pos: { x: 16, y: 4 }, id: 3, prior: 2 };
+  const fourthMove = { player: "white", pos: { x: 4, y: 16 }, id: 4, prior: 3 };
+  const fifthMove = { player: "black", pos: { x: 10, y: 4 }, id: 5, prior: 4 };
+  const sixthMove = { player: "white", pos: { x: 4, y: 10 }, id: 6, prior: 5 };
+  const seventhMove = {
+    player: "black",
+    pos: { x: 10, y: 16 },
+    id: 7,
+    prior: 6,
+  };
+  const eighthMove = {
+    player: "white",
+    pos: { x: 16, y: 10 },
+    id: 8,
+    prior: 7,
+  };
 
   it("makeMove creates gameRecord item", (done) => {
     Game().initGame().makeMove(firstMove).gameRecord[0].should.eql(firstMove);
@@ -728,11 +748,11 @@ describe("Game end logic", () => {
   it("two nonconsecutive passes continue game", (done) => {
     Game()
       .initGame()
-      .makeMove({ player: "black", pos: { x: 4, y: 4 } })
-      .makeMove({ player: "white", pos: { x: 4, y: 5 } })
-      .makeMove({ player: "black", pos: { x: 5, y: 3 } })
+      .makeMove({ player: "black", pos: { x: 4, y: 4 }, id: 1, prior: null })
+      .makeMove({ player: "white", pos: { x: 4, y: 5 }, id: 2, prior: 1 })
+      .makeMove({ player: "black", pos: { x: 5, y: 3 }, id: 3, prior: 2 })
       .submitPass("white")
-      .makeMove({ player: "black", pos: { x: 16, y: 16 } })
+      .makeMove({ player: "black", pos: { x: 16, y: 16 }, id: 4, prior: 3 })
       .submitPass("white")
       .getMeta()
       .should.eql({
@@ -740,12 +760,38 @@ describe("Game end logic", () => {
         pass: 1,
         turn: 1,
         gameRecord: [
-          { player: "black", pos: { x: 4, y: 4 } },
-          { player: "white", pos: { x: 4, y: 5 } },
-          { player: "black", pos: { x: 5, y: 3 } },
-          { player: "white", pos: { x: null, y: null } },
-          { player: "black", pos: { x: 16, y: 16 } },
-          { player: "white", pos: { x: null, y: null } },
+          {
+            player: "black",
+            pos: { x: 4, y: 4 },
+            id: 1,
+            prior: null,
+          },
+          {
+            player: "white",
+            pos: { x: 4, y: 5 },
+            id: 2,
+            prior: 1,
+          },
+          {
+            player: "black",
+            pos: { x: 5, y: 3 },
+            id: 3,
+            prior: 2,
+          },
+          {
+            player: "white",
+            pos: { x: null, y: null },
+          },
+          {
+            player: "black",
+            pos: { x: 16, y: 16 },
+            id: 4,
+            prior: 3,
+          },
+          {
+            player: "white",
+            pos: { x: null, y: null },
+          },
         ],
       });
     done();

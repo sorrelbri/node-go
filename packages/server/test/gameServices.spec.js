@@ -20,7 +20,7 @@ describe("game services", () => {
 
   it("games services places move", async () => {
     gameServices.initGame({ id: 1, handicap: 4 });
-    const move = { player: "white", pos: { x: 6, y: 3 } };
+    const move = { player: "white", pos: { x: 6, y: 3 }, id: 1, prior: null };
     const afterMove = await gameServices.makeMove({ id: 1, move });
     const afterMoveShould = {
       board: { ...fourHandicapBoard, "6-3": -1 },
