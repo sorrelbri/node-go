@@ -266,10 +266,11 @@ const Game = ({ gameData = {}, gameRecord = [] } = {}) => {
       if (this.pass > 1) {
         return { ...this, success: false };
       }
-      if (x === 0) return game.submitPass(player);
-
+      
       let success = false;
       let game = this;
+      
+      if (x === 0) return game.submitPass(player);
 
       // if checkMove has not been run, determine legality
       if (!game.move) {
